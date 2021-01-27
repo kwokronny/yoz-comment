@@ -1,0 +1,7 @@
+server_port: "80"
+log_file_path: ./logs/
+mysql_host: kwok-nas.mokeyjay.com:3336
+mysql_usr: root
+mysql_pwd: gr68599$
+mysql_db: comment
+ip_block_path: ./config/block_ip
