@@ -23,8 +23,8 @@ func SetupRouter() *gin.Engine {
 
 	r := engine.Group("api-comment")
 
-	commentGroup := r.Group("comment")
-	commentGroup.GET("/page", comment.GetPage)
+	r.GET("/page", comment.GetPage)
+	r.POST("/comment", comment.Save)
 
 	return engine
 }
