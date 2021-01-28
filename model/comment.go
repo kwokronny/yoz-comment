@@ -31,20 +31,41 @@ func (q Comment) GetArticleComment(ArticleToken string, page helper.Pagination) 
 	condition := dao.DB
 	condition = condition.Where("article_token = ? and r_id = 0", ArticleToken)
 	condition.Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
-	var ids []uint
+	ids := make([]uint, data.Total)
 	for index, comment := range comments {
-		println(index, comment.ID)
+		ids[index] = comment.ID
 	}
-	dao.DB.Where("parent_id in (?)", ids).Order("created_at DESC").Find(&comments)
-	data.Records = comments
+	var replys []Comment
+	dao.DB.Where("parent_id in (?)", ids).Order("created_at DESC").Find(&replys)
+	comments = append(comments, replys...)
+	data.Records = genrateTree(comments)
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()
 	return data
 }
 
 // genrateTree is
-func genrateTree(comments []Comment) {
+func genrateTree(comments []Comment) []*Comment {
+	commentMap := make(map[uint]Comment)
+	var tree []Comment
+	for _, comment := range comments {
+		println(comment.ID)
+		commentMap[comment.ID] = comment
+	}
+	for _, comment := range comments {
+		if comment.RID > 0 {
+			parentComment := commentMap[comment.RID]
+			if parentComment.Replys == nil {
+				parentComment.Replys = []*Comment{&comment}
+			} else {
+				parentComment.Replys = append(parentComment.Replys, &comment)
+			}
+		} else {
+			tree = append(tree, commentMap[comment.ID])
+		}
+	}
 
+	return tree
 }
 
 // Save is insert or update record
