@@ -8,14 +8,14 @@ import (
 // Comment is Model Type
 type Comment struct {
 	dao.Model
-	ArticleToken string    `gorm:"column:article_token" json:"article_token" form:"article_token"`
+	ArticleToken string    `gorm:"column:article_token" json:"article_token" form:"article_token" binding:"required"`
 	ParentID     uint      `gorm:"column:parent_id" json:"parent_id" form:"parent_id"`
 	RID          uint      `gorm:"column:r_id" json:"r_id" form:"r_id"`
-	Nickname     string    `gorm:"column:nickname" json:"nickname" form:"nickname"`
-	Mail         string    `gorm:"column:mail" json:"mail" form:"mail"`
+	Nickname     string    `gorm:"column:nickname" json:"nickname" form:"nickname" binding:"required"`
+	Mail         string    `gorm:"column:mail" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site" json:"site" form:"site"`
-	Content      string    `gorm:"column:content" json:"content" form:"content"`
-	IP           string    `gorm:"column:ip" json:"ip" form:"ip"`
+	Content      string    `gorm:"column:content" json:"content" form:"content" binding:"required"`
+	IP           string    `gorm:"column:ip" json:"ip" form:"ip" binding:"required"`
 	Replys       []Comment `sql:"default:null" json:"replys"`
 }
 
@@ -24,8 +24,19 @@ func (q Comment) TableName() string {
 	return "comment"
 }
 
-// GetArticleComment is get all or search all question records
-func (q Comment) GetArticleComment(ArticleToken string, page helper.Pagination) helper.PageData {
+// GetPage is get all comment
+func (q Comment) GetPage(page helper.Pagination) helper.PageData {
+	var data helper.PageData
+	var comments []Comment
+	dao.DB.Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
+	data.Records = comments
+	data.Page = page.GetPage()
+	data.PageSize = page.GetPageSize()
+	return data
+}
+
+// GetCommentByArticle is get comment by article
+func (q Comment) GetCommentByArticle(ArticleToken string, page helper.Pagination) helper.PageData {
 	var data helper.PageData
 	var comments []Comment
 	condition := dao.DB
@@ -44,7 +55,6 @@ func (q Comment) GetArticleComment(ArticleToken string, page helper.Pagination) 
 	return data
 }
 
-// genrateTree is
 func genrateTree(comments []Comment) (trees []Comment) {
 	trees = []Comment{}
 	var roots, childs []Comment
@@ -77,17 +87,11 @@ func recursiveTree(tree *Comment, nodes []Comment) {
 
 // Save is insert or update record
 func (q Comment) Save(data Comment) Comment {
-	var model Comment
-	dao.DB.First(&model, data.ID)
-	if model.ID == 0 {
-		dao.DB.Create(&data)
-	} else {
-		dao.DB.Model(&model).Updates(&data)
-	}
+	dao.DB.Create(&data)
 	return data
 }
 
-// Delete is get one record question
+// Delete is get one record Comment
 func (q Comment) Delete(id uint) Comment {
 	var model Comment
 	dao.DB.First(&model, id)

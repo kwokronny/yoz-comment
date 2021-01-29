@@ -4,9 +4,9 @@ import (
 	"github.com/importcjj/sensitive"
 )
 
-var Filter sensitive.Filter
-
-func init() {
+// SensitiveValid 敏感字验证
+func SensitiveValid(content string) (bool, string) {
 	filter := sensitive.New()
-	filter.LoadWordDict("path/to/dict")
+	filter.LoadWordDict(Config.SensitivePath)
+	return filter.Validate(content)
 }

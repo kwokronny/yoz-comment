@@ -14,8 +14,6 @@ const (
 	ResponseSuccess ResponseStatus = 200
 	// ResponseAuthorized is 鉴权失败
 	ResponseAuthorized ResponseStatus = 401
-	// ResponseNotFound is 入参错误
-	ResponseNotFound ResponseStatus = 404
 	// ResponseParamError is 入参错误
 	ResponseParamError ResponseStatus = 406
 	// ResponseServerError is 服务错误

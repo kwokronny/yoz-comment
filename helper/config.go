@@ -17,7 +17,8 @@ type conf struct {
 	MysqlPwd  string `yaml:"mysql_pwd"`
 	MysqlDB   string `yaml:"mysql_db"`
 
-	IPBlockPath string `yaml:"ip_block_path"`
+	SensitivePath string `yaml:"sensitive_path"`
+	IPBlockPath   string `yaml:"ip_block_path"`
 }
 
 // Config 配置内容
@@ -51,6 +52,7 @@ func initConfigFile() (config conf, err error) {
 	config.MysqlPwd = "password"
 	config.MysqlDB = "comment"
 
+	config.SensitivePath = "./config/sensitive.txt"
 	config.IPBlockPath = "./config/block_ip"
 	yamlFile, err := yaml.Marshal(config)
 	if err != nil {

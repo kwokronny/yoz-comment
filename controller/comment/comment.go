@@ -3,6 +3,7 @@ package comment
 import (
 	"kwok-comment/helper"
 	"kwok-comment/model"
+	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -13,14 +14,19 @@ var resp = helper.Response{}
 
 // GetPage 获取所有问答并分页
 func GetPage(c *gin.Context) {
-	// authGet, _ := c.Get("auth")
-	// var auth middleware.Auth
-	// auth = authGet.(middleware.Auth)
+	page := helper.GetPagination(c)
+	comments := commentModel.GetPage(page)
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		"data": comments,
+	})
+}
 
+// GetComment 获取所有问答并分页
+func GetComment(c *gin.Context) {
 	var token string = c.DefaultQuery("token", "")
 	page := helper.GetPagination(c)
 
-	comments := commentModel.GetArticleComment(token, page)
+	comments := commentModel.GetCommentByArticle(token, page)
 	resp.Success(c, comments)
 }
 
@@ -43,11 +49,12 @@ func Save(c *gin.Context) {
 		resp.Error(c, helper.ResponseParamError, "入参错误")
 		return
 	}
-	notBlockWord, _ := helper.Filter.Validate(data.Content)
+	notBlockWord, text := helper.SensitiveValid(data.Content)
+	println(text)
 	if !notBlockWord {
-		resp.Error(c, helper.ResponseNotFound, "提交内容含违法违规内容")
-	} else {
-		commentModel.Save(data)
-		resp.Success(c, true)
+		resp.Error(c, helper.ResponseParamError, "提交内容含敏感内容")
+		return
 	}
+	commentModel.Save(data)
+	resp.Success(c, true)
 }
