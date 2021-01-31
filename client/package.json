@@ -1,0 +1,16 @@
+{
+  "name": "kb-comment",
+  "version": "1.0.0",
+  "description": "open source blog comment system",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve src/index.html --no-hmr --port 4000",
+    "build": "parcel build src/index.html --experimental-scope-hoisting",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.1.3"
+  }
+}

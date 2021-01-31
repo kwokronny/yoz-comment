@@ -1,14 +1,14 @@
 package dao
 
 import (
+	"KBCommentAPI/helper"
 	"fmt"
-	"kwok-comment/helper"
 	"log"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	// Register mysql server
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
 )
 
 // DB is gorm instance Lib
@@ -27,13 +27,11 @@ type Model struct {
 func init() {
 	var err error
 	config := helper.Config
-	var uri string = fmt.Sprintf("%s:%s@(%s)/%s?loc=Local&parseTime=True", config.MysqlUsr, config.MysqlPwd, config.MysqlHost, config.MysqlDB)
-	DB, err = gorm.Open("mysql", uri)
+	var uri string = fmt.Sprintf("%s:%s@tcp(%s)/%s?loc=Local&parseTime=True", config.MysqlUsr, config.MysqlPwd, config.MysqlHost, config.MysqlDB)
+	DB, err = gorm.Open(mysql.New(mysql.Config{
+		DSN: uri,
+	}), &gorm.Config{})
 	if err != nil {
 		log.Panicln("err:", err.Error())
 	}
-}
-
-func destory() {
-	defer DB.Close()
 }

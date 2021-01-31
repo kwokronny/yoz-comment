@@ -17,7 +17,7 @@ type Pagination interface {
 type PageData struct {
 	Page     int         `json:"page"`
 	PageSize int         `json:"pageSize"`
-	Total    int         `json:"total"`
+	Total    int64       `json:"total"`
 	Records  interface{} `json:"records"`
 }
 

@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"kwok-comment/helper"
+	"KBCommentAPI/helper"
 	"time"
 
 	"github.com/gin-gonic/gin"

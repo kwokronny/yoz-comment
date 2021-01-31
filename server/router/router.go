@@ -8,10 +8,12 @@
 package router
 
 import (
+	"KBCommentAPI/controller/comment"
+	"KBCommentAPI/helper"
+	"KBCommentAPI/middleware"
 	"fmt"
 	"html/template"
-	"kwok-comment/controller/comment"
-	"kwok-comment/middleware"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +33,7 @@ func SetupRouter() *gin.Engine {
 	engine.SetFuncMap(template.FuncMap{
 		"formatAsDate": formatAsDate,
 	})
-	engine.LoadHTMLGlob("templates/index.tmpl")
+	engine.LoadHTMLGlob("templates/index.html")
 	engine.Use(middleware.LoggerToFile())
 
 	r := engine.Group("api-comment")
@@ -39,11 +41,14 @@ func SetupRouter() *gin.Engine {
 	r.GET("/page", comment.GetComment)
 	r.POST("/comment", comment.Save)
 
-	manage := r.Group("manage", gin.BasicAuth(gin.Accounts{
-		"Hwq0za9WlCNSS7pT": "h#EqOHOr#Yl&v)ah",
+	manage := r.Group(helper.Config.ManageRouter, gin.BasicAuth(gin.Accounts{
+		helper.Config.AdminRoot: helper.Config.AdminPass,
 	}))
-	manage.POST("/delete", comment.Delete)
+	manage.GET("/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
 	manage.GET("/page", comment.GetPage)
+	manage.POST("/delete", comment.Delete)
 
 	return engine
 }

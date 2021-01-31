@@ -17,6 +17,10 @@ type conf struct {
 	MysqlPwd  string `yaml:"mysql_pwd"`
 	MysqlDB   string `yaml:"mysql_db"`
 
+	ManageRouter string `yaml:"manage_router"`
+	AdminRoot    string `yaml:"admin_root"`
+	AdminPass    string `yaml:"admin_pass"`
+
 	SensitivePath string `yaml:"sensitive_path"`
 	IPBlockPath   string `yaml:"ip_block_path"`
 }
@@ -51,6 +55,13 @@ func initConfigFile() (config conf, err error) {
 	config.MysqlUsr = "username"
 	config.MysqlPwd = "password"
 	config.MysqlDB = "comment"
+
+	config.ManageRouter = "manage_router"
+	config.MysqlUsr = "username"
+	config.MysqlPwd = "password"
+
+	config.AdminRoot = "root"
+	config.AdminPass = "pass"
 
 	config.SensitivePath = "./config/sensitive.txt"
 	config.IPBlockPath = "./config/block_ip"

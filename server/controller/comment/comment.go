@@ -1,10 +1,8 @@
 package comment
 
 import (
-	"kwok-comment/helper"
-	"kwok-comment/model"
-	"net/http"
-	"strconv"
+	"KBCommentAPI/helper"
+	"KBCommentAPI/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,13 +10,19 @@ import (
 var commentModel = model.Comment{}
 var resp = helper.Response{}
 
+type getPageRequestQuery struct {
+	NickName string `form:"nickName"`
+	Mail     string `form:"mail"`
+	Content  string `form:"content"`
+}
+
 // GetPage 获取所有问答并分页
 func GetPage(c *gin.Context) {
+	data := &getPageRequestQuery{}
+	c.BindQuery(&data)
 	page := helper.GetPagination(c)
-	comments := commentModel.GetPage(page)
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"data": comments,
-	})
+	comments := commentModel.GetPage(data.NickName, data.Mail, data.Content, page)
+	resp.Success(c, comments)
 }
 
 // GetComment 获取所有问答并分页
@@ -30,15 +34,18 @@ func GetComment(c *gin.Context) {
 	resp.Success(c, comments)
 }
 
+type deleteRequestJSON struct {
+	ID uint `json:"id" binding:"required"`
+}
+
 // Delete 删除评论
 func Delete(c *gin.Context) {
-	id, err := strconv.Atoi(c.DefaultPostForm("id", ""))
-	if err == nil {
-		commentModel.Delete(uint(id))
+	data := &deleteRequestJSON{}
+	if c.Bind(&data) == nil {
+		commentModel.Delete(data.ID)
 		resp.Success(c, true)
-	} else {
-		c.Status(404)
 	}
+	resp.Error(c, helper.ResponseParamError, "入参错误")
 }
 
 // Save 保存评论

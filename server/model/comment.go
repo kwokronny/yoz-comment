@@ -1,22 +1,22 @@
 package model
 
 import (
-	"kwok-comment/dao"
-	"kwok-comment/helper"
+	"KBCommentAPI/dao"
+	"KBCommentAPI/helper"
 )
 
 // Comment is Model Type
 type Comment struct {
 	dao.Model
-	ArticleToken string    `gorm:"column:article_token" json:"article_token" form:"article_token" binding:"required"`
-	ParentID     uint      `gorm:"column:parent_id" json:"parent_id" form:"parent_id"`
-	RID          uint      `gorm:"column:r_id" json:"r_id" form:"r_id"`
-	Nickname     string    `gorm:"column:nickname" json:"nickname" form:"nickname" binding:"required"`
+	ArticleToken string    `gorm:"column:article_token" json:"articleToken" form:"articleToken" binding:"required"`
+	ParentID     uint      `gorm:"column:parent_id" json:"parentId" form:"parentId"`
+	RID          uint      `gorm:"column:r_id" json:"rId" form:"rId"`
+	NickName     string    `gorm:"column:nickname" json:"nickName" form:"nickName" binding:"required"`
 	Mail         string    `gorm:"column:mail" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site" json:"site" form:"site"`
 	Content      string    `gorm:"column:content" json:"content" form:"content" binding:"required"`
 	IP           string    `gorm:"column:ip" json:"ip" form:"ip" binding:"required"`
-	Replys       []Comment `sql:"default:null" json:"replys"`
+	Replys       []Comment `gorm:"foreignKey:r_id" json:"replys"`
 }
 
 // TableName is Change GORM default TableName
@@ -25,10 +25,10 @@ func (q Comment) TableName() string {
 }
 
 // GetPage is get all comment
-func (q Comment) GetPage(page helper.Pagination) helper.PageData {
+func (q Comment) GetPage(nickName string, mail string, content string, page helper.Pagination) helper.PageData {
 	var data helper.PageData
 	var comments []Comment
-	dao.DB.Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
+	dao.DB.Where("content LIKE ? or nickname = ? or mail = ?", "%%"+content+"%%", nickName, mail).Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
 	data.Records = comments
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()

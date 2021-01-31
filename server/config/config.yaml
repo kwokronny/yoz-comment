@@ -4,5 +4,8 @@ mysql_host: kwok-nas.mokeyjay.com:3336
 mysql_usr: root
 mysql_pwd: gr68599$
 mysql_db: comment
+manage_router: 8P4iZOql6VcSiFEVuDiPasnE80f3QIJ0MLgiTa
+admin_root: Hwq0za9WlCNSS7pT
+admin_pass: h#EqOHOr#Yl&v)ah
 sensitive_path: ./config/sensitive.txt
 ip_block_path: ./config/block_ip
