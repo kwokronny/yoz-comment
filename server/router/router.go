@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,6 +35,17 @@ func SetupRouter() *gin.Engine {
 		"formatAsDate": formatAsDate,
 	})
 	engine.LoadHTMLGlob("templates/index.html")
+	engine.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"PUT", "PATCH"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		AllowOriginFunc: func(origin string) bool {
+			return origin == "https://github.com"
+		},
+		MaxAge: 12 * time.Hour,
+	}))
 	engine.Use(middleware.LoggerToFile())
 
 	r := engine.Group("api-comment")

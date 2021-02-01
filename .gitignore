@@ -1,0 +1,4 @@
+/server/tmp
+/client/dist
+/client/node_modules
+/client/.cache
