@@ -51,13 +51,11 @@ func Delete(c *gin.Context) {
 // Save 保存评论
 func Save(c *gin.Context) {
 	var data model.Comment
-	err := c.ShouldBind(&data)
-	if err != nil {
+	if c.ShouldBind(&data) != nil {
 		resp.Error(c, helper.ResponseParamError, "入参错误")
 		return
 	}
-	notBlockWord, text := helper.SensitiveValid(data.Content)
-	println(text)
+	notBlockWord, _ := helper.SensitiveValid(data.Content)
 	if !notBlockWord {
 		resp.Error(c, helper.ResponseParamError, "提交内容含敏感内容")
 		return

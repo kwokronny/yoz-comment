@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel serve src/index.html src/themes/{light,dark}.styl --port 4000",
-    "build": "parcel build src/index.html --experimental-scope-hoisting",
+    "build": "parcel build src/index.html src/themes/{light,dark}.styl --experimental-scope-hoisting",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

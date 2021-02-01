@@ -42,18 +42,16 @@ func SetupRouter() *gin.Engine {
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		AllowOriginFunc: func(origin string) bool {
-			return origin == "https://github.com"
+			return origin == "*"
 		},
 		MaxAge: 12 * time.Hour,
 	}))
 	engine.Use(middleware.LoggerToFile())
 
-	r := engine.Group("api-comment")
+	engine.GET("/page", comment.GetComment)
+	engine.POST("/comment", comment.Save)
 
-	r.GET("/page", comment.GetComment)
-	r.POST("/comment", comment.Save)
-
-	manage := r.Group(helper.Config.ManageRouter, gin.BasicAuth(gin.Accounts{
+	manage := engine.Group(helper.Config.ManageRouter, gin.BasicAuth(gin.Accounts{
 		helper.Config.AdminRoot: helper.Config.AdminPass,
 	}))
 	manage.GET("/index", func(c *gin.Context) {

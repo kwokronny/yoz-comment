@@ -6,7 +6,6 @@
       "dom",
       "es2017"
     ],
-    "types": [],
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
