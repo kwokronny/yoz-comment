@@ -1,5 +1,5 @@
 export class KBCommentComponent {
-  public container: HTMLFormElement;
+  public element: HTMLFormElement;
   private parentIdField: HTMLInputElement;
   private rIdField: HTMLInputElement;
   private nickNameField: HTMLInputElement;
@@ -8,16 +8,17 @@ export class KBCommentComponent {
   private contentField: HTMLTextAreaElement;
   private submitBtn: HTMLButtonElement;
   private submitting: boolean = false;
+  private success: Function = () => {};
 
-  public constructor(private config: KBCommentConfig, private readonly success: Function) {
+  public constructor(private config: KBCommentConfig) {
     this.config = config;
-    this.container = document.createElement("form");
-    this.container.className = "kb-comment-form";
-    this.container.action = "javascript:";
-    this.container.innerHTML = `
+    this.element = document.createElement("form");
+    this.element.className = "kb-comment-form";
+    this.element.action = "javascript:";
+    this.element.innerHTML = `
 		<div class="user-info clearfix">
 			<div class="is-reply">
-				回复 用户名 <a href="javascript:">取消</a>
+				回复 用户名 <a class="reset-reply" href="javascript:">取消</a>
 				<input type="hidden" name="parentId" value="0" />
 				<input type="hidden" name="rId" value="0" />
 			</div>
@@ -37,14 +38,19 @@ export class KBCommentComponent {
 		<div class="btn-group">
 			<button type="submit">评论</button>
 		</div>`;
-    this.parentIdField = this.container.querySelector("input[name=parentId]") as HTMLInputElement;
-    this.rIdField = this.container.querySelector("input[name=rId]") as HTMLInputElement;
-    this.nickNameField = this.container.querySelector("input[name=nickname]") as HTMLInputElement;
-    this.mailField = this.container.querySelector("input[name=mail]") as HTMLInputElement;
-    this.siteField = this.container.querySelector("input[name=site]") as HTMLInputElement;
-    this.contentField = this.container.querySelector("textarea") as HTMLTextAreaElement;
-    this.submitBtn = this.container.querySelector("button[type=submit]") as HTMLButtonElement;
-    this.container.addEventListener("submit", this.onSubmitComment.bind(this), false);
+    this.parentIdField = this.element.querySelector("input[name=parentId]") as HTMLInputElement;
+    this.rIdField = this.element.querySelector("input[name=rId]") as HTMLInputElement;
+    this.nickNameField = this.element.querySelector("input[name=nickname]") as HTMLInputElement;
+    this.mailField = this.element.querySelector("input[name=mail]") as HTMLInputElement;
+    this.siteField = this.element.querySelector("input[name=site]") as HTMLInputElement;
+    this.contentField = this.element.querySelector("textarea") as HTMLTextAreaElement;
+    this.submitBtn = this.element.querySelector("button[type=submit]") as HTMLButtonElement;
+    this.element.querySelector("a.reset-reply")?.addEventListener("click", this.resetReply.bind(this));
+    this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
+  }
+
+  public setEvent(successFunc: Function) {
+    this.success = successFunc;
   }
 
   private getModel() {
@@ -75,8 +81,12 @@ export class KBCommentComponent {
     return false;
   }
 
-  public setReply(parentId: string, rId: string) {
-    this.rIdField.value = rId;
-    this.parentIdField.value = parentId;
+  private resetReply() {
+    this.setReply(0, 0);
+  }
+
+  public setReply(parentId: number, rId: number) {
+    this.rIdField.value = rId.toString();
+    this.parentIdField.value = parentId.toString();
   }
 }

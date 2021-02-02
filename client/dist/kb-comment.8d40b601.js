@@ -117,45 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"time-ago.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.timeAgo = timeAgo;
-var thresholds = [1000, "秒", 1000 * 60, "分", 1000 * 60 * 60, "时", 1000 * 60 * 60 * 24, "天", 1000 * 60 * 60 * 24 * 7, "周", 1000 * 60 * 60 * 24 * 27, "月"];
-var formatOptions = {
-  month: "short",
-  day: "numeric",
-  year: "numeric"
-};
-
-function timeAgo(value) {
-  var date = new Date(value);
-  var elapsed = new Date().getTime() - new Date(value).getTime();
-
-  if (elapsed < 5000) {
-    return "just now";
-  }
-
-  var i = 0;
-
-  while (i + 2 < thresholds.length && elapsed * 1.1 > thresholds[i + 2]) {
-    i += 2;
-  }
-
-  var divisor = thresholds[i];
-  var text = thresholds[i + 1];
-  var units = Math.round(elapsed / divisor);
-
-  if (units > 3 && i === thresholds.length - 2) {
-    return "on " + date.toLocaleDateString(undefined, formatOptions);
-  }
-
-  return "" + units + text + "\u524D";
-}
-},{}],"comment-component.ts":[function(require,module,exports) {
+})({"comment-component.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -164,24 +126,33 @@ Object.defineProperty(exports, "__esModule", {
 exports.KBCommentComponent = void 0;
 
 var KBCommentComponent = function () {
-  function KBCommentComponent(config, success) {
+  function KBCommentComponent(config) {
+    var _a;
+
     this.config = config;
-    this.success = success;
     this.submitting = false;
+
+    this.success = function () {};
+
     this.config = config;
-    this.container = document.createElement("form");
-    this.container.className = "kb-comment-form";
-    this.container.action = "javascript:";
-    this.container.innerHTML = "\n\t\t<div class=\"user-info clearfix\">\n\t\t\t<div class=\"is-reply\">\n\t\t\t\t\u56DE\u590D \u7528\u6237\u540D <a href=\"javascript:\">\u53D6\u6D88</a>\n\t\t\t\t<input type=\"hidden\" name=\"parentId\" value=\"0\" />\n\t\t\t\t<input type=\"hidden\" name=\"rId\" value=\"0\" />\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"text\" name=\"nickname\" maxlength=\"40\" placeholder=\"\u6635\u79F0(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"email\" name=\"mail\" placeholder=\"\u90AE\u7BB1(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"url\" name=\"site\" maxlength=\"40\" placeholder=\"\u7F51\u5740\" />\n\t\t\t</div>\n\t\t</div>\n    <div class=\"message\">\n      <textarea row=\"6\" name=\"content\" placeholder=\"\u8BF7\u8F93\u5165\u4F60\u7684\u7559\u8A00\" required></textarea>\n\t\t</div>\n\t\t<div class=\"btn-group\">\n\t\t\t<button type=\"submit\">\u8BC4\u8BBA</button>\n\t\t</div>";
-    this.parentIdField = this.container.querySelector("input[name=parentId]");
-    this.rIdField = this.container.querySelector("input[name=rId]");
-    this.nickNameField = this.container.querySelector("input[name=nickname]");
-    this.mailField = this.container.querySelector("input[name=mail]");
-    this.siteField = this.container.querySelector("input[name=site]");
-    this.contentField = this.container.querySelector("textarea");
-    this.submitBtn = this.container.querySelector("button[type=submit]");
-    this.container.addEventListener("submit", this.onSubmitComment.bind(this), false);
+    this.element = document.createElement("form");
+    this.element.className = "kb-comment-form";
+    this.element.action = "javascript:";
+    this.element.innerHTML = "\n\t\t<div class=\"user-info clearfix\">\n\t\t\t<div class=\"is-reply\">\n\t\t\t\t\u56DE\u590D \u7528\u6237\u540D <a class=\"reset-reply\" href=\"javascript:\">\u53D6\u6D88</a>\n\t\t\t\t<input type=\"hidden\" name=\"parentId\" value=\"0\" />\n\t\t\t\t<input type=\"hidden\" name=\"rId\" value=\"0\" />\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"text\" name=\"nickname\" maxlength=\"40\" placeholder=\"\u6635\u79F0(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"email\" name=\"mail\" placeholder=\"\u90AE\u7BB1(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"url\" name=\"site\" maxlength=\"40\" placeholder=\"\u7F51\u5740\" />\n\t\t\t</div>\n\t\t</div>\n    <div class=\"message\">\n      <textarea row=\"6\" name=\"content\" placeholder=\"\u8BF7\u8F93\u5165\u4F60\u7684\u7559\u8A00\" required></textarea>\n\t\t</div>\n\t\t<div class=\"btn-group\">\n\t\t\t<button type=\"submit\">\u8BC4\u8BBA</button>\n\t\t</div>";
+    this.parentIdField = this.element.querySelector("input[name=parentId]");
+    this.rIdField = this.element.querySelector("input[name=rId]");
+    this.nickNameField = this.element.querySelector("input[name=nickname]");
+    this.mailField = this.element.querySelector("input[name=mail]");
+    this.siteField = this.element.querySelector("input[name=site]");
+    this.contentField = this.element.querySelector("textarea");
+    this.submitBtn = this.element.querySelector("button[type=submit]");
+    (_a = this.element.querySelector("a.reset-reply")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", this.resetReply.bind(this));
+    this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
   }
+
+  KBCommentComponent.prototype.setEvent = function (successFunc) {
+    this.success = successFunc;
+  };
 
   KBCommentComponent.prototype.getModel = function () {
     return {
@@ -215,9 +186,13 @@ var KBCommentComponent = function () {
     return false;
   };
 
+  KBCommentComponent.prototype.resetReply = function () {
+    this.setReply(0, 0);
+  };
+
   KBCommentComponent.prototype.setReply = function (parentId, rId) {
-    this.rIdField.value = rId;
-    this.parentIdField.value = parentId;
+    this.rIdField.value = rId.toString();
+    this.parentIdField.value = parentId.toString();
   };
 
   return KBCommentComponent;
@@ -226,8 +201,6 @@ var KBCommentComponent = function () {
 exports.KBCommentComponent = KBCommentComponent;
 },{}],"kb-comment.ts":[function(require,module,exports) {
 "use strict";
-
-var _timeAgo = require("./time-ago");
 
 var _commentComponent = require("./comment-component");
 
@@ -250,8 +223,8 @@ var KBComment = function () {
       this.load().then(function () {
         var _a;
 
-        var form = new _commentComponent.KBCommentComponent(_this.config, _this.getList);
-        (_a = _this.container) === null || _a === void 0 ? void 0 : _a.appendChild(form.container);
+        _this.formComponent = new _commentComponent.KBCommentComponent(_this.config);
+        (_a = _this.container) === null || _a === void 0 ? void 0 : _a.appendChild(_this.formComponent.element);
       });
     } else {
       console.error("未设定渲染容器");
@@ -270,7 +243,7 @@ var KBComment = function () {
       link.rel = "stylesheet";
       link.setAttribute("crossorigin", "anonymous");
       link.onload = resolve;
-      link.href = "/themes/" + _this.theme + ".css";
+      link.href = "/themes/" + _this.config.theme + ".css";
       document.head.appendChild(link);
     });
   };
@@ -284,40 +257,11 @@ var KBComment = function () {
     });
   };
 
-  KBComment.prototype.getList = function (page) {
-    var _this = this;
-
-    if (page === void 0) {
-      page = 1;
-    }
-
-    var listContainer = document.createElement("div");
-    listContainer.className = "kb-comment-list";
-    axios.get(this.api + "/page?token=" + this.token).then(function (res) {
-      if (res.data.code == 200) {
-        if (_this.container) {
-          listContainer.innerHTML = _this.renderCommentItem(res.data.data.records);
-
-          _this.container.appendChild(listContainer);
-        }
-      }
-    });
-  };
-
-  KBComment.prototype.renderCommentItem = function (list) {
-    var _this = this;
-
-    return list.reduce(function (html, item) {
-      html += "\n\t\t\t\t<div class=\"comment-item\">\n\t\t\t\t\t<div class=\"comment-avatar\">\n\t\t\t\t\t\t<img src=\"https://s.gravatar.com/avatar/" + md5(item.mail) + "?s=50&d=retro&r=g\" />\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-message clear-right\">\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"comment-time\">" + (0, _timeAgo.timeAgo)(item.createdAt) + "</div>\n\t\t\t\t\t\t\t<div class=\"comment-nickname\"><a href=\"" + item.site + "\">" + item.nickName + "</a></div>\n\t\t\t\t\t\t</div>\n\t\t\t\t\t\t<div class=\"comment-content\">" + item.content + "</div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-replys\">\n\t\t\t\t\t\t" + (Array.isArray(item.replys) ? _this.renderCommentItem(item.replys) : "") + "\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
-      return html;
-    }, "");
-  };
-
   return KBComment;
 }();
 
 new KBComment();
-},{"./time-ago":"time-ago.ts","./comment-component":"comment-component.ts"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./comment-component":"comment-component.ts"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -345,7 +289,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49666" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59247" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
