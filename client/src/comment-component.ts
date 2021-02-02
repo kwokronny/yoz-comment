@@ -9,7 +9,7 @@ export class KBCommentComponent {
   private contentField: HTMLTextAreaElement;
   private submitBtn: HTMLButtonElement;
   private submitting: boolean = false;
-  private success: Function = () => {};
+  private success?: Function;
 
   public constructor(private config: KBCommentConfig) {
     this.config = config;
@@ -46,7 +46,7 @@ export class KBCommentComponent {
     this.element.querySelector("a.reset-reply")?.addEventListener("click", this.resetReply.bind(this));
     this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
 
-    let info: KBCommentUserInfo = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "") as KBCommentUserInfo;
+    let info: KBCommentUserInfo = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "null") as KBCommentUserInfo;
     if (info) {
       this.nickNameField.value = info.nickName;
       this.mailField.value = info.mail;
@@ -67,11 +67,11 @@ export class KBCommentComponent {
     window.localStorage.setItem(STORAGE_NAME, JSON.stringify(info));
     return {
       ...info,
-      parentId: this.parentIdField.value,
-      rId: this.rIdField.value,
+      parentId: Number(this.parentIdField.value),
+      rId: Number(this.rIdField.value),
       content: this.contentField.value,
       ip: returnCitySN.cip,
-      token: this.config.token,
+      articleToken: this.config.token,
     };
   }
 
@@ -82,9 +82,12 @@ export class KBCommentComponent {
     }
     this.submitting = true;
     this.submitBtn.disabled = true;
-    axios.post(this.config.apiBase + "/comment", this.getModel(), (res: any) => {
+    axios.post(this.config.apiBase + "/comment", this.getModel()).then((res: any) => {
+      this.submitBtn.disabled = false;
+      this.submitting = false;
       if (res.data.code == 200) {
-        this.success();
+        this.success && this.success();
+        this.contentField.value = "";
       }
     });
     return false;

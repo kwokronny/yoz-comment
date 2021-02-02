@@ -6,7 +6,7 @@ export function timeAgo(value: string) {
 	let date:Date = new Date(value);
   const elapsed = new Date().getTime() - new Date(value).getTime();
   if (elapsed < 5000) {
-    return "just now";
+    return "刚刚";
   }
   let i = 0;
   while (i + 2 < thresholds.length && elapsed * 1.1 > thresholds[i + 2]) {

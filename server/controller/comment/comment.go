@@ -51,7 +51,7 @@ func Delete(c *gin.Context) {
 // Save 保存评论
 func Save(c *gin.Context) {
 	var data model.Comment
-	if c.ShouldBind(&data) != nil {
+	if c.Bind(&data) != nil {
 		resp.Error(c, helper.ResponseParamError, "入参错误")
 		return
 	}

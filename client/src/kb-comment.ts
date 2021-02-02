@@ -23,8 +23,9 @@ class KBComment {
         this.timelineComponent = new KBTimeLineComponent(this.config);
         this.container?.appendChild(this.timelineComponent.element);
         this.timelineComponent.getList();
-        this.commentComponent.setEvent(() => {
-          this.timelineComponent?.getList();
+        let self = this;
+        this.commentComponent.setEvent(function () {
+          self.timelineComponent?.getList();
         });
       });
     } else {

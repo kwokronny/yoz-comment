@@ -149,9 +149,6 @@ var KBCommentComponent = function () {
 
     this.config = config;
     this.submitting = false;
-
-    this.success = function () {};
-
     this.config = config;
     this.element = document.createElement("form");
     this.element.className = "kb-comment-form";
@@ -166,7 +163,7 @@ var KBCommentComponent = function () {
     this.submitBtn = this.element.querySelector("button[type=submit]");
     (_a = this.element.querySelector("a.reset-reply")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", this.resetReply.bind(this));
     this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
-    var info = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "");
+    var info = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "null");
 
     if (info) {
       this.nickNameField.value = info.nickName;
@@ -187,11 +184,11 @@ var KBCommentComponent = function () {
     };
     window.localStorage.setItem(STORAGE_NAME, JSON.stringify(info));
     return __assign(__assign({}, info), {
-      parentId: this.parentIdField.value,
-      rId: this.rIdField.value,
+      parentId: Number(this.parentIdField.value),
+      rId: Number(this.rIdField.value),
       content: this.contentField.value,
       ip: returnCitySN.cip,
-      token: this.config.token
+      articleToken: this.config.token
     });
   };
 
@@ -206,9 +203,13 @@ var KBCommentComponent = function () {
 
     this.submitting = true;
     this.submitBtn.disabled = true;
-    axios.post(this.config.apiBase + "/comment", this.getModel(), function (res) {
+    axios.post(this.config.apiBase + "/comment", this.getModel()).then(function (res) {
+      _this.submitBtn.disabled = false;
+      _this.submitting = false;
+
       if (res.data.code == 200) {
-        _this.success();
+        _this.success && _this.success();
+        _this.contentField.value = "";
       }
     });
     return false;
@@ -246,7 +247,7 @@ function timeAgo(value) {
   var elapsed = new Date().getTime() - new Date(value).getTime();
 
   if (elapsed < 5000) {
-    return "just now";
+    return "刚刚";
   }
 
   var i = 0;
@@ -387,10 +388,12 @@ var KBComment = function () {
 
         _this.timelineComponent.getList();
 
+        var self = _this;
+
         _this.commentComponent.setEvent(function () {
           var _a;
 
-          (_a = _this.timelineComponent) === null || _a === void 0 ? void 0 : _a.getList();
+          (_a = self.timelineComponent) === null || _a === void 0 ? void 0 : _a.getList();
         });
       });
     } else {
@@ -428,7 +431,7 @@ var KBComment = function () {
 }();
 
 new KBComment();
-},{"./comment-component":"comment-component.ts","./timeline-component":"timeline-component.ts"}],"C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./comment-component":"comment-component.ts","./timeline-component":"timeline-component.ts"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -456,7 +459,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50513" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49686" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -632,5 +635,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
+},{}]},{},["../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
 //# sourceMappingURL=/kb-comment.8d40b601.js.map

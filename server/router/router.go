@@ -35,17 +35,7 @@ func SetupRouter() *gin.Engine {
 		"formatAsDate": formatAsDate,
 	})
 	engine.LoadHTMLGlob("templates/index.html")
-	engine.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"PUT", "PATCH"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "*"
-		},
-		MaxAge: 12 * time.Hour,
-	}))
+	engine.Use(cors.Default())
 	engine.Use(middleware.LoggerToFile())
 
 	engine.GET("/page", comment.GetComment)
