@@ -1,3 +1,4 @@
+const STORAGE_NAME: string = "kb-comment-user";
 export class KBCommentComponent {
   public element: HTMLFormElement;
   private parentIdField: HTMLInputElement;
@@ -16,28 +17,25 @@ export class KBCommentComponent {
     this.element.className = "kb-comment-form";
     this.element.action = "javascript:";
     this.element.innerHTML = `
-		<div class="user-info clearfix">
-			<div class="is-reply">
-				回复 用户名 <a class="reset-reply" href="javascript:">取消</a>
-				<input type="hidden" name="parentId" value="0" />
-				<input type="hidden" name="rId" value="0" />
-			</div>
-			<div class="input-col">
-				<input type="text" name="nickname" maxlength="40" placeholder="昵称(必填)" required/>
-			</div>
-			<div class="input-col">
-				<input type="email" name="mail" placeholder="邮箱(必填)" required/>
-			</div>
-			<div class="input-col">
-				<input type="url" name="site" maxlength="40" placeholder="网址" />
-			</div>
-		</div>
-    <div class="message">
-      <textarea row="6" name="content" placeholder="请输入你的留言" required></textarea>
-		</div>
-		<div class="btn-group">
-			<button type="submit">评论</button>
-		</div>`;
+      <input type="hidden" name="parentId" value="0" />
+      <input type="hidden" name="rId" value="0" />
+      <div class="user-info clearfix">
+        <div class="input-col">
+          <input type="text" name="nickname" maxlength="40" placeholder="昵称(必填)" required/>
+        </div>
+        <div class="input-col">
+          <input type="email" name="mail" placeholder="邮箱(必填)" required/>
+        </div>
+        <div class="input-col">
+          <input type="url" name="site" maxlength="40" placeholder="网址" />
+        </div>
+      </div>
+      <div class="message">
+        <textarea row="6" name="content" placeholder="请输入你的留言" required></textarea>
+      </div>
+      <div class="btn-group">
+        <button type="submit">评论</button>
+      </div>`;
     this.parentIdField = this.element.querySelector("input[name=parentId]") as HTMLInputElement;
     this.rIdField = this.element.querySelector("input[name=rId]") as HTMLInputElement;
     this.nickNameField = this.element.querySelector("input[name=nickname]") as HTMLInputElement;
@@ -47,6 +45,13 @@ export class KBCommentComponent {
     this.submitBtn = this.element.querySelector("button[type=submit]") as HTMLButtonElement;
     this.element.querySelector("a.reset-reply")?.addEventListener("click", this.resetReply.bind(this));
     this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
+
+    let info: KBCommentUserInfo = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "") as KBCommentUserInfo;
+    if (info) {
+      this.nickNameField.value = info.nickName;
+      this.mailField.value = info.mail;
+      this.siteField.value = info.site;
+    }
   }
 
   public setEvent(successFunc: Function) {
@@ -54,12 +59,16 @@ export class KBCommentComponent {
   }
 
   private getModel() {
-    return {
-      parentId: this.parentIdField.value,
-      rId: this.rIdField.value,
+    let info: KBCommentUserInfo = {
       nickName: this.nickNameField.value,
       mail: this.mailField.value,
       site: this.siteField.value,
+    };
+    window.localStorage.setItem(STORAGE_NAME, JSON.stringify(info));
+    return {
+      ...info,
+      parentId: this.parentIdField.value,
+      rId: this.rIdField.value,
       content: this.contentField.value,
       ip: returnCitySN.cip,
       token: this.config.token,
@@ -82,11 +91,11 @@ export class KBCommentComponent {
   }
 
   private resetReply() {
-    this.setReply(0, 0);
+    this.setReply("0", "0");
   }
 
-  public setReply(parentId: number, rId: number) {
-    this.rIdField.value = rId.toString();
-    this.parentIdField.value = parentId.toString();
+  public setReply(parentId: string, rId: string) {
+    this.rIdField.value = rId;
+    this.parentIdField.value = parentId;
   }
 }

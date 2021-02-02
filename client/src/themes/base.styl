@@ -4,6 +4,7 @@ colors ?= {
 	border: #5f6b74,
 	text: #525869,
 	sub_text: #5f6b74,
+	link_text: #375f99,
 	nickname: #375f99,
 	input_bg: white,
 	input_line: #5f6b74,
@@ -22,6 +23,11 @@ colors ?= {
 		}
 	}
 
+	a {
+		text-decoration: none;
+		color: colors.link_text;
+	}
+
 	.clear-right {
 		&:after {
 			content: ' ';
@@ -31,7 +37,20 @@ colors ?= {
 	}
 
 	.kb-comment-form {
-		.user-info {
+		margin-top: 20px;
+
+		.is-reply {
+			l-ph: 10px;
+			t-fl: 14px 30px colors.text;
+			display: none;
+
+			&.show {
+				display: block;
+			}
+
+			a {
+				color: colors.text;
+			}
 		}
 
 		.input-col {
@@ -73,7 +92,7 @@ colors ?= {
 				t-fl: 16px 20px colors.btn_text;
 				font-weight: bold;
 				outline: none;
-				background: linear-gradient(-180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 90%), (colors.btn_bg);
+				background: linear-gradient(-180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0) 90%), (((((((colors.btn_bg)))))));
 			}
 		}
 	}
@@ -83,8 +102,8 @@ colors ?= {
 
 		.comment-item {
 			border-top: 1px dashed colors.border;
-			l-pv: 10px;
-			l-mv: 10px;
+			l-pv: 10px 0;
+			l-mv: 10px 0;
 
 			.comment-avatar {
 				float: left;
@@ -95,6 +114,14 @@ colors ?= {
 				}
 			}
 
+			.comment-option {
+				text-align: right;
+				t-fl: 12px 20px;
+			}
+
+			// &:hover .comment-option {
+			// opacity: 1;
+			// }
 			.comment-message {
 				margin-left: 60px;
 				min-height: 80px;
@@ -113,7 +140,7 @@ colors ?= {
 				div.comment-content {
 					l-mv: 5px;
 					t-fl: 14px 25px colors.text;
-					word-wrap: break-word; 
+					word-wrap: break-word;
 					white-space: pre-wrap;
 				}
 			}
@@ -147,7 +174,7 @@ colors ?= {
 				margin-top: 10px;
 			}
 
-			.message, .btn-group {
+			.message, .btn-group, .is-reply {
 				l-ph: 5px;
 			}
 		}

@@ -125,6 +125,24 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.KBCommentComponent = void 0;
 
+var __assign = void 0 && (void 0).__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var STORAGE_NAME = "kb-comment-user";
+
 var KBCommentComponent = function () {
   function KBCommentComponent(config) {
     var _a;
@@ -138,7 +156,7 @@ var KBCommentComponent = function () {
     this.element = document.createElement("form");
     this.element.className = "kb-comment-form";
     this.element.action = "javascript:";
-    this.element.innerHTML = "\n\t\t<div class=\"user-info clearfix\">\n\t\t\t<div class=\"is-reply\">\n\t\t\t\t\u56DE\u590D \u7528\u6237\u540D <a class=\"reset-reply\" href=\"javascript:\">\u53D6\u6D88</a>\n\t\t\t\t<input type=\"hidden\" name=\"parentId\" value=\"0\" />\n\t\t\t\t<input type=\"hidden\" name=\"rId\" value=\"0\" />\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"text\" name=\"nickname\" maxlength=\"40\" placeholder=\"\u6635\u79F0(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"email\" name=\"mail\" placeholder=\"\u90AE\u7BB1(\u5FC5\u586B)\" required/>\n\t\t\t</div>\n\t\t\t<div class=\"input-col\">\n\t\t\t\t<input type=\"url\" name=\"site\" maxlength=\"40\" placeholder=\"\u7F51\u5740\" />\n\t\t\t</div>\n\t\t</div>\n    <div class=\"message\">\n      <textarea row=\"6\" name=\"content\" placeholder=\"\u8BF7\u8F93\u5165\u4F60\u7684\u7559\u8A00\" required></textarea>\n\t\t</div>\n\t\t<div class=\"btn-group\">\n\t\t\t<button type=\"submit\">\u8BC4\u8BBA</button>\n\t\t</div>";
+    this.element.innerHTML = "\n      <input type=\"hidden\" name=\"parentId\" value=\"0\" />\n      <input type=\"hidden\" name=\"rId\" value=\"0\" />\n      <div class=\"user-info clearfix\">\n        <div class=\"input-col\">\n          <input type=\"text\" name=\"nickname\" maxlength=\"40\" placeholder=\"\u6635\u79F0(\u5FC5\u586B)\" required/>\n        </div>\n        <div class=\"input-col\">\n          <input type=\"email\" name=\"mail\" placeholder=\"\u90AE\u7BB1(\u5FC5\u586B)\" required/>\n        </div>\n        <div class=\"input-col\">\n          <input type=\"url\" name=\"site\" maxlength=\"40\" placeholder=\"\u7F51\u5740\" />\n        </div>\n      </div>\n      <div class=\"message\">\n        <textarea row=\"6\" name=\"content\" placeholder=\"\u8BF7\u8F93\u5165\u4F60\u7684\u7559\u8A00\" required></textarea>\n      </div>\n      <div class=\"btn-group\">\n        <button type=\"submit\">\u8BC4\u8BBA</button>\n      </div>";
     this.parentIdField = this.element.querySelector("input[name=parentId]");
     this.rIdField = this.element.querySelector("input[name=rId]");
     this.nickNameField = this.element.querySelector("input[name=nickname]");
@@ -148,6 +166,13 @@ var KBCommentComponent = function () {
     this.submitBtn = this.element.querySelector("button[type=submit]");
     (_a = this.element.querySelector("a.reset-reply")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", this.resetReply.bind(this));
     this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
+    var info = JSON.parse(window.localStorage.getItem(STORAGE_NAME) || "");
+
+    if (info) {
+      this.nickNameField.value = info.nickName;
+      this.mailField.value = info.mail;
+      this.siteField.value = info.site;
+    }
   }
 
   KBCommentComponent.prototype.setEvent = function (successFunc) {
@@ -155,16 +180,19 @@ var KBCommentComponent = function () {
   };
 
   KBCommentComponent.prototype.getModel = function () {
-    return {
-      parentId: this.parentIdField.value,
-      rId: this.rIdField.value,
+    var info = {
       nickName: this.nickNameField.value,
       mail: this.mailField.value,
-      site: this.siteField.value,
+      site: this.siteField.value
+    };
+    window.localStorage.setItem(STORAGE_NAME, JSON.stringify(info));
+    return __assign(__assign({}, info), {
+      parentId: this.parentIdField.value,
+      rId: this.rIdField.value,
       content: this.contentField.value,
       ip: returnCitySN.cip,
       token: this.config.token
-    };
+    });
   };
 
   KBCommentComponent.prototype.onSubmitComment = function (event) {
@@ -187,22 +215,151 @@ var KBCommentComponent = function () {
   };
 
   KBCommentComponent.prototype.resetReply = function () {
-    this.setReply(0, 0);
+    this.setReply("0", "0");
   };
 
   KBCommentComponent.prototype.setReply = function (parentId, rId) {
-    this.rIdField.value = rId.toString();
-    this.parentIdField.value = parentId.toString();
+    this.rIdField.value = rId;
+    this.parentIdField.value = parentId;
   };
 
   return KBCommentComponent;
 }();
 
 exports.KBCommentComponent = KBCommentComponent;
-},{}],"kb-comment.ts":[function(require,module,exports) {
+},{}],"time-ago.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.timeAgo = timeAgo;
+var thresholds = [1000, "秒", 1000 * 60, "分", 1000 * 60 * 60, "时", 1000 * 60 * 60 * 24, "天", 1000 * 60 * 60 * 24 * 7, "周", 1000 * 60 * 60 * 24 * 27, "月"];
+var formatOptions = {
+  month: "short",
+  day: "numeric",
+  year: "numeric"
+};
+
+function timeAgo(value) {
+  var date = new Date(value);
+  var elapsed = new Date().getTime() - new Date(value).getTime();
+
+  if (elapsed < 5000) {
+    return "just now";
+  }
+
+  var i = 0;
+
+  while (i + 2 < thresholds.length && elapsed * 1.1 > thresholds[i + 2]) {
+    i += 2;
+  }
+
+  var divisor = thresholds[i];
+  var text = thresholds[i + 1];
+  var units = Math.round(elapsed / divisor);
+
+  if (units > 3 && i === thresholds.length - 2) {
+    return "on " + date.toLocaleDateString(undefined, formatOptions);
+  }
+
+  return "" + units + text + "\u524D";
+}
+},{}],"timeline-component.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.KBTimeLineComponent = void 0;
+
+var _commentComponent = require("./comment-component");
+
+var _timeAgo = require("./time-ago");
+
+var KBTimeLineComponent = function () {
+  function KBTimeLineComponent(config) {
+    var _this = this;
+
+    this.config = config;
+    this.loading = false;
+    this.element = document.createElement("div");
+    this.element.className = "kb-comment-list";
+    this.commentComp = new _commentComponent.KBCommentComponent(this.config);
+    this.element.addEventListener("click", function (event) {
+      var _a, _b, _c;
+
+      var target = event.target;
+
+      if (target.className == "reply-btn") {
+        if ((_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.contains(_this.commentComp.element)) {
+          (_b = target.parentNode) === null || _b === void 0 ? void 0 : _b.removeChild(_this.commentComp.element);
+        } else {
+          (_c = target.parentNode) === null || _c === void 0 ? void 0 : _c.appendChild(_this.commentComp.element);
+
+          _this.commentComp.setReply(target.dataset.pid || "", target.dataset.rid || "");
+
+          _this.commentComp.setEvent(function () {
+            var _a;
+
+            (_a = target.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(_this.commentComp.element);
+
+            _this.getList();
+          });
+        }
+      }
+    });
+  }
+
+  KBTimeLineComponent.prototype.getList = function (page) {
+    var _this = this;
+
+    if (page === void 0) {
+      page = 1;
+    }
+
+    if (this.loading == true) return;
+    this.loading = true;
+    this.element.innerHTML = "<div class=\"loading\">loading</div>";
+    var params = {
+      token: this.config.token,
+      page: page
+    };
+    axios.get(this.config.apiBase + "/page", {
+      params: params
+    }).then(function (res) {
+      _this.loading = false;
+
+      if (res.data.code == 200) {
+        _this.element.innerHTML = _this.renderCommentItem(res.data.data.records);
+      }
+    });
+  };
+
+  KBTimeLineComponent.prototype.renderCommentItem = function (list, first) {
+    var _this = this;
+
+    if (first === void 0) {
+      first = 0;
+    }
+
+    return list.reduce(function (html, item) {
+      var pid = first == 0 ? item.id : first;
+      html += "\n\t\t\t\t<div class=\"comment-item\">\n\t\t\t\t\t<div class=\"comment-avatar\">\n\t\t\t\t\t\t<img src=\"https://s.gravatar.com/avatar/" + md5(item.mail) + "?s=50&d=retro&r=g\" />\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-message clear-right\">\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"comment-time\">" + (0, _timeAgo.timeAgo)(item.createdAt) + "</div>\n\t\t\t\t\t\t\t<div class=\"comment-nickname\"><a href=\"" + item.site + "\">" + item.nickName + "</a></div>\n\t\t\t\t\t\t</div>\n            <div class=\"comment-content\">" + item.content + "</div>\n            <div class=\"comment-option\"><a class=\"reply-btn\" data-rid=\"" + item.id + "\" data-pid=\"" + pid + "\" href=\"javascript:\">\u56DE\u590D</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-replys\">\n\t\t\t\t\t\t" + (Array.isArray(item.replys) ? _this.renderCommentItem(item.replys, pid) : "") + "\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+      return html;
+    }, "");
+  };
+
+  return KBTimeLineComponent;
+}();
+
+exports.KBTimeLineComponent = KBTimeLineComponent;
+},{"./comment-component":"comment-component.ts","./time-ago":"time-ago.ts"}],"kb-comment.ts":[function(require,module,exports) {
 "use strict";
 
 var _commentComponent = require("./comment-component");
+
+var _timelineComponent = require("./timeline-component");
 
 var KBComment = function () {
   function KBComment() {
@@ -221,10 +378,20 @@ var KBComment = function () {
       this.config.apiBase = this.container.dataset.api || "";
       this.config.token = this.container.dataset.token || location.pathname;
       this.load().then(function () {
-        var _a;
+        var _a, _b;
 
-        _this.formComponent = new _commentComponent.KBCommentComponent(_this.config);
-        (_a = _this.container) === null || _a === void 0 ? void 0 : _a.appendChild(_this.formComponent.element);
+        _this.commentComponent = new _commentComponent.KBCommentComponent(_this.config);
+        (_a = _this.container) === null || _a === void 0 ? void 0 : _a.appendChild(_this.commentComponent.element);
+        _this.timelineComponent = new _timelineComponent.KBTimeLineComponent(_this.config);
+        (_b = _this.container) === null || _b === void 0 ? void 0 : _b.appendChild(_this.timelineComponent.element);
+
+        _this.timelineComponent.getList();
+
+        _this.commentComponent.setEvent(function () {
+          var _a;
+
+          (_a = _this.timelineComponent) === null || _a === void 0 ? void 0 : _a.getList();
+        });
       });
     } else {
       console.error("未设定渲染容器");
@@ -261,7 +428,7 @@ var KBComment = function () {
 }();
 
 new KBComment();
-},{"./comment-component":"comment-component.ts"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./comment-component":"comment-component.ts","./timeline-component":"timeline-component.ts"}],"C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -289,7 +456,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59247" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50513" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -465,5 +632,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
+},{}]},{},["C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
 //# sourceMappingURL=/kb-comment.8d40b601.js.map

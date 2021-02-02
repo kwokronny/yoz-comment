@@ -1,8 +1,9 @@
-
 import { KBCommentComponent } from "./comment-component";
+import { KBTimeLineComponent } from "./timeline-component";
 class KBComment {
   private container: HTMLElement | null;
-  private formComponent?: KBCommentComponent;
+  private commentComponent?: KBCommentComponent;
+  private timelineComponent?: KBTimeLineComponent;
   private config: KBCommentConfig = {
     theme: "light",
     apiBase: "",
@@ -17,8 +18,14 @@ class KBComment {
       this.config.apiBase = this.container.dataset.api || "";
       this.config.token = this.container.dataset.token || location.pathname;
       this.load().then(() => {
-        this.formComponent = new KBCommentComponent(this.config);
-        this.container?.appendChild(this.formComponent.element);
+        this.commentComponent = new KBCommentComponent(this.config);
+        this.container?.appendChild(this.commentComponent.element);
+        this.timelineComponent = new KBTimeLineComponent(this.config);
+        this.container?.appendChild(this.timelineComponent.element);
+        this.timelineComponent.getList();
+        this.commentComponent.setEvent(() => {
+          this.timelineComponent?.getList();
+        });
       });
     } else {
       console.error("未设定渲染容器");
@@ -48,7 +55,6 @@ class KBComment {
       document.body.appendChild(script);
     });
   }
-
 }
 
 new KBComment();

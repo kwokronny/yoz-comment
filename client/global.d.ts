@@ -7,7 +7,7 @@ declare interface KBCommentConfig {
   theme: string;
 }
 
-declare interface CommentItem {
+declare interface KBCommentItem {
   id: number;
   createdAt: string;
   articleToken: string;
@@ -18,5 +18,11 @@ declare interface CommentItem {
   site: string;
   content: string;
   ip: string;
-  replys: CommentItem[] | null;
+  replys: KBCommentItem[] | null;
+}
+
+declare interface KBCommentUserInfo {
+  nickName: string;
+  mail: string;
+  site: string;
 }
