@@ -19,6 +19,6 @@ generate:
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$app_name" main.go
   after_script:
     - eval `ssh-agent -s`
-    - ssh-add <(echo "$SERVER_KEY")
+    - bash -c "ssh-add <(echo '$SERVER_KEY')"
     - scp -P"$SERVER_PORT" -r "$app_name" root@"$SERVER_HOST":"$deploy_path"
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "cd $deploy_path && nohup $app_name >> log.out & sleep 1"
