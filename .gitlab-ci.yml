@@ -1,0 +1,46 @@
+# image: node:12-alpine
+# image: golang:1.15.7-alpine
+
+# stages:
+#   - deploy
+  
+# generate:
+#   stage: deploy
+#   only:
+#     - master
+#   variables:
+#     deploy_path: "/www/wwwroot/kwokronny.top"
+#     tar_name: "blog.release.tar.gz"
+#   before_script:
+#     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+#     - apk update
+#     - apk add openssh-client
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#   script:
+#     - echo "生成静态SSR站点文件"
+#     - hexo generate --config prod_config.yml
+#     - echo "生成完成"
+#     - gulp
+#     - echo "开始部署"
+#     - cd public
+#     - echo "开始同步CDN"
+#     - git init
+#     - git config --global user.email "green68599@icloud.com"
+#     - git config --global user.name "KwokRonny"
+#     - git config --global credential.helper store
+#     - git remote add origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/kwokronny/kwokronny.github.io.git"
+#     - git add .
+#     - git commit -m "UPDATE BLOG ${CI_JOB_ID}"
+#     - git tag "$CI_JOB_ID"
+#     - git push --force -u origin master --tags
+#     - echo "同步完成"
+#     - echo "开始打包转输"
+#     - rm -rf .git
+#     - tar -zcvf "$tar_name" ./*
+#     - eval `ssh-agent -s`
+#     - ssh-add <(echo "$SERVER_KEY")
+#     - scp -P"$SERVER_PORT" "$tar_name" root@"$SERVER_HOST":/root
+#     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "tar -zxvf $tar_name -C $deploy_path && rm $tar_name"
+#     - echo "部署完成"

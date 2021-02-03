@@ -19,9 +19,9 @@ var DB *gorm.DB
 //      dao.Model
 //    }
 type Model struct {
-	ID        uint      `gorm:"column:id;primary_key;unique;not null;AUTO_INCREMENT" json:"id" form:"id"`
-	CreatedAt time.Time `gorm:"column:created_at;ASSOCIATION_AUTOCREATE;type:timestamp" json:"createdAt" time_utc:"1"`
-	DeletedAt *string   `gorm:"column:deleted_at;type:timestamp" json:"-" sql:"index"`
+	ID        uint      `gorm:"AUTOINCREMENT;primary_key;unique;type:int(11);not null" json:"id" form:"id"`
+	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:timestamp" json:"createdAt" time_utc:"1"`
+	DeletedAt *time.Time
 }
 
 func init() {

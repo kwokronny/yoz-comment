@@ -18,7 +18,7 @@ export function timeAgo(value: string) {
   const units = Math.round(elapsed / divisor);
 
   if (units > 3 && i === thresholds.length - 2) {
-    return `on ${date.toLocaleDateString(undefined, formatOptions)}`;
+    return date.toLocaleDateString(undefined, formatOptions);
   }
   return `${units}${text}前`;
 }

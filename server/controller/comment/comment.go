@@ -55,6 +55,7 @@ func Save(c *gin.Context) {
 		resp.Error(c, helper.ResponseParamError, "入参错误")
 		return
 	}
+	data.IP = c.ClientIP()
 	notBlockWord, _ := helper.SensitiveValid(data.Content)
 	if !notBlockWord {
 		resp.Error(c, helper.ResponseParamError, "提交内容含敏感内容")

@@ -261,7 +261,7 @@ function timeAgo(value) {
   var units = Math.round(elapsed / divisor);
 
   if (units > 3 && i === thresholds.length - 2) {
-    return "on " + date.toLocaleDateString(undefined, formatOptions);
+    return date.toLocaleDateString(undefined, formatOptions);
   }
 
   return "" + units + text + "\u524D";
@@ -346,7 +346,7 @@ var KBTimeLineComponent = function () {
 
     return list.reduce(function (html, item) {
       var pid = first == 0 ? item.id : first;
-      html += "\n\t\t\t\t<div class=\"comment-item\">\n\t\t\t\t\t<div class=\"comment-avatar\">\n\t\t\t\t\t\t<img src=\"https://s.gravatar.com/avatar/" + md5(item.mail) + "?s=50&d=retro&r=g\" />\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-message clear-right\">\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"comment-time\">" + (0, _timeAgo.timeAgo)(item.createdAt) + "</div>\n\t\t\t\t\t\t\t<div class=\"comment-nickname\"><a href=\"" + item.site + "\">" + item.nickName + "</a></div>\n\t\t\t\t\t\t</div>\n            <div class=\"comment-content\">" + item.content + "</div>\n            <div class=\"comment-option\"><a class=\"reply-btn\" data-rid=\"" + item.id + "\" data-pid=\"" + pid + "\" href=\"javascript:\">\u56DE\u590D</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-replys\">\n\t\t\t\t\t\t" + (Array.isArray(item.replys) ? _this.renderCommentItem(item.replys, pid) : "") + "\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
+      html += "\n\t\t\t\t<div class=\"comment-item\">\n\t\t\t\t\t<div class=\"comment-avatar\">\n\t\t\t\t\t\t<img src=\"https://s.gravatar.com/avatar/" + md5(item.mail) + "?s=50&d=retro&r=g\" />\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-message clear-right\">\n\t\t\t\t\t\t<div>\n\t\t\t\t\t\t\t<div class=\"comment-time\">" + (0, _timeAgo.timeAgo)(item.createdAt) + "</div>\n\t\t\t\t\t\t\t<div class=\"comment-nickname\"><a target=\"_black\" href=\"" + item.site + "\">" + item.nickName + "</a></div>\n\t\t\t\t\t\t</div>\n            <div class=\"comment-content\">" + item.content + "</div>\n            <div class=\"comment-option\"><a class=\"reply-btn\" data-rid=\"" + item.id + "\" data-pid=\"" + pid + "\" href=\"javascript:\">\u56DE\u590D</a></div>\n\t\t\t\t\t</div>\n\t\t\t\t\t<div class=\"comment-replys\">\n\t\t\t\t\t\t" + (Array.isArray(item.replys) ? _this.renderCommentItem(item.replys, pid) : "") + "\n\t\t\t\t\t</div>\n\t\t\t\t</div>";
       return html;
     }, "");
   };
@@ -431,7 +431,7 @@ var KBComment = function () {
 }();
 
 new KBComment();
-},{"./comment-component":"comment-component.ts","./timeline-component":"timeline-component.ts"}],"../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./comment-component":"comment-component.ts","./timeline-component":"timeline-component.ts"}],"C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -459,7 +459,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49686" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56998" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -635,5 +635,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../.nvm/versions/node/v10.16.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
+},{}]},{},["C:/Users/guoren/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","kb-comment.ts"], null)
 //# sourceMappingURL=/kb-comment.8d40b601.js.map

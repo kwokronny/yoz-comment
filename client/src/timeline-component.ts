@@ -56,7 +56,7 @@ export class KBTimeLineComponent {
 					<div class="comment-message clear-right">
 						<div>
 							<div class="comment-time">${timeAgo(item.createdAt)}</div>
-							<div class="comment-nickname"><a href="${item.site}">${item.nickName}</a></div>
+							<div class="comment-nickname"><a target="_black" href="${item.site}">${item.nickName}</a></div>
 						</div>
             <div class="comment-content">${item.content}</div>
             <div class="comment-option"><a class="reply-btn" data-rid="${item.id}" data-pid="${pid}" href="javascript:">回复</a></div>

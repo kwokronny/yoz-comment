@@ -8,20 +8,24 @@ import (
 // Comment is Model Type
 type Comment struct {
 	dao.Model
-	ArticleToken string    `gorm:"column:article_token" json:"articleToken" form:"articleToken" binding:"required"`
-	ParentID     uint      `gorm:"column:parent_id" json:"parentId" form:"parentId"`
-	RID          uint      `gorm:"column:r_id" json:"rId" form:"rId"`
-	NickName     string    `gorm:"column:nickname" json:"nickName" form:"nickName" binding:"required"`
-	Mail         string    `gorm:"column:mail" json:"mail" form:"mail" binding:"required,email"`
-	Site         string    `gorm:"column:site" json:"site" form:"site"`
-	Content      string    `gorm:"column:content" json:"content" form:"content" binding:"required"`
-	IP           string    `gorm:"column:ip" json:"ip" form:"ip" binding:"required"`
-	Replys       []Comment `gorm:"foreignKey:r_id" json:"replys"`
+	ArticleToken string    `gorm:"column:article_token;type:varchar(50);not null;comment:文章token" json:"articleToken" form:"articleToken" binding:"required"`
+	ParentID     uint      `gorm:"column:parent_id;type:int(11);not null;comment:楼ID" json:"parentId" form:"parentId"`
+	RID          uint      `gorm:"column:r_id;type:int(11);not null;comment:回复ID" json:"rId" form:"rId"`
+	NickName     string    `gorm:"column:nickname;type:varchar(50);not null;comment:昵称" json:"nickName" form:"nickName" binding:"required"`
+	Mail         string    `gorm:"column:mail;type:varchar(50);not null;comment:邮箱" json:"mail" form:"mail" binding:"required,email"`
+	Site         string    `gorm:"column:site;type:varchar(50);comment:网站" json:"site" form:"site"`
+	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
+	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP" json:"ip" form:"ip" binding:"required"`
+	Replys       []Comment `gorm:"-" json:"replys"`
+}
+
+func init() {
+	dao.DB.AutoMigrate(&Comment{})
 }
 
 // TableName is Change GORM default TableName
 func (q Comment) TableName() string {
-	return "comment"
+	return "kb-comment"
 }
 
 // GetPage is get all comment
