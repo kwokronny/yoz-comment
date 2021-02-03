@@ -4,20 +4,26 @@ generate:
     - master
   variables:
     deploy_path: "/www/wwwroot/kwokronny.top"
+    tar_name: "kb-comment."
     app_name: "kb-comment"
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     - apk update
     - apk add openssh-client
     - mkdir -p ~/.ssh
+    - echo "$SERVER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - cd server
     - export GOPROXY=https://goproxy.io
-    - cat go.mod
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$app_name" main.go
-    - eval `ssh-agent -s`
-    - ssh-add < (echo "$SERVER_KEY")
-    - scp -P"$SERVER_PORT" -r "$app_name" root@"$SERVER_HOST":/"$deploy_path"
-    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "cd $deploy_path && nohup $app_name >> log.out & sleep 1"
+    - mkdir -p release/logs
+    - cp -r templates release
+    - cp -r config release
+    - echo "$API_CONFIG" > ./release/config.yaml
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o release/"$app_name" main.go
+    - cd release
+    - tar -zcvf "$tar_name" ./*
+    - scp -P"$SERVER_PORT" -r "$app_name" root@"$SERVER_HOST":"$deploy_path"
+    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name && tar -zxvf $tar_name -C $deploy_path && nohup ${deploy_path}/${app_name} >> log.out & sleep 1"
