@@ -10,15 +10,14 @@ generate:
     - apk update
     - apk add openssh-client
     - mkdir -p ~/.ssh
+    - echo "$SERVER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
     - cd server
     - export GOPROXY=https://goproxy.io
     - cat go.mod
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$app_name" main.go
-  after_script:
-    - eval `ssh-agent -s`
-    - bash -c "ssh-add <(echo '$SERVER_KEY')"
     - scp -P"$SERVER_PORT" -r "$app_name" root@"$SERVER_HOST":"$deploy_path"
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "cd $deploy_path && nohup $app_name >> log.out & sleep 1"
