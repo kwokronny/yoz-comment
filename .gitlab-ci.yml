@@ -1,5 +1,5 @@
 generate:
-  image: golang:1.15.7-alpine
+  image: golang:1.15-alpine
   only:
     - master
   variables:
