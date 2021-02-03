@@ -21,4 +21,4 @@ generate:
     - cat go.mod
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o "$app_name" main.go
     - scp -P"$SERVER_PORT" -r "$app_name" root@"$SERVER_HOST":"$deploy_path"
-    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "nohup ${deploy_path}/${app_name} >> log.out & sleep 1"
+    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "chmod 774 ${deploy_path}/${app_name} && nohup ${deploy_path}/${app_name} >> log.out & sleep 1"
