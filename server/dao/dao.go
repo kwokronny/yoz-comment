@@ -19,8 +19,8 @@ var DB *gorm.DB
 //      dao.Model
 //    }
 type Model struct {
-	ID        uint      `gorm:"AUTOINCREMENT;primary_key;unique;type:int(11);not null" json:"id" form:"id"`
-	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:timestamp" json:"createdAt" time_utc:"1"`
+	ID        uint      `gorm:"AUTOINCREMENT;primary_key;unique;type:int;size:32;comment:ID" json:"id" form:"id"`
+	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:timestamp;comment:发表日期" json:"createdAt" time_utc:"1"`
 	DeletedAt *time.Time
 }
 

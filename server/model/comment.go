@@ -9,8 +9,8 @@ import (
 type Comment struct {
 	dao.Model
 	ArticleToken string    `gorm:"column:article_token;type:varchar(50);not null;comment:文章token" json:"articleToken" form:"articleToken" binding:"required"`
-	ParentID     uint      `gorm:"column:parent_id;type:int(11);not null;comment:楼ID" json:"parentId" form:"parentId"`
-	RID          uint      `gorm:"column:r_id;type:int(11);not null;comment:回复ID" json:"rId" form:"rId"`
+	ParentID     uint64    `gorm:"column:parent_id;type:int;size:32;not null;comment:楼ID" json:"parentId" form:"parentId"`
+	RID          uint      `gorm:"column:r_id;type:int;size:32;not null;comment:回复ID" json:"rId" form:"rId"`
 	NickName     string    `gorm:"column:nickname;type:varchar(50);not null;comment:昵称" json:"nickName" form:"nickName" binding:"required"`
 	Mail         string    `gorm:"column:mail;type:varchar(50);not null;comment:邮箱" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site;type:varchar(50);comment:网站" json:"site" form:"site"`
