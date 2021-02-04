@@ -22,9 +22,10 @@ generate:
     - mkdir -p release/logs
     - cp -r templates release
     - cp -r config release
-    - echo "$API_CONFIG" > ./release/config.yaml
+    - rm -f release/config/config.yaml
+    - echo "$API_CONFIG" > ./release/config/config.yaml
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o release/"$app_name" main.go
     - cd release
     - tar -zcvf "$tar_name" ./*
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
-    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name ; tar -zxvf $tar_name -C $deploy_path && chmod 774 ${deploy_path}/${app_name} && nohup ${deploy_path}/${app_name} >> log.out & sleep 1"
+    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name ; mkdir ${deploy_path} && tar -zxvf $tar_name -C $deploy_path && chmod 774 ${deploy_path}/${app_name} && nohup ${deploy_path}/${app_name} >> log.out & sleep 1"
