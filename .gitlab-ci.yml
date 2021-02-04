@@ -29,3 +29,19 @@ generate:
     - tar -zcvf "$tar_name" ./*
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name ; mkdir ${deploy_path} ; tar -zxvf $tar_name -C $deploy_path && chmod 774 ${deploy_path}/${app_name} && cd $deploy_path && nohup ./${app_name} >> log.out & sleep 1"
+
+public:
+  image: golang:1.15-alpine
+  only:
+    - public
+  script:
+    - rm -rf .git
+    - git init
+    - git config --global user.email "green68599@icloud.com"
+    - git config --global user.name "KwokRonny"
+    - git config --global credential.helper store
+    - git remote add origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/kwokronny/kb-comment.git"
+    - git add .
+    - git commit -m "同步仓库"
+    - git push -u origin master
+
