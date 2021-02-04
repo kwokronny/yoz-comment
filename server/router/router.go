@@ -37,17 +37,17 @@ func SetupRouter() *gin.Engine {
 		engine.Use(cors.Default())
 	}
 
-	engine.GET("page", comment.GetComment)
-	engine.POST("comment", comment.Save)
+	engine.GET("/page", comment.GetComment)
+	engine.POST("/comment", comment.Save)
 
 	manage := engine.Group(helper.Config.ManageRouter, gin.BasicAuth(gin.Accounts{
 		helper.Config.AdminRoot: helper.Config.AdminPass,
 	}))
-	manage.GET("index", func(c *gin.Context) {
+	manage.GET("/index", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
-	manage.GET("page", comment.GetPage)
-	manage.POST("delete", comment.Delete)
+	manage.GET("/page", comment.GetPage)
+	manage.POST("/delete", comment.Delete)
 
 	return engine
 }
