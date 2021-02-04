@@ -17,7 +17,7 @@ type conf struct {
 	MysqlPwd  string `yaml:"mysql_pwd"`
 	MysqlDB   string `yaml:"mysql_db"`
 
-	CROS_Enabled string `yaml:"cros_enabled"`
+	CROS_Enabled bool `yaml:"cros_enabled"`
 
 	ManageRouter string `yaml:"manage_router"`
 	AdminRoot    string `yaml:"admin_root"`
