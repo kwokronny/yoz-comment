@@ -17,6 +17,8 @@ type conf struct {
 	MysqlPwd  string `yaml:"mysql_pwd"`
 	MysqlDB   string `yaml:"mysql_db"`
 
+	CROS_Enabled string `yaml:"cros_enabled"`
+
 	ManageRouter string `yaml:"manage_router"`
 	AdminRoot    string `yaml:"admin_root"`
 	AdminPass    string `yaml:"admin_pass"`
@@ -59,6 +61,8 @@ func initConfigFile() (config conf, err error) {
 	config.ManageRouter = "manage_router"
 	config.MysqlUsr = "username"
 	config.MysqlPwd = "password"
+
+	config.CROS_Enabled = false
 
 	config.AdminRoot = "root"
 	config.AdminPass = "pass"
