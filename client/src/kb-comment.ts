@@ -1,40 +1,44 @@
 import { KBCommentComponent } from "./comment-component";
 import { KBTimeLineComponent } from "./timeline-component";
+import { deparam } from "./deparam";
+import { startMeasuring } from './measure';
 class KBComment {
-  private container: HTMLElement | null;
+  private container!: HTMLElement;
   private commentComponent?: KBCommentComponent;
   private timelineComponent?: KBTimeLineComponent;
   private config: KBCommentConfig = {
     theme: "light",
     apiBase: "",
-    token: "light",
+    token: "",
   };
 
   constructor() {
-    this.container = document.getElementById("kb-comment");
-    if (this.container) {
-      this.container.className = "kb-comment-container";
-      this.config.theme = this.container.dataset.theme || "light";
-      this.config.apiBase = this.container.dataset.api || "";
-      this.config.token = this.container.dataset.token || location.pathname;
-      this.load().then(() => {
-        this.commentComponent = new KBCommentComponent(this.config);
-        this.container?.appendChild(this.commentComponent.element);
-        this.timelineComponent = new KBTimeLineComponent(this.config);
-        this.container?.appendChild(this.timelineComponent.element);
-        this.timelineComponent.getList();
-        let self = this;
-        this.commentComponent.setEvent(function () {
-          self.timelineComponent?.getList();
-        });
-      });
-    } else {
+    this.container = document.createElement("div");
+    document.body.appendChild(this.container);
+    let params = deparam(location.search.replace("?", ""));
+    if (!this.container) {
       console.error("未设定渲染容器");
     }
+    startMeasuring(params.origin)
+    this.container.className = "kb-comment-container";
+    this.config.theme = params.theme || "light";
+    this.config.apiBase = params.api || "";
+    this.config.token = params.token || location.pathname;
+    this.load().then(() => {
+      this.commentComponent = new KBCommentComponent(this.config);
+      this.container?.appendChild(this.commentComponent.element);
+      this.timelineComponent = new KBTimeLineComponent(this.config);
+      this.container?.appendChild(this.timelineComponent.element);
+      this.timelineComponent.getList();
+      let self = this;
+      this.commentComponent.setEvent(function () {
+        self.timelineComponent?.getList();
+      });
+    });
   }
 
   private load(): Promise<any> {
-    return Promise.all([this.loadTheme(), this.loadLibrary("http://pv.sohu.com/cityjson?ie=utf-8"), this.loadLibrary("https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"), this.loadLibrary("https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js")]);
+    return Promise.all([this.loadTheme()]);
   }
 
   private loadTheme() {
@@ -43,17 +47,8 @@ class KBComment {
       link.rel = "stylesheet";
       link.setAttribute("crossorigin", "anonymous");
       link.onload = resolve;
-      link.href = `/themes/${this.config.theme}.css`;
+      link.href = `/web/themes/${this.config.theme}.css`;
       document.head.appendChild(link);
-    });
-  }
-
-  private loadLibrary(url: string) {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = url;
-      script.onload = resolve;
-      document.body.appendChild(script);
     });
   }
 }

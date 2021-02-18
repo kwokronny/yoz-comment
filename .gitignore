@@ -1,4 +1,4 @@
-/server/tmp
-/client/dist
+/tmp
+/templates/static
 /client/node_modules
 /client/.cache

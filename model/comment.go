@@ -15,7 +15,7 @@ type Comment struct {
 	Mail         string    `gorm:"column:mail;type:varchar(50);not null;comment:邮箱" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site;type:varchar(50);comment:网站" json:"site" form:"site"`
 	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
-	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP" json:"ip" form:"ip" binding:"required"`
+	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP"`
 	Replys       []Comment `gorm:"-" json:"replys"`
 }
 

@@ -2,21 +2,14 @@
 <html lang="en">
   <head>
     <title>kb-comment</title>
-    <meta name="description" content="A lightweight commenting system using GitHub issues." />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body{
-        background:black;
-      }
-    </style>
+    <link rel="preconnect" href="https://api.github.com">
+    <link rel="preconnect" href="https://avatars3.githubusercontent.com">
   </head>
   <body>
-    <div id="kb-comment" 
-      data-api="http://127.0.0.1" 
-      data-token="test"
-      data-theme="dark">
-    </div>
+    <script src="https://cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script src="./kb-comment.ts"></script>
   </body>
 </html>

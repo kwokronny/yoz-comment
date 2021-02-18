@@ -70,7 +70,6 @@ export class KBCommentComponent {
       parentId: Number(this.parentIdField.value),
       rId: Number(this.rIdField.value),
       content: this.contentField.value,
-      ip: returnCitySN.cip,
       articleToken: this.config.token,
     };
   }
@@ -82,7 +81,7 @@ export class KBCommentComponent {
     }
     this.submitting = true;
     this.submitBtn.disabled = true;
-    axios.post(this.config.apiBase + "/comment", this.getModel()).then((res: any) => {
+    axios.post(this.config.apiBase + "/api/comment", this.getModel()).then((res: any) => {
       this.submitBtn.disabled = false;
       this.submitting = false;
       if (res.data.code == 200) {
