@@ -25,7 +25,7 @@ func SetupRouter() *gin.Engine {
 	engine.LoadHTMLGlob("templates/manage.html")
 	engine.Use(middleware.LoggerToFile())
 
-	if helper.Config.CROS_Enabled == true {
+	if helper.Config.CROSEnabled == true {
 		engine.Use(cors.Default())
 	}
 

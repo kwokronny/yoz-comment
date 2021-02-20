@@ -5,6 +5,7 @@ import (
 	"KBCommentAPI/model"
 
 	"github.com/gin-gonic/gin"
+	"gopkg.in/gomail.v2"
 )
 
 var commentModel = model.Comment{}
@@ -62,5 +63,22 @@ func Save(c *gin.Context) {
 		return
 	}
 	commentModel.Save(data)
+	if helper.Config.SMTPEnabled == true {
+		sendEmail(data.Content)
+	}
 	resp.Success(c, true)
+}
+
+func sendEmail(content string) {
+	m := gomail.NewMessage()
+	m.SetHeader("Form", helper.Config.SMTPForm)
+	m.SetHeader("To", helper.Config.SMTPTo)
+	m.SetHeader("Subject", "[KB-Comment]你有一条新的留言")
+	m.SetBody("text/plain", content)
+
+	d := gomail.NewDialer(helper.Config.SMTPHost, helper.Config.SMTPPort, helper.Config.SMTPUsername, helper.Config.SMTPPassword)
+	err := d.DialAndSend(m)
+	if err != nil {
+		panic(err)
+	}
 }

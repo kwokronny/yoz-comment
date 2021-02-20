@@ -17,11 +17,19 @@ type conf struct {
 	MysqlPwd  string `yaml:"mysql_pwd"`
 	MysqlDB   string `yaml:"mysql_db"`
 
-	CROS_Enabled bool `yaml:"cros_enabled"`
+	CROSEnabled bool `yaml:"cros_enabled"`
 
 	ManageRouter string `yaml:"manage_router"`
 	AdminRoot    string `yaml:"admin_root"`
 	AdminPass    string `yaml:"admin_pass"`
+
+	SMTPEnabled  bool   `yaml:"smtp_enabled"`
+	SMTPHost     string `yaml:"smtp_host"`
+	SMTPPort     int    `yaml:"smtp_port"`
+	SMTPUsername string `yaml:"smtp_username"`
+	SMTPPassword string `yaml:"smtp_password"`
+	SMTPForm     string `yaml:"smtp_form"`
+	SMTPTo       string `yaml:"smtp_to"`
 
 	SensitivePath string `yaml:"sensitive_path"`
 	IPBlockPath   string `yaml:"ip_block_path"`
@@ -53,8 +61,8 @@ func initConfigFile() (config conf, err error) {
 
 	config.LogFilePath = "./logs/"
 
-	config.MysqlHost = "url"
-	config.MysqlUsr = "username"
+	config.MysqlHost = "127.0.0.1:3306"
+	config.MysqlUsr = "root"
 	config.MysqlPwd = "password"
 	config.MysqlDB = "comment"
 
@@ -62,13 +70,21 @@ func initConfigFile() (config conf, err error) {
 	config.MysqlUsr = "username"
 	config.MysqlPwd = "password"
 
-	config.CROS_Enabled = false
+	config.CROSEnabled = false
 
 	config.AdminRoot = "root"
 	config.AdminPass = "pass"
 
+	config.SMTPEnabled = false
+	config.SMTPHost = "smtp_host"
+	config.SMTPPort = 465
+	config.SMTPUsername = "smtp_username"
+	config.SMTPPassword = "smtp_password"
+	config.SMTPForm = "smtp_form"
+	config.SMTPTo = "smtp_to"
+
 	config.SensitivePath = "./config/sensitive.txt"
-	config.IPBlockPath = "./config/block_ip"
+	config.IPBlockPath = "./config/block_ip.txt"
 	yamlFile, err := yaml.Marshal(config)
 	if err != nil {
 		return
