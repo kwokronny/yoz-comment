@@ -5,11 +5,10 @@ generate:
   variables:
     deploy_path: "/www/wwwroot/kwokronny.top/server"
     tar_name: "kb-comment.release.tar.gz"
-    app_name: "kb-comment"
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     - apk update
-    - apk add openssh-client
+    - apk add openssh-client nodejs npm
     - mkdir -p ~/.ssh
     - echo "$SERVER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -17,18 +16,24 @@ generate:
     - ssh-add ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - cd server
+    - cd client
+    - npm install cnpm --registry=https://registry.npm.taobao.org/
+    - cnpm install parcel-bundler -g
+    - cnpm install
+    - npm build
+    - cd ../
     - export GOPROXY=https://goproxy.io
-    - mkdir -p release/logs
-    - cp -r templates release
-    - cp -r config release
-    - rm -f release/config/config.yaml
-    - echo "$API_CONFIG" > ./release/config/config.yaml
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o release/"$app_name" main.go
-    - cd release
+    - mkdir -p deploy/logs
+    - cp -r templates deploy
+    - cp -r config deploy
+    - rm -f deploy/config/config.yaml
+    - echo "$API_CONFIG" > ./deploy/config/config.yaml
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deploy/comment-app main.go
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deploy/install install.go
+    - cd deploy
     - tar -zcvf "$tar_name" ./*
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
-    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name ; mkdir ${deploy_path} ; tar -zxvf $tar_name -C $deploy_path && chmod 774 ${deploy_path}/${app_name} && cd $deploy_path && nohup ./${app_name} >> log.out & sleep 1"
+    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 $app_name ; mkdir ${deploy_path} ; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && sh ./server.sh"
 
 public:
   image: golang:1.15-alpine
@@ -36,6 +41,7 @@ public:
     - public
   script:
     - rm -rf .git
+    - rm -f config/config.yaml
     - git init
     - git config --global user.email "green68599@icloud.com"
     - git config --global user.name "KwokRonny"

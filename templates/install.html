@@ -27,6 +27,7 @@
       }
       .layout-footer-center {
         text-align: center;
+        margin-bottom: 10px;
       }
     </style>
   </head>
@@ -34,29 +35,77 @@
     <div id="app">
       <Layout>
         <i-header>
-          <div class="layout-logo">KBComments</div>
+          <div class="layout-logo">KBComments 初始化配置</div>
         </i-header>
         <i-content class="layout-content">
-          <Card title="初始化配置">
-            <div style="min-height: 200px">
-              <i-form :model="filter">
-                <form-item prop="nickName">
-                  <i-input type="text" v-model="filter.nickName" placeholder="请输入昵称"></i-input>
+          <i-form ref="configForm" label-width="120" :rules="rules" :model="model">
+            <Card title="常规配置" style="margin-bottom: 20px">
+              <div style="width: 600px; margin: auto">
+                <form-item prop="server_port" label="服务端口">
+                  <i-input type="number" number v-model="model.server_port" placeholder="请输入端口"></i-input>
                 </form-item>
-                <form-item prop="mail">
-                  <i-input type="text" v-model="filter.mail" placeholder="请输入邮箱"></i-input>
+                <form-item prop="cros_enabled" label="允许跨域">
+                  <i-switch v-model="model.cros_enabled"></i-switch>
                 </form-item>
-                <form-item prop="content">
-                  <i-input type="text" v-model="filter.content" placeholder="请输入内容"></i-input>
+              </div>
+            </Card>
+            <Card title="数据库配置" style="margin-bottom: 20px">
+              <div style="width: 600px; margin: auto">
+                <form-item prop="mysql_host" label="链接">
+                  <i-input type="text" v-model="model.mysql_host" placeholder="host:port"></i-input>
                 </form-item>
-                <form-item>
-                  <i-button type="primary" icon="ios-funnel" @click="save()">保存</i-button>
+                <form-item prop="mysql_usr" label="用户名">
+                  <i-input type="text" v-model="model.mysql_usr" placeholder="请输入用户名"></i-input>
                 </form-item>
-              </i-form>
-            </div>
-          </Card>
+                <form-item prop="mysql_pwd" label="密码">
+                  <i-input type="text" v-model="model.mysql_pwd" placeholder="请输入密码"></i-input>
+                </form-item>
+                <form-item prop="mysql_db" label="数据库">
+                  <i-input type="text" v-model="model.mysql_db" placeholder="请输入数据库名"></i-input>
+                </form-item>
+              </div>
+            </Card>
+            <Card title="SMTP邮件通知配置" style="margin-bottom: 20px">
+              <div style="width: 600px; margin: auto">
+                <form-item prop="smtp_enabled" label="开启通知">
+                  <i-switch v-model="model.smtp_enabled"></i-switch>
+                </form-item>
+                <div v-if="model.smtp_enabled">
+                  <form-item prop="smtp_host" label="地址">
+                    <i-input type="text" v-model="model.smtp_host" placeholder="请输入SMTP链接"></i-input>
+                  </form-item>
+                  <form-item prop="smtp_port" label="端口">
+                    <i-input type="number" number v-model="model.smtp_port" placeholder="请输入SMTP端口"></i-input>
+                  </form-item>
+                  <form-item prop="smtp_username" label="用户名">
+                    <i-input type="text" v-model="model.smtp_username" placeholder="请输入用户名"></i-input>
+                  </form-item>
+                  <form-item prop="smtp_password" label="密码">
+                    <i-input type="text" v-model="model.smtp_password" placeholder="请输入密码"></i-input>
+                  </form-item>
+                  <form-item prop="smtp_to" label="收件人">
+                    <i-input type="text" v-model="model.smtp_to" placeholder="请输入收件邮箱"></i-input>
+                  </form-item>
+                </div>
+              </div>
+            </Card>
+            <Card title="管理配置" style="margin-bottom: 20px">
+              <div style="width: 600px; margin: auto">
+                <form-item prop="manage_router" label="路由">
+                  <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
+                </form-item>
+                <form-item prop="admin_root" label="用户名">
+                  <i-input type="text" v-model="model.admin_root" placeholder="请输入用户名"></i-input>
+                </form-item>
+                <form-item prop="admin_pass" label="密码">
+                  <i-input type="text" v-model="model.admin_pass" placeholder="请输入密码"></i-input>
+                </form-item>
+              </div>
+            </Card>
+            <i-button type="primary" icon="md-checkmark-circle-outline" long size="large" @click="save()">保存</i-button>
+          </i-form>
         </i-content>
-        <footer class="layout-footer-center">Power by<a href="https://kwokronny.top">kwokronny</a></footer>
+        <footer class="layout-footer-center">Power by <a href="https://kwokronny.top">kwokronny</a></footer>
       </Layout>
     </div>
     <script src="//vuejs.org/js/vue.min.js"></script>
@@ -67,85 +116,54 @@
         el: "#app",
         data: {
           loading: false,
-          filter: {
-            nickName: "",
-            mail: "",
-            content: "",
+          model: {
+            server_port: "",
+            mysql_host: "",
+            mysql_usr: "",
+            mysql_pwd: "",
+            mysql_db: "",
+            cros_enabled: false,
+            manage_router: "",
+            admin_root: "",
+            admin_pass: "",
+            smtp_enabled: false,
+            smtp_host: "",
+            smtp_port: 0,
+            smtp_username: "",
+            smtp_password: "",
+            smtp_to: "",
           },
-          list: {
-            records: [],
+          rules: {
+            server_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+            mysql_host: [{ required: true, message: "必填项", type: "string" }],
+            mysql_usr: [{ required: true, message: "必填项", type: "string" }],
+            mysql_pwd: [{ required: true, message: "必填项", type: "string" }],
+            mysql_db: [{ required: true, message: "必填项", type: "string" }],
+            manage_router: [{ required: true, message: "必填项", type: "string" }],
+            admin_root: [{ required: true, message: "必填项", type: "string" }],
+            admin_pass: [{ required: true, message: "必填项", type: "string" }],
+            smtp_host: [{ required: true, message: "必填项", type: "string" }],
+            smtp_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+            smtp_username: [{ required: true, message: "必填项", type: "string" }],
+            smtp_password: [{ required: true, message: "必填项", type: "string" }],
+            smtp_to: [{ required: true, message: "必填项", type: "string" }],
           },
-          columns: [
-            {
-              key: "id",
-              title: "ID",
-              width: 80,
-            },
-            {
-              key: "nickName",
-              title: "昵称",
-            },
-            {
-              key: "mail",
-              title: "邮箱",
-            },
-            {
-              key: "content",
-              title: "内容",
-              tooltip: true,
-              ellipsis: true,
-            },
-            {
-              key: "site",
-              title: "个人主页",
-            },
-            {
-              key: "createdAt",
-              title: "日期",
-              slot: "date",
-            },
-            {
-              key: "option",
-              title: "操作",
-              slot: "option",
-            },
-          ],
         },
-        mounted: function () {
-          this.getList();
-        },
+        mounted: function () {},
         methods: {
-          getList: function (page) {
+          save: function (page) {
             var self = this;
             this.loading = true;
-            var params = Object.assign({}, this.filter);
-            params.page = page || this.list.page + 1 || 1;
-            axios.get("page", { params }).then(function (response) {
-              var ret = response.data;
-              self.loading = false;
-              if (ret.code == 200) {
-                self.list = ret.data;
-              } else {
-                self.$Message.error("加载失败，请刷新重试");
-              }
-            });
-          },
-          remove(row) {
-            var self = this;
-            this.$Modal.confirm({
-              title: "操作确认",
-              content: "确认删除" + row.nickName + "的评论吗？",
-              onOk: function () {
-                axios.post("delete", { id: row.id }).then(function (response) {
-                  var ret = response.data;
-                  if (ret.code == 200) {
-                    self.$Message.success("删除成功");
-                    self.getList(1);
-                  } else {
-                    self.$Message.error(ret.msg);
-                  }
-                });
-              },
+            var params = Object.assign({}, this.model);
+            this.$refs["configForm"].validate().then(function (valid) {
+              if (valid == false) return;
+              axios.post("setting", params).then(function (response) {
+                var ret = response.data;
+                self.loading = false;
+                if (ret.code == 200) {
+                  self.$Message.success("配置完成");
+                }
+              });
             });
           },
         },

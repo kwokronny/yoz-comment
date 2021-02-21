@@ -1,5 +1,4 @@
-server_port: "80"
-log_file_path: ./logs/
+server_port: 80
 mysql_host: kwok-nas.mokeyjay.com:3336
 mysql_usr: root
 mysql_pwd: gr68599$
@@ -13,7 +12,7 @@ smtp_host: smtp.139.com
 smtp_port: 465
 smtp_username: 13682436847@139.com
 smtp_password: 3a2417c1a7e8dc474100
-smtp_form: KBComment<13682436847@139.com>
-smtp_to: guoren0533@126.com
+smtp_to: 540476284@qq.com
+log_file_path: ./logs/
 sensitive_path: ./config/sensitive.txt
 ip_block_path: ./config/block_ip.txt
