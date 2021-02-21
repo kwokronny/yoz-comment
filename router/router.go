@@ -22,14 +22,18 @@ func SetupRouter() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.Default()
-	engine.LoadHTMLGlob("templates/manage.html")
+	engine.LoadHTMLFiles("templates/static/index.html", "templates/manage.html")
 	engine.Use(middleware.LoggerToFile())
 
 	if helper.Config.CROSEnabled == true {
 		engine.Use(cors.Default())
 	}
 
-	engine.Static("/web", "./templates/static")
+	engine.Static("/static", "./templates/static")
+
+	engine.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{})
+	})
 
 	api := engine.Group("/api")
 	api.GET("/page", comment.GetComment)

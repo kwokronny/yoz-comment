@@ -47,7 +47,7 @@ class KBComment {
       link.rel = "stylesheet";
       link.setAttribute("crossorigin", "anonymous");
       link.onload = resolve;
-      link.href = `./themes/${this.config.theme}.css`;
+      link.href = `./static/themes/${this.config.theme}.css`;
       document.head.appendChild(link);
     });
   }
