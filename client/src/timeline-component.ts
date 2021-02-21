@@ -64,7 +64,7 @@ export class KBTimeLineComponent {
       page,
     };
     axios
-      .get(this.config.apiBase + "/api/page", {
+      .get(this.config.apiBase + "api/page", {
         params,
       })
       .then((res: any) => {

@@ -81,7 +81,7 @@ export class KBCommentComponent {
     }
     this.submitting = true;
     this.submitBtn.disabled = true;
-    axios.post(this.config.apiBase + "/api/comment", this.getModel()).then((res: any) => {
+    axios.post(this.config.apiBase + "api/comment", this.getModel()).then((res: any) => {
       this.submitBtn.disabled = false;
       this.submitting = false;
       if (res.data.code == 200) {
