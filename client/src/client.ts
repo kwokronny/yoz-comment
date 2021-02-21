@@ -35,7 +35,7 @@ document.head.insertAdjacentHTML(
 			}
 		</style>`
 );
-let url = script.src.replace(/static\/client.js$/, "index.html");
+let url = script.src.replace(/static\/client.js$/, "");
 script.insertAdjacentHTML(
   "afterend",
   `<div class="kbcomment">
