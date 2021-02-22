@@ -4,12 +4,12 @@ echo "kill process"
 pkill -9 install
 pkill -9 comment-app
 echo "kill end"
-if [ ! -f "$configFile" ]; then
-	echo "run install"
-	chmod 774 ./install
-	nohup ./install >> install-log.out &1 &
+if [ ! -f $configFile ]; then
+	echo "start install sever"
+	nohup ./install > /dev/null 2>&1 &
+	sleep 1
 else
-	echo "run main"
-	chmod 774 ./comment-app
-	nohup ./comment-app >> log.out &1 &
+	echo "start comment-app sever"
+	nohup ./comment-app > /dev/null 2>&1 &
+	sleep 1
 fi

@@ -20,7 +20,7 @@ func Logger() *logrus.Logger {
 	logFileName := now.Format("2006-01-02") + ".log"
 
 	fileName := path.Join(logFilePath, logFileName)
-	src, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND, os.ModeAppend|os.ModePerm)
+	src, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND|os.O_WRONLY, os.ModeAppend|os.ModePerm)
 	if err != nil {
 		fmt.Println("err", err)
 	}
