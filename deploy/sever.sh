@@ -7,9 +7,9 @@ echo "kill end"
 if [ ! -f "$configFile" ]; then
 	echo "run install"
 	chmod 774 ./install
-	nohup ./install >> log.out & sleep 1
+	nohup ./install >> install-log.out &1 &
 else
 	echo "run main"
 	chmod 774 ./comment-app
-	nohup ./comment-app >> log.out & sleep 1
+	nohup ./comment-app >> log.out &1 &
 fi

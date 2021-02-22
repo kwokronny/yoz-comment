@@ -19,7 +19,6 @@ class KBComment {
     if (!this.container) {
       console.error("未设定渲染容器");
     }
-    console.log(params)
     startMeasuring(params.origin);
     this.container.className = "kb-comment-container";
     this.config.theme = params.theme || "light";
