@@ -12,7 +12,7 @@ smtp_host: smtp.139.com
 smtp_port: 465
 smtp_username: 13682436847@139.com
 smtp_password: 3a2417c1a7e8dc474100
-smtp_to: 540476284@qq.com
+smtp_to: guoren0533@126.com
 log_file_path: ./logs/
 sensitive_path: ./config/sensitive.txt
 ip_block_path: ./config/block_ip.txt

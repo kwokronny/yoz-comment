@@ -84,10 +84,11 @@ func Save(c *gin.Context) {
 
 func sendEmail(data model.Comment) {
 	m := gomail.NewMessage()
-	m.SetHeader("From", "KBComment<"+helper.Config.SMTPUsername+">")
+
+	m.SetHeader("From", m.FormatAddress(helper.Config.SMTPUsername, "KBComment"))
 	m.SetHeader("To", helper.Config.SMTPTo)
 	m.SetHeader("Subject", "[KB-Comment]你有一条新的留言")
-	m.SetBody("text/html", "====================================================================================<br/>["+fmt.Sprint(data.ID)+"]<a href=\""+data.PageLink+"\">"+data.ArticleToken+"</a><br/>"+data.NickName+"&lt;"+data.Mail+"&gt;:"+data.Content+"<br/>====================================================================================")
+	m.SetBody("text/html", "["+fmt.Sprint(data.ID)+"]<a href=\""+data.PageLink+"\">"+data.ArticleToken+"</a><br/>"+data.NickName+"&lt;"+data.Mail+"&gt;:"+data.Content)
 
 	d := gomail.NewDialer(helper.Config.SMTPHost, helper.Config.SMTPPort, helper.Config.SMTPUsername, helper.Config.SMTPPassword)
 	err := d.DialAndSend(m)
