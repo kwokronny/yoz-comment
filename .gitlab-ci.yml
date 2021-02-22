@@ -23,7 +23,6 @@ generate:
     - npm run build
     - cd ../
     - export GOPROXY=https://goproxy.io
-    - mkdir -p deploy/logs
     - cp -r templates deploy
     - cp -r config deploy
     - rm -f deploy/config/config.yaml

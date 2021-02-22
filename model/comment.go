@@ -17,6 +17,7 @@ type Comment struct {
 	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
 	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP"`
 	Replys       []Comment `gorm:"-" json:"replys"`
+	PageLink     string    `gorm:"-" json:"page" binding:"required"`
 }
 
 func init() {

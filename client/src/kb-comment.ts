@@ -1,14 +1,14 @@
 import { KBCommentComponent } from "./comment-component";
 import { KBTimeLineComponent } from "./timeline-component";
 import { deparam } from "./deparam";
-import { startMeasuring } from './measure';
+import { startMeasuring } from "./measure";
 class KBComment {
   private container!: HTMLElement;
   private commentComponent?: KBCommentComponent;
   private timelineComponent?: KBTimeLineComponent;
   private config: KBCommentConfig = {
     theme: "light",
-    apiBase: "",
+    page: "",
     token: "",
   };
 
@@ -19,10 +19,11 @@ class KBComment {
     if (!this.container) {
       console.error("未设定渲染容器");
     }
-    startMeasuring(params.origin)
+    console.log(params)
+    startMeasuring(params.origin);
     this.container.className = "kb-comment-container";
     this.config.theme = params.theme || "light";
-    this.config.apiBase = params.api || "";
+    this.config.page = params.page || "";
     this.config.token = params.token || location.pathname;
     this.load().then(() => {
       this.commentComponent = new KBCommentComponent(this.config);

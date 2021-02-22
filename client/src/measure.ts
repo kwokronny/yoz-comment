@@ -20,6 +20,7 @@ function measure() {
   }
   lastHeight = height;
   const message: ResizeMessage = { type: "resize", height };
+  console.log(hostOrigin)
   parent.postMessage(message, hostOrigin);
 }
 

@@ -1,10 +1,3 @@
-/*
- * @Author: KwokRonny
- * @Date: 2020-07-16 10:47:07
- * @LastEditors: KwokRonny
- * @LastEditTime: 2020-07-24 16:04:35
- * @Description: file content
- */
 package router
 
 import (
@@ -13,7 +6,6 @@ import (
 	"KBCommentAPI/middleware"
 	"net/http"
 
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,12 +18,25 @@ func SetupRouter() *gin.Engine {
 	engine.Use(middleware.LoggerToFile())
 
 	if helper.Config.CROSEnabled == true {
-		engine.Use(cors.Default())
+		engine.Use(func(c *gin.Context) {
+			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+			c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT")
+			c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+
+			if c.Request.Method == "OPTIONS" {
+				c.AbortWithStatus(204)
+				return
+			}
+
+			c.Next()
+		})
 	}
 
 	engine.Static("/static", "./templates/static")
+	engine.StaticFile("client.js", "./templates/static/client.js")
 
-	engine.GET("/", func(c *gin.Context) {
+	engine.GET("/index.html", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
 	})
 

@@ -1,5 +1,5 @@
 import { param } from "./deparam";
-import { ResizeMessage } from './measure';
+import { ResizeMessage } from "./measure";
 let script = document.currentScript as HTMLScriptElement;
 if (script === undefined) {
   script = document.querySelector("script#KBComment") as HTMLScriptElement;
@@ -11,6 +11,7 @@ for (let i = 0; i < script.attributes.length; i++) {
   attrs[attr.name.replace(/^data-/, "")] = attr.value;
 }
 attrs.origin = location.origin;
+attrs.page = location.href;
 document.head.insertAdjacentHTML(
   "afterbegin",
   `<style>
@@ -35,7 +36,10 @@ document.head.insertAdjacentHTML(
 			}
 		</style>`
 );
-let url = script.src.replace(/static\/client.js$/, "");
+// let origin = script.src.replace(/client.js$/, "index.html");
+let pathArray = script.src.split("/");
+let urlOrigin = pathArray[0] + "//" + pathArray[2];
+let url = script.src.replace(/client.js$/, "index.html");
 script.insertAdjacentHTML(
   "afterend",
   `<div class="kbcomment">
@@ -46,13 +50,13 @@ const container = script.nextElementSibling as HTMLDivElement;
 script.parentElement!.removeChild(script);
 
 // adjust the iframe's height when the height of it's content changes
-addEventListener('message', event => {
-	console.log(event)
-  // if (event.origin !== ) {
-  //   return;
-  // }
+addEventListener("message", (event) => {
+  console.log(event, location.origin);
+  if (event.origin !== urlOrigin) {
+    return;
+  }
   const data = event.data as ResizeMessage;
-  if (data && data.type === 'resize' && data.height) {
+  if (data && data.type === "resize" && data.height) {
     container.style.height = `${data.height}px`;
   }
 });

@@ -2,8 +2,8 @@ declare function md5(str: string): string;
 declare const axios: any;
 declare let returnCitySN: any;
 declare interface KBCommentConfig {
-  apiBase: string;
   token: string;
+  page: string;
   theme: string;
 }
 
