@@ -44,9 +44,7 @@ func SetupRouter() *gin.Engine {
 	api.GET("/page", comment.GetComment)
 	api.POST("/comment", comment.Save)
 
-	manage := engine.Group(helper.Config.ManageRouter, gin.BasicAuth(gin.Accounts{
-		helper.Config.AdminRoot: helper.Config.AdminPass,
-	}))
+	manage := engine.Group(helper.Config.ManageRouter)
 	manage.GET("/index", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "manage.html", gin.H{})
 	})

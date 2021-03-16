@@ -13,6 +13,19 @@ smtp_port: 465
 smtp_username: 13682436847@139.com
 smtp_password: 3a2417c1a7e8dc474100
 smtp_to: guoren0533@126.com
+webHook: 
+  comment:
+    - 
+      url: https://api.sendcloud.net/apiv2/mail/sendtemplate
+      method: POST
+      data: 
+        apiUser: kwokronny_notice
+        apiKey: 3d6fa4576e3c60e943e0cf4e9fbdb049
+        from: no-reply@kwokronny.top
+        templateInvokeName: mokeyjay_blog_comment_notice
+        xsmtpapi: 
+            
+
 log_file_path: ./logs/
 sensitive_path: ./config/sensitive.txt
 ip_block_path: ./config/block_ip.txt
