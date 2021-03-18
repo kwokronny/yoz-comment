@@ -11,7 +11,8 @@ for (let i = 0; i < script.attributes.length; i++) {
   attrs[attr.name.replace(/^data-/, "")] = attr.value;
 }
 attrs.origin = location.origin;
-attrs.page = location.href;
+// attrs.pageUrl = location.href;
+// attrs.pageTitle = document.title;
 document.head.insertAdjacentHTML(
   "afterbegin",
   `<style>

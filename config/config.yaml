@@ -1,4 +1,4 @@
-server_port: 80
+server_port: 7550
 mysql_host: kwok-nas.mokeyjay.com:3336
 mysql_usr: root
 mysql_pwd: gr68599$

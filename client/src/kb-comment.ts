@@ -8,7 +8,6 @@ class KBComment {
   private timelineComponent?: KBTimeLineComponent;
   private config: KBCommentConfig = {
     theme: "light",
-    page: "",
     token: "",
   };
 
@@ -22,7 +21,6 @@ class KBComment {
     startMeasuring(params.origin);
     this.container.className = "kb-comment-container";
     this.config.theme = params.theme || "light";
-    this.config.page = params.page || "";
     this.config.token = params.token || location.pathname;
     this.load().then(() => {
       this.commentComponent = new KBCommentComponent(this.config);

@@ -71,8 +71,9 @@ export class KBCommentComponent {
       rId: Number(this.rIdField.value),
       content: this.contentField.value,
       articleToken: this.config.token,
-      page: this.config.page,
-    };
+      pageUrl: top.location.href,
+      pageTitle: top.document.title,
+    }; 
   }
 
   private onSubmitComment(event: Event) {

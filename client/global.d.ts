@@ -3,7 +3,6 @@ declare const axios: any;
 declare let returnCitySN: any;
 declare interface KBCommentConfig {
   token: string;
-  page: string;
   theme: string;
 }
 
