@@ -1,12 +1,12 @@
 package main
 
 import (
-	"KBCommentAPI/helper"
-	"KBCommentAPI/router"
+	"YozComment/helper"
+	"YozComment/router"
 	"strconv"
 )
 
 func main() {
 	r := router.SetupRouter()
-	r.Run(":" + strconv.Itoa(helper.Config.ServerPort))
+	r.Run(":" + strconv.Itoa(util.Config.ServerPort))
 }

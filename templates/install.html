@@ -29,6 +29,11 @@
         text-align: center;
         margin-bottom: 10px;
       }
+      .config-content{
+        max-width: 600px; 
+        width: 100%;
+        margin: auto;
+      }
     </style>
   </head>
   <body>
@@ -40,7 +45,7 @@
         <i-content class="layout-content">
           <i-form ref="configForm" label-width="120" :rules="rules" :model="model">
             <Card title="常规配置" style="margin-bottom: 20px">
-              <div style="width: 600px; margin: auto">
+              <div class="config-content">
                 <form-item prop="server_port" label="服务端口">
                   <i-input type="number" number v-model="model.server_port" placeholder="请输入端口"></i-input>
                 </form-item>
@@ -50,7 +55,7 @@
               </div>
             </Card>
             <Card title="数据库配置" style="margin-bottom: 20px">
-              <div style="width: 600px; margin: auto">
+              <div class="config-content">
                 <form-item prop="mysql_host" label="链接">
                   <i-input type="text" v-model="model.mysql_host" placeholder="host:port"></i-input>
                 </form-item>
@@ -66,7 +71,7 @@
               </div>
             </Card>
             <Card title="SMTP邮件通知配置" style="margin-bottom: 20px">
-              <div style="width: 600px; margin: auto">
+              <div class="config-content">
                 <form-item prop="smtp_enabled" label="开启通知">
                   <i-switch v-model="model.smtp_enabled"></i-switch>
                 </form-item>
@@ -90,7 +95,7 @@
               </div>
             </Card>
             <Card title="管理配置" style="margin-bottom: 20px">
-              <div style="width: 600px; margin: auto">
+              <div class="config-content">
                 <form-item prop="manage_router" label="路由">
                   <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
                 </form-item>

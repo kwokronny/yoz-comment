@@ -1,8 +1,8 @@
 package model
 
 import (
-	"KBCommentAPI/dao"
-	"KBCommentAPI/helper"
+	"YozComment/dao"
+	"YozComment/helper"
 )
 
 // Comment is Model Type
@@ -15,9 +15,10 @@ type Comment struct {
 	Mail         string    `gorm:"column:mail;type:varchar(50);not null;comment:邮箱" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site;type:varchar(50);comment:网站" json:"site" form:"site"`
 	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
+	pageUrl      string    `gorm:"column:page_url;type:varchar(255);not null;comment:来源页面" json:"pageUrl" binding:"required"`
+	PageTitle    string    `gorm:"column:page_title;type:varchar(100);not null;comment:页面标题" json:"PageTitle" binding:"required"`
 	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP"`
 	Replys       []Comment `gorm:"-" json:"replys"`
-	PageLink     string    `gorm:"-" json:"page" binding:"required"`
 }
 
 func init() {
@@ -26,12 +27,12 @@ func init() {
 
 // TableName is Change GORM default TableName
 func (q Comment) TableName() string {
-	return "kb-comment"
+	return "yoz-comment"
 }
 
 // GetPage is get all comment
-func (q Comment) GetPage(nickName string, mail string, content string, page helper.Pagination) helper.PageData {
-	var data helper.PageData
+func (q Comment) GetPage(nickName string, mail string, content string, page util.Pagination) util.PageData {
+	var data util.PageData
 	var comments []Comment
 	dao.DB.Where("content LIKE ? or nickname = ? or mail = ?", "%%"+content+"%%", nickName, mail).Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
 	data.Records = comments
@@ -41,8 +42,8 @@ func (q Comment) GetPage(nickName string, mail string, content string, page help
 }
 
 // GetCommentByArticle is get comment by article
-func (q Comment) GetCommentByArticle(ArticleToken string, page helper.Pagination) helper.PageData {
-	var data helper.PageData
+func (q Comment) GetCommentByArticle(ArticleToken string, page util.Pagination) util.PageData {
+	var data util.PageData
 	var comments []Comment
 	condition := dao.DB
 	condition = condition.Where("article_token = ? and r_id = 0", ArticleToken)

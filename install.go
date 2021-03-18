@@ -1,9 +1,10 @@
 package main
 
 import (
-	"KBCommentAPI/helper"
-	"github.com/gin-gonic/gin"
+	"YozComment/util"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SetupRouter is setup router setting
@@ -16,7 +17,7 @@ func main() {
 	engine.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "install.html", gin.H{})
 	})
-	engine.POST("/setting", helper.SaveConfigFile)
+	engine.POST("/setting", util.SaveConfigFile)
 
 	engine.Run(":8080")
 }

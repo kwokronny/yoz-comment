@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"KBCommentAPI/helper"
+	"YozComment/helper"
 	"fmt"
 	"log"
 	"time"
@@ -26,7 +26,7 @@ type Model struct {
 
 func init() {
 	var err error
-	config := helper.Config
+	config := util.Config
 	var uri string = fmt.Sprintf("%s:%s@tcp(%s)/%s?loc=Local&parseTime=True", config.MysqlUsr, config.MysqlPwd, config.MysqlHost, config.MysqlDB)
 	DB, err = gorm.Open(mysql.New(mysql.Config{
 		DSN: uri,

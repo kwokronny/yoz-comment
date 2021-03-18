@@ -1,17 +1,19 @@
 package comment
 
+
 import (
-	"KBCommentAPI/helper"
-	"KBCommentAPI/model"
+	"YozComment/helper"
+	"YozComment/model"
 	"fmt"
 	"html/template"
 
+	"github.com/importcjj/sensitive"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 )
 
 var commentModel = model.Comment{}
-var resp = helper.Response{}
+var resp = util.Response{}
 
 type getPageRequestQuery struct {
 	NickName string `form:"nickName"`
@@ -23,7 +25,7 @@ type getPageRequestQuery struct {
 func GetPage(c *gin.Context) {
 	data := &getPageRequestQuery{}
 	c.BindQuery(&data)
-	page := helper.GetPagination(c)
+	page := util.GetPagination(c)
 	comments := commentModel.GetPage(data.NickName, data.Mail, data.Content, page)
 	resp.Success(c, comments)
 }
@@ -32,14 +34,18 @@ func GetPage(c *gin.Context) {
 func GetComment(c *gin.Context) {
 	var token string = c.DefaultQuery("token", "")
 	if token == "" {
-		helper.Logger().Warning("token值为空")
-		resp.Error(c, helper.ResponseParamError, "入参错误")
+		util.Logger().Warning("token值为空")
+		resp.Error(c, util.ResponseParamError, "入参错误")
 		return
 	}
-	page := helper.GetPagination(c)
+	page := util.GetPagination(c)
 
 	comments := commentModel.GetCommentByArticle(token, page)
 	resp.Success(c, comments)
+}
+
+func Login(c *gin.Context){
+	var authToken = 
 }
 
 type deleteRequestJSON struct {
@@ -51,33 +57,41 @@ func Delete(c *gin.Context) {
 	data := &deleteRequestJSON{}
 	err := c.Bind(&data)
 	if err != nil {
-		helper.Logger().Warning(err.Error())
-		resp.Error(c, helper.ResponseParamError, "入参错误")
+		util.Logger().Warning(err.Error())
+		resp.Error(c, util.ResponseParamError, "入参错误")
 		return
 	}
 	commentModel.Delete(data.ID)
 	resp.Success(c, true)
 }
 
+// sensitiveValid 敏感字验证
+func sensitiveValid(content string) (bool, string) {
+	filter := sensitive.New()
+	filter.LoadWordDict(Config.SensitivePath)
+	return filter.Validate(content)
+}
+
+
 // Save 保存评论
 func Save(c *gin.Context) {
 	var data model.Comment
 	err := c.Bind(&data)
 	if err != nil {
-		helper.Logger().Warning(err.Error())
-		resp.Error(c, helper.ResponseParamError, "入参错误")
+		util.Logger().Warning(err.Error())
+		resp.Error(c, util.ResponseParamError, "入参错误")
 		return
 	}
 	data.IP = c.ClientIP()
-	notBlockWord, _ := helper.SensitiveValid(data.Content)
+	notBlockWord, _ := sensitiveValid(data.Content)
 	if !notBlockWord {
-		resp.Error(c, helper.ResponseParamError, "提交内容含敏感内容")
+		resp.Error(c, util.ResponseParamError, "提交内容含敏感内容")
 		return
 	}
 	data.Content = template.HTMLEscapeString(data.Content)
 	commentModel.Save(data)
 	resp.Success(c, true)
-	if helper.Config.SMTPEnabled == true {
+	if util.Config.SMTPEnabled == true {
 		sendEmail(data)
 	}
 }
@@ -85,14 +99,14 @@ func Save(c *gin.Context) {
 func sendEmail(data model.Comment) {
 	m := gomail.NewMessage()
 
-	m.SetHeader("From", m.FormatAddress(helper.Config.SMTPUsername, "KBComment"))
-	m.SetHeader("To", helper.Config.SMTPTo)
+	m.SetHeader("From", m.FormatAddress(util.Config.SMTPUsername, "KBComment"))
+	m.SetHeader("To", util.Config.SMTPTo)
 	m.SetHeader("Subject", "[KB-Comment]你有一条新的留言")
 	m.SetBody("text/html", "["+fmt.Sprint(data.ID)+"]<a href=\""+data.PageLink+"\">"+data.ArticleToken+"</a><br/>"+data.NickName+"&lt;"+data.Mail+"&gt;:"+data.Content)
 
-	d := gomail.NewDialer(helper.Config.SMTPHost, helper.Config.SMTPPort, helper.Config.SMTPUsername, helper.Config.SMTPPassword)
+	d := gomail.NewDialer(util.Config.SMTPHost, util.Config.SMTPPort, util.Config.SMTPUsername, util.Config.SMTPPassword)
 	err := d.DialAndSend(m)
 	if err != nil {
-		helper.Logger().Error(err.Error())
+		util.Logger().Error(err.Error())
 	}
 }

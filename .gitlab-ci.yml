@@ -39,6 +39,7 @@ public:
     - public
   script:
     - rm -rf .git
+    - rm -rf plugins
     - rm -f config/config.yaml
     - git init
     - git config --global user.email "green68599@icloud.com"

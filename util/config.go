@@ -1,8 +1,10 @@
-package helper
+package util
 
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"gopkg.in/yaml.v2"
@@ -10,7 +12,7 @@ import (
 
 var resp = Response{}
 
-type conf struct {
+type configStruct struct {
 	ServerPort int `yaml:"server_port" json:"server_port" `
 
 	LogFilePath string `yaml:"log_file_path" `
@@ -23,6 +25,7 @@ type conf struct {
 	CROSEnabled bool `yaml:"cros_enabled" json:"cros_enabled"`
 
 	ManageRouter string `yaml:"manage_router" json:"manage_router"`
+	JWTEncrypt   string `yaml:"jwt_encrypt" json:"jwt_encrypt"`
 	AdminRoot    string `yaml:"admin_root" json:"admin_root"`
 	AdminPass    string `yaml:"admin_pass" json:"admin_pass"`
 
@@ -34,11 +37,10 @@ type conf struct {
 	SMTPTo       string `yaml:"smtp_to" json:"smtp_to"`
 
 	SensitivePath string `yaml:"sensitive_path"`
-	IPBlockPath   string `yaml:"ip_block_path"`
 }
 
 // Config 配置内容
-var Config conf
+var Config configStruct
 
 var configPath string = "./config/config.yaml"
 
@@ -53,20 +55,30 @@ func init() {
 	}
 }
 
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func randStringRunes(n int) string {
+	rand.Seed(time.Now().UnixNano())
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
+}
+
 // SaveConfigFile is save config
 func SaveConfigFile(c *gin.Context) {
-	var config conf
-	err := c.BindJSON(&config)
+	var conf configStruct
+	err := c.BindJSON(&conf)
 	if err != nil {
 		fmt.Println(err.Error())
 		resp.Error(c, ResponseParamError, "入参错误")
 		return
 	}
-
-	config.LogFilePath = "./logs/"
-	config.SensitivePath = "./config/sensitive.txt"
-	config.IPBlockPath = "./config/block_ip.txt"
-	yamlFile, err := yaml.Marshal(config)
+	conf.LogFilePath = "./logs/"
+	conf.SensitivePath = "./config/sensitive.txt"
+	conf.JWTEncrypt = randStringRunes(26)
+	yamlFile, err := yaml.Marshal(conf)
 	if err != nil {
 		resp.Error(c, ResponseServerError, "生成错误")
 		return
