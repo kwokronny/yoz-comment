@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"YozComment/util"
 	"fmt"
 	"os"
 	"path"
@@ -22,7 +23,7 @@ func LoggerToFile() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
 
-		util.Logger().Infof("[%s] %s | %3d | %13v | %15s |",
+		Logger().Infof("[%s] %s | %3d | %13v | %15s |",
 			reqMethod,
 			reqURI,
 			statusCode,
@@ -34,7 +35,7 @@ func LoggerToFile() gin.HandlerFunc {
 
 // Logger 日志记录到文件
 func Logger() *logrus.Logger {
-	logFilePath := Config.LogFilePath
+	logFilePath := util.Config.LogFilePath
 
 	if err := os.MkdirAll(logFilePath, 0777); err != nil {
 		fmt.Println(err.Error())
@@ -51,7 +52,7 @@ func Logger() *logrus.Logger {
 	logger := logrus.New()
 	logger.Out = src
 	logger.SetLevel(logrus.DebugLevel)
-	logger.SetFormatter(&logrus.JSONFormatter{
+	logger.SetFormatter(&logrus.TextFormatter{
 		TimestampFormat: "2006-01-02 15:04:05",
 	})
 

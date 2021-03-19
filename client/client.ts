@@ -2,7 +2,7 @@ import { param } from "./deparam";
 import { ResizeMessage } from "./measure";
 let script = document.currentScript as HTMLScriptElement;
 if (script === undefined) {
-  script = document.querySelector("script#KBComment") as HTMLScriptElement;
+  script = document.querySelector("script#YozComment") as HTMLScriptElement;
 }
 
 let attrs: Record<string, string> = {};
@@ -16,7 +16,7 @@ attrs.origin = location.origin;
 document.head.insertAdjacentHTML(
   "afterbegin",
   `<style>
-			.kbcomment {
+			.yozComment {
 				position: relative;
 				box-sizing: border-box;
 				width: 100%;
@@ -24,7 +24,7 @@ document.head.insertAdjacentHTML(
 				margin-left: auto;
 				margin-right: auto;
 			}
-			.kbcomment-frame {
+			.yozComment-frame {
 				color-scheme: light;
 				position: absolute;
 				left: 0;
@@ -43,8 +43,8 @@ let urlOrigin = pathArray[0] + "//" + pathArray[2];
 let url = script.src.replace(/client.js$/, "index.html");
 script.insertAdjacentHTML(
   "afterend",
-  `<div class="kbcomment">
-    <iframe class="kbcomment-frame" title="Comments" scrolling="no" src="${url}?${param(attrs)}" loading="lazy"></iframe>
+  `<div class="yozComment">
+    <iframe class="yozComment-frame" title="Comments" scrolling="no" src="${url}?${param(attrs)}" loading="lazy"></iframe>
   </div>`
 );
 const container = script.nextElementSibling as HTMLDivElement;

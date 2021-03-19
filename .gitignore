@@ -1,5 +1,5 @@
 /tmp
 /templates/static
 /logs
-/client/node_modules
-/client/.cache
+/node_modules
+/.cache

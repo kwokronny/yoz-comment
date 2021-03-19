@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"YozComment/helper"
+	"YozComment/util"
 	"fmt"
 	"log"
 	"time"

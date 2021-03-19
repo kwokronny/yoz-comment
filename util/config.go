@@ -13,7 +13,9 @@ import (
 var resp = Response{}
 
 type configStruct struct {
-	ServerPort int `yaml:"server_port" json:"server_port" `
+	SiteName   string `yaml:"site_name" json:"site_name"`
+	SiteUrl    string `yaml:"site_url" json:"site_url"`
+	ServerPort int    `yaml:"server_port" json:"server_port" `
 
 	LogFilePath string `yaml:"log_file_path" `
 

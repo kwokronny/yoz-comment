@@ -2,7 +2,9 @@ package router
 
 import (
 	"YozComment/controller/comment"
+	"YozComment/controller/manage"
 	"YozComment/middleware"
+	"YozComment/util"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +18,7 @@ func SetupRouter() *gin.Engine {
 	engine.LoadHTMLFiles("templates/static/index.html", "templates/manage.html")
 	engine.Use(middleware.LoggerToFile())
 
-	if config.CROSEnabled == true {
+	if util.Config.CROSEnabled == true {
 		engine.Use(func(c *gin.Context) {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -43,12 +45,12 @@ func SetupRouter() *gin.Engine {
 	api.GET("/page", comment.GetComment)
 	api.POST("/comment", comment.Save)
 
-	manage := engine.Group(config.ManageRouter)
-	manage.GET("/index", func(c *gin.Context) {
+	manageApi := engine.Group(util.Config.ManageRouter)
+	manageApi.GET("/index", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "manage.html", gin.H{})
 	})
-	manage.GET("/page", comment.GetPage)
-	manage.POST("/delete", comment.Delete)
+	manageApi.GET("/page", manage.GetPage)
+	manageApi.POST("/delete", manage.Delete)
 
 	return engine
 }

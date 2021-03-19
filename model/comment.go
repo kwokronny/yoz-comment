@@ -2,7 +2,7 @@ package model
 
 import (
 	"YozComment/dao"
-	"YozComment/helper"
+	"YozComment/util"
 )
 
 // Comment is Model Type
@@ -18,7 +18,7 @@ type Comment struct {
 	pageUrl      string    `gorm:"column:page_url;type:varchar(255);not null;comment:来源页面" json:"pageUrl" binding:"required"`
 	PageTitle    string    `gorm:"column:page_title;type:varchar(100);not null;comment:页面标题" json:"PageTitle" binding:"required"`
 	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP"`
-	Replys       []Comment `gorm:"-" json:"replys"`
+	Replys       []Comment `gorm:"-" json:"replys"` // 回复列表
 }
 
 func init() {
@@ -39,6 +39,11 @@ func (q Comment) GetPage(nickName string, mail string, content string, page util
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()
 	return data
+}
+
+func (q Comment) GetComment(id uint) (comment Comment) {
+	dao.DB.First(&comment, id)
+	return
 }
 
 // GetCommentByArticle is get comment by article

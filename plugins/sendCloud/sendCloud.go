@@ -21,7 +21,7 @@ func SendMail(info mailInfo) {
 		"apiKey":   {"3d6fa4576e3c60e943e0cf4e9fbdb049"},
 		"from":     {"no-reply@notice.kwokronny.top"},
 		"fromName": {"KwokRonny"},
-		// "xsmtpapi":
+		"xsmtpapi": {"{\"sub\":{\"%you%\"}}"}
 		"to":                 {info.To}, //to is address list
 		"subject":            {"你在 KwokRonny 博客上的留言有回复啦"},
 		"templateInvokeName": {"kwok_comment_notice"},
