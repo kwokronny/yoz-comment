@@ -1,12 +1,12 @@
 {
-  "name": "kb-comment",
+  "name": "yoz-comment",
   "version": "1.0.0",
   "description": "open source blog comment system",
+  "repository": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel serve client/client.ts client/index.html client/themes/{light,dark}.styl --out-dir ./templates/static --public-url ./static",
-    "build": "parcel build client/client.ts client/index.html client/themes/{light,dark}.styl --out-dir ./templates/static --public-url ./static --experimental-scope-hoisting --no-content-hash",
-    "test": "parcel serve client/demo.html --port 5000 --open"
+    "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates --port 5000",
+    "build": "parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates --experimental-scope-hoisting --no-content-hash"
   },
   "author": "kwokronny",
   "license": "ISC",

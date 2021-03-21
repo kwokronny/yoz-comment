@@ -8,9 +8,12 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/howeyc/fsnotify v0.9.0 // indirect
 	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
+	github.com/lestrrat-go/strftime v1.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/pilu/config v0.0.0-20131214182432-3eb99e6c0b9a // indirect
 	github.com/pilu/fresh v0.0.0-20190826141211-0fa698148017 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	golang.org/x/sys v0.0.0-20210316164454-77fc1eacc6aa // indirect
 	golang.org/x/tools/gopls v0.6.6 // indirect

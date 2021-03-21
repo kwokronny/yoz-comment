@@ -1,5 +1,5 @@
-import { param } from "./deparam";
-import { ResizeMessage } from "./measure";
+import { param } from "./static/deparam";
+import { ResizeMessage } from "./static/measure";
 let script = document.currentScript as HTMLScriptElement;
 if (script === undefined) {
   script = document.querySelector("script#YozComment") as HTMLScriptElement;
@@ -11,8 +11,8 @@ for (let i = 0; i < script.attributes.length; i++) {
   attrs[attr.name.replace(/^data-/, "")] = attr.value;
 }
 attrs.origin = location.origin;
-// attrs.pageUrl = location.href;
-// attrs.pageTitle = document.title;
+attrs.title = document.title;
+attrs.url = location.href;
 document.head.insertAdjacentHTML(
   "afterbegin",
   `<style>

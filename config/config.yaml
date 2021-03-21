@@ -11,10 +11,10 @@ jwt_encrypt: bLNZbBbXPBKytrrYRsOXRDYSfS
 admin_root: Hwq0za9WlCNSS7pT
 admin_pass: 65931B6D2ADD30CCD16E7D23FAB32031
 smtp_enabled: true
-smtp_host: smtp.139.com
+smtp_host: smtp.qq.com
 smtp_port: 465
-smtp_username: 13682436847@139.com
-smtp_password: 3a2417c1a7e8dc474100
-smtp_to: guoren0533@126.com
+smtp_username: 204852001@qq.com
+smtp_password: vhqknjsixlurcaie
+smtp_to: 540476284@qq.com
 log_file_path: ./logs/
 sensitive_path: ./config/sensitive.txt

@@ -1,11 +1,15 @@
 declare function md5(str: string): string;
 declare const axios: any;
-declare interface KBCommentConfig {
+declare interface YozCommentConfig {
   token: string;
-  theme: string;
+  pageUrl: string;
+  pageTitle: string;
+}
+declare interface Window {
+  YozCommentConfig: YozCommentConfig;
 }
 
-declare interface KBCommentItem {
+declare interface YozCommentItem {
   id: number;
   createdAt: string;
   articleToken: string;
@@ -16,10 +20,10 @@ declare interface KBCommentItem {
   site: string;
   content: string;
   ip: string;
-  replys: KBCommentItem[] | null;
+  replys: YozCommentItem[] | null;
 }
 
-declare interface KBCommentUserInfo {
+declare interface YozCommentUserInfo {
   nickName: string;
   mail: string;
   site: string;

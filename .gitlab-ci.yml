@@ -3,8 +3,8 @@ generate:
   only:
     - master
   variables:
-    deploy_path: "/www/wwwroot/kwokronny.top/kb-comment"
-    tar_name: "kb-comment.release.tar.gz"
+    deploy_path: "/www/wwwroot/kwokronny.top/yoz-comment"
+    tar_name: "yoz-comment.release.tar.gz"
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     - apk update
@@ -45,7 +45,7 @@ public:
     - git config --global user.email "green68599@icloud.com"
     - git config --global user.name "KwokRonny"
     - git config --global credential.helper store
-    - git remote add origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/kwokronny/kb-comment.git"
+    - git remote add origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/kwokronny/yoz-comment.git"
     - git add .
     - git commit -m "同步仓库"
     - git push -u origin master
