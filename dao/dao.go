@@ -3,11 +3,12 @@ package dao
 import (
 	"YozComment/util"
 	"fmt"
-	"log"
 	"time"
 
 	"gorm.io/gorm"
 	// Register mysql server
+
+	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 )
 
@@ -32,6 +33,6 @@ func init() {
 		DSN: uri,
 	}), &gorm.Config{})
 	if err != nil {
-		log.Panicln("err:", err.Error())
+		log.Panicln("GORM Error:", err.Error())
 	}
 }

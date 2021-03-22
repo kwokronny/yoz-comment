@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 type ResponseStatus int
@@ -41,5 +42,6 @@ func (resp Response) Error(c *gin.Context, code ResponseStatus, message string) 
 	var result Response
 	result.Code = code
 	result.Message = message
+	log.Infof("Response: %s", message)
 	c.JSON(http.StatusOK, result)
 }

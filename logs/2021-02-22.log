@@ -1,9 +1,0 @@
-{"level":"info","msg":"[GET] / | 404 |            0s |             ::1 |","time":"2021-02-22 18:33:14"}
-{"level":"info","msg":"[GET] /index.html | 200 |            0s |             ::1 |","time":"2021-02-22 18:33:17"}
-{"level":"info","msg":"[GET] /static/kb-comment.8d40b601.js | 200 |     65.8238ms |             ::1 |","time":"2021-02-22 18:33:17"}
-{"level":"info","msg":"[GET] /static/themes/light.css | 200 |     43.8815ms |             ::1 |","time":"2021-02-22 18:33:17"}
-{"level":"info","msg":"{200 操作成功 {1 15 0 []}}","time":"2021-02-22 18:33:17"}
-{"level":"info","msg":"[GET] /api/page?token=%2Findex.html\u0026page=1 | 200 |     27.9252ms |             ::1 |","time":"2021-02-22 18:33:17"}
-{"level":"warning","msg":"Key: 'Comment.PageLink' Error:Field validation for 'PageLink' failed on the 'required' tag","time":"2021-02-22 18:34:53"}
-{"level":"error","msg":"{406 入参错误 \u003cnil\u003e}","time":"2021-02-22 18:34:53"}
-{"level":"info","msg":"[POST] /api/comment | 200 |      1.0216ms |             ::1 |","time":"2021-02-22 18:34:53"}

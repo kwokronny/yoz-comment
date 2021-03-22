@@ -52,6 +52,22 @@
                 <form-item prop="cros_enabled" label="允许跨域">
                   <i-switch v-model="model.cros_enabled"></i-switch>
                 </form-item>
+                <form-item prop="sensitive_enabled" label="敏感字识别">
+                  <i-switch v-model="model.sensitive_enabled"></i-switch>
+                </form-item>
+              </div>
+            </Card>
+            <Card title="管理配置" style="margin-bottom: 20px">
+              <div class="config-content">
+                <form-item prop="manage_router" label="路由">
+                  <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
+                </form-item>
+                <form-item prop="admin_root" label="用户名">
+                  <i-input type="text" v-model="model.admin_root" placeholder="请输入用户名"></i-input>
+                </form-item>
+                <form-item prop="admin_pass" label="密码">
+                  <i-input type="text" v-model="model.admin_pass" placeholder="请输入密码"></i-input>
+                </form-item>
               </div>
             </Card>
             <Card title="数据库配置" style="margin-bottom: 20px">
@@ -94,19 +110,6 @@
                 </div>
               </div>
             </Card>
-            <Card title="管理配置" style="margin-bottom: 20px">
-              <div class="config-content">
-                <form-item prop="manage_router" label="路由">
-                  <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
-                </form-item>
-                <form-item prop="admin_root" label="用户名">
-                  <i-input type="text" v-model="model.admin_root" placeholder="请输入用户名"></i-input>
-                </form-item>
-                <form-item prop="admin_pass" label="密码">
-                  <i-input type="text" v-model="model.admin_pass" placeholder="请输入密码"></i-input>
-                </form-item>
-              </div>
-            </Card>
             <i-button type="primary" icon="md-checkmark-circle-outline" long size="large" @click="save()">保存</i-button>
           </i-form>
         </i-content>
@@ -123,14 +126,15 @@
           loading: false,
           model: {
             server_port: "",
-            mysql_host: "",
-            mysql_usr: "",
-            mysql_pwd: "",
-            mysql_db: "",
+            sensitive_enabled: false,
             cros_enabled: false,
             manage_router: "",
             admin_root: "",
             admin_pass: "",
+            mysql_host: "",
+            mysql_usr: "",
+            mysql_pwd: "",
+            mysql_db: "",
             smtp_enabled: false,
             smtp_host: "",
             smtp_port: 0,

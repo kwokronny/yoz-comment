@@ -17,8 +17,6 @@ type configStruct struct {
 	SiteUrl    string `yaml:"site_url" json:"site_url"`
 	ServerPort int    `yaml:"server_port" json:"server_port" `
 
-	LogFilePath string `yaml:"log_file_path" `
-
 	MysqlHost string `yaml:"mysql_host" json:"mysql_host"`
 	MysqlUsr  string `yaml:"mysql_usr" json:"mysql_usr"`
 	MysqlPwd  string `yaml:"mysql_pwd" json:"mysql_pwd"`
@@ -38,7 +36,8 @@ type configStruct struct {
 	SMTPPassword string `yaml:"smtp_password" json:"smtp_password"`
 	SMTPTo       string `yaml:"smtp_to" json:"smtp_to"`
 
-	SensitivePath string `yaml:"sensitive_path"`
+	SensitiveEnabled bool   `yaml:"sensitive_enabled" json:"sensitive_enabled"`
+	SensitivePath    string `yaml:"sensitive_path"`
 }
 
 // Config 配置内容
@@ -77,7 +76,6 @@ func SaveConfigFile(c *gin.Context) {
 		resp.Error(c, ResponseParamError, "入参错误")
 		return
 	}
-	conf.LogFilePath = "./logs/"
 	conf.SensitivePath = "./config/sensitive.txt"
 	conf.JWTEncrypt = randStringRunes(26)
 	yamlFile, err := yaml.Marshal(conf)

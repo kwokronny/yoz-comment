@@ -1,5 +1,9 @@
 /tmp
 /templates/static
+/templates/client.js
+/templates/client.js.map
+/templates/index.html
 /logs
+/fresh
 /node_modules
 /.cache

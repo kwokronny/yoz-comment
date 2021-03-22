@@ -8,6 +8,7 @@ export class YozCommentComponent {
   private siteField: HTMLInputElement;
   private contentField: HTMLTextAreaElement;
   private submitBtn: HTMLButtonElement;
+  private msgSpan: HTMLSpanElement;
   private submitting: boolean = false;
   private success?: Function;
 
@@ -33,6 +34,7 @@ export class YozCommentComponent {
         <textarea row="6" name="content" placeholder="请输入你的留言" required></textarea>
       </div>
       <div class="btn-group">
+        <span class="msg-tip"></span>
         <button type="submit">评论</button>
       </div>`;
     this.parentIdField = this.element.querySelector("input[name=parentId]") as HTMLInputElement;
@@ -42,6 +44,7 @@ export class YozCommentComponent {
     this.siteField = this.element.querySelector("input[name=site]") as HTMLInputElement;
     this.contentField = this.element.querySelector("textarea") as HTMLTextAreaElement;
     this.submitBtn = this.element.querySelector("button[type=submit]") as HTMLButtonElement;
+    this.msgSpan = this.element.querySelector("span.msg-tip") as HTMLSpanElement;
     this.element.querySelector("a.reset-reply")?.addEventListener("click", this.resetReply.bind(this));
     this.element.addEventListener("submit", this.onSubmitComment.bind(this), false);
 
@@ -87,8 +90,11 @@ export class YozCommentComponent {
       this.submitBtn.disabled = false;
       this.submitting = false;
       if (res.data.code == 200) {
+        this.msgSpan.innerText = ""
         this.success && this.success();
         this.contentField.value = "";
+      }else{
+        this.msgSpan.innerText = res.data.msg
       }
     });
     return false;

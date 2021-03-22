@@ -10,11 +10,11 @@ manage_router: 8P4iZOql6VcSiFEVuDiPasnE80f3QIJ0MLgiTa
 jwt_encrypt: bLNZbBbXPBKytrrYRsOXRDYSfS
 admin_root: Hwq0za9WlCNSS7pT
 admin_pass: 65931B6D2ADD30CCD16E7D23FAB32031
-smtp_enabled: true
+smtp_enabled: false
 smtp_host: smtp.qq.com
 smtp_port: 465
 smtp_username: 204852001@qq.com
 smtp_password: vhqknjsixlurcaie
 smtp_to: 540476284@qq.com
-log_file_path: ./logs/
+sensitive_enabled: false
 sensitive_path: ./config/sensitive.txt

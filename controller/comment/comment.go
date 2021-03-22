@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/importcjj/sensitive"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/gomail.v2"
 )
 
@@ -36,10 +37,12 @@ func Save(c *gin.Context) {
 		return
 	}
 	data.IP = c.ClientIP()
-	notBlockWord, _ := sensitiveValid(data.Content)
-	if !notBlockWord {
-		resp.Error(c, util.ResponseParamError, "提交内容含敏感内容")
-		return
+	if util.Config.SensitiveEnabled == true {
+		notBlockWord, _ := sensitiveValid(data.Content)
+		if !notBlockWord {
+			resp.Error(c, util.ResponseParamError, "提交内容含敏感内容")
+			return
+		}
 	}
 	data.Content = template.HTMLEscapeString(data.Content)
 	commentModel.Save(data)
@@ -47,7 +50,8 @@ func Save(c *gin.Context) {
 	resp.Success(c, true)
 
 	if util.Config.SMTPEnabled == true {
-		sendEmail(data)
+		err := sendEmail(data)
+		log.Errorf("邮件通知 %s", err.Error())
 	}
 }
 
@@ -59,11 +63,10 @@ func sensitiveValid(content string) (bool, string) {
 }
 
 func sendEmail(data model.Comment) (err error) {
-
 	tmpl := template.New("mail_notice.html")
 	tmpl, err = tmpl.ParseFiles("./templates/mail_notice.html")
 	if err != nil {
-		println(err)
+		return
 	}
 	var body bytes.Buffer
 	err = tmpl.Execute(&body, struct {
