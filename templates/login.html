@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YozComment 评论系统</title>
+    <link rel="stylesheet" href="//unpkg.com/view-design/dist/styles/iview.css" />
+    <style>
+      html,
+      body {
+        background: #f5f7f9;
+        position: relative;
+      }
+      .layout-logo {
+        width: auto;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 3px;
+        position: relative;
+        top: 15px;
+        left: 20px;
+      }
+      .layout-content {
+        padding: 40px 50px;
+      }
+      .layout-footer-center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <Layout>
+        <i-header>
+          <div class="layout-logo">YozComment</div>
+        </i-header>
+        <i-content class="layout-content">
+          <Card title="登陆" style="width: 500px; margin:0 auto;">
+            <div style="min-height: 200px;">
+              <i-form :model="login">
+                <form-item prop="username">
+                  <i-input type="text" v-model="login.username" placeholder="请输入用户名"></i-input>
+                </form-item>
+                <form-item prop="password">
+                  <i-input type="text" v-model="login.password" placeholder="请输入密码"></i-input>
+                </form-item>
+                <form-item>
+                  <i-button type="primary" long icon="ios-key" @click="login">登陆</i-button>
+                </form-item>
+              </i-form>
+            </div>
+          </Card>
+        </i-content>
+        <footer class="layout-footer-center">Power by <a href="https://kwokronny.top">kwokronny</a></footer>
+      </Layout>
+    </div>
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <script src="//unpkg.com/view-design/dist/iview.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          loading: false,
+          login: {
+            username: "",
+            password: "",
+          },
+        },
+        methods: {
+          login: function () {
+            var self = this;
+            this.loading = true;
+            var params = Object.assign({}, this.login);
+						params.password = md5(params.password)
+            axios.get("login", { params }).then(function (response) {
+              var ret = response.data;
+              self.loading = false;
+              if (ret.code == 200) {
+								location.href+="/index"
+              } else {
+                self.$Message.error("登陆失败");
+              }
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -15,7 +15,7 @@ func SetupRouter() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.Default()
-	engine.LoadHTMLFiles("templates/index.html", "templates/manage.html")
+	engine.LoadHTMLFiles("templates/index.html", "templates/manage.html", "templates/login.html")
 	engine.Use(middleware.LoggerMiddleware())
 
 	if util.Config.CROSEnabled == true {
@@ -45,12 +45,16 @@ func SetupRouter() *gin.Engine {
 	api.GET("/page", comment.GetComment)
 	api.POST("/comment", comment.Save)
 
-	manageApi := engine.Group(util.Config.ManageRouter)
-	manageApi.GET("/index", func(c *gin.Context) {
+	// manageApi.POST("/comment", comment.Save)
+	manageApi := engine.Group(util.Config.ManageRouter, middleware.AuthCheck())
+	manageApi.GET("/login", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "manage.html", gin.H{})
 	})
-	manageApi.GET("/page", manage.GetPage)
-	manageApi.POST("/delete", manage.Delete)
+	manageApi.GET("/comment/index", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "manage.html", gin.H{})
+	})
+	manageApi.GET("/comment/page", manage.GetPage)
+	manageApi.POST("/comment/delete", manage.Delete)
 
 	return engine
 }

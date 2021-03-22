@@ -1,6 +1,7 @@
 package manage
 
 import (
+	"YozComment/middleware"
 	"YozComment/model"
 	"YozComment/util"
 
@@ -39,4 +40,27 @@ func Delete(c *gin.Context) {
 	}
 	commentModel.Delete(data.ID)
 	resp.Success(c, true)
+}
+
+type LoginParams struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func Login(c *gin.Context) {
+	var admin LoginParams
+	err := c.ShouldBind(&admin)
+	if err != nil {
+		resp.Error(c, util.ResponseParamError, "入参错误")
+		return
+	}
+	// 校验用户名和密码是否正确
+	if admin.Username == util.Config.AdminRoot && admin.Password == util.Config.AdminPass {
+		// 生成Token
+		tokenString, _ := middleware.GenerateToken()
+		resp.Success(c, tokenString)
+		return
+	}
+	resp.Error(c, util.ResponseParamError, "用户名或密码错误")
+	return
 }
