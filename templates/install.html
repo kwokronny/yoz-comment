@@ -118,6 +118,7 @@
     </div>
     <script src="//vuejs.org/js/vue.min.js"></script>
     <script src="//unpkg.com/view-design/dist/iview.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script>
       new Vue({
@@ -164,6 +165,7 @@
             var self = this;
             this.loading = true;
             var params = Object.assign({}, this.model);
+            params.admin_pass = md5(params.admin_pass)
             this.$refs["configForm"].validate().then(function (valid) {
               if (valid == false) return;
               axios.post("setting", params).then(function (response) {

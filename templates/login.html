@@ -37,17 +37,17 @@
           <div class="layout-logo">YozComment</div>
         </i-header>
         <i-content class="layout-content">
-          <Card title="登陆" style="width: 500px; margin:0 auto;">
-            <div style="min-height: 200px;">
-              <i-form :model="login">
+          <Card title="登陆" style="width: 500px; margin: 0 auto">
+            <div style="min-height: 200px">
+              <i-form :model="model" :rules="rules">
                 <form-item prop="username">
-                  <i-input type="text" v-model="login.username" placeholder="请输入用户名"></i-input>
+                  <i-input type="text" v-model="model.username" placeholder="请输入用户名"></i-input>
                 </form-item>
                 <form-item prop="password">
-                  <i-input type="text" v-model="login.password" placeholder="请输入密码"></i-input>
+                  <i-input type="text" v-model="model.password" placeholder="请输入密码"></i-input>
                 </form-item>
                 <form-item>
-                  <i-button type="primary" long icon="ios-key" @click="login">登陆</i-button>
+                  <i-button type="primary" long icon="ios-key" v-on:click="login()">登陆</i-button>
                 </form-item>
               </i-form>
             </div>
@@ -65,22 +65,27 @@
         el: "#app",
         data: {
           loading: false,
-          login: {
+          model: {
             username: "",
             password: "",
+          },
+          rules: {
+            username: [{ required: true, message: "必填项", type: "string" }],
+            password: [{ required: true, message: "必填项", type: "string" }],
           },
         },
         methods: {
           login: function () {
             var self = this;
             this.loading = true;
-            var params = Object.assign({}, this.login);
-						params.password = md5(params.password)
-            axios.get("login", { params }).then(function (response) {
+            var params = Object.assign({}, this.model);
+            params.password = md5(params.password);
+            axios.post("login", params).then(function (response) {
               var ret = response.data;
               self.loading = false;
               if (ret.code == 200) {
-								location.href+="/index"
+                window.localStorage.setItem("yoz-comment-auth", ret.data);
+                location.href = "./index.html";
               } else {
                 self.$Message.error("登陆失败");
               }

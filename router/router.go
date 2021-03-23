@@ -45,16 +45,16 @@ func SetupRouter() *gin.Engine {
 	api.GET("/page", comment.GetComment)
 	api.POST("/comment", comment.Save)
 
-	// manageApi.POST("/comment", comment.Save)
-	manageApi := engine.Group(util.Config.ManageRouter, middleware.AuthCheck())
-	manageApi.GET("/login", func(c *gin.Context) {
+	manageApi := engine.Group(util.Config.ManageRouter)
+	manageApi.GET("/login.html", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "login.html", gin.H{})
+	})
+	manageApi.GET("/index.html", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "manage.html", gin.H{})
 	})
-	manageApi.GET("/comment/index", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "manage.html", gin.H{})
-	})
-	manageApi.GET("/comment/page", manage.GetPage)
-	manageApi.POST("/comment/delete", manage.Delete)
+	manageApi.POST("/login", manage.Login)
+	manageApi.GET("/page", middleware.AuthCheck(), manage.GetPage)
+	manageApi.POST("/delete", middleware.AuthCheck(), manage.Delete)
 
 	return engine
 }

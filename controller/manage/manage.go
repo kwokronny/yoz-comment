@@ -12,9 +12,10 @@ var commentModel = model.Comment{}
 var resp = util.Response{}
 
 type getPageRequestQuery struct {
-	NickName string `form:"nickName"`
-	Mail     string `form:"mail"`
-	Content  string `form:"content"`
+	NickName  string `form:"nickName"`
+	Mail      string `form:"mail"`
+	Content   string `form:"content"`
+	PageTitle string `form:"pageTitle"`
 }
 
 // GetPage 获取所有问答并分页
@@ -22,7 +23,7 @@ func GetPage(c *gin.Context) {
 	data := &getPageRequestQuery{}
 	c.BindQuery(&data)
 	page := util.GetPagination(c)
-	comments := commentModel.GetPage(data.NickName, data.Mail, data.Content, page)
+	comments := commentModel.GetPage(data.NickName, data.Mail, data.Content, data.PageTitle, page)
 	resp.Success(c, comments)
 }
 

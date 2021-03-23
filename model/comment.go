@@ -31,10 +31,10 @@ func (q Comment) TableName() string {
 }
 
 // GetPage is get all comment
-func (q Comment) GetPage(nickName string, mail string, content string, page util.Pagination) util.PageData {
+func (q Comment) GetPage(nickName string, mail string, content string, pageTitle string, page util.Pagination) util.PageData {
 	var data util.PageData
 	var comments []Comment
-	dao.DB.Where("content LIKE ? or nickname = ? or mail = ?", "%%"+content+"%%", nickName, mail).Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
+	dao.DB.Where("content LIKE ? or nickname = ? or mail = ? or page_title LIKE ?", "%%"+content+"%%", nickName, mail, "%%"+pageTitle+"%%").Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
 	data.Records = comments
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()
