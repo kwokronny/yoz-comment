@@ -20,10 +20,10 @@ type getPageRequestQuery struct {
 
 // GetPage 获取所有问答并分页
 func GetPage(c *gin.Context) {
-	data := &getPageRequestQuery{}
+	data := model.QueryCommentField{}
 	c.BindQuery(&data)
 	page := util.GetPagination(c)
-	comments := commentModel.GetPage(data.NickName, data.Mail, data.Content, data.PageTitle, page)
+	comments := commentModel.GetPage(data, page)
 	resp.Success(c, comments)
 }
 

@@ -41,10 +41,10 @@
             <div style="min-height: 200px">
               <i-form :model="model" :rules="rules">
                 <form-item prop="username">
-                  <i-input type="text" v-model="model.username" placeholder="请输入用户名"></i-input>
+                  <i-input type="text" name="username" v-model="model.username" placeholder="请输入用户名"></i-input>
                 </form-item>
                 <form-item prop="password">
-                  <i-input type="text" v-model="model.password" placeholder="请输入密码"></i-input>
+                  <i-input type="password" name="password" v-model="model.password" placeholder="请输入密码"></i-input>
                 </form-item>
                 <form-item>
                   <i-button type="primary" long icon="ios-key" v-on:click="login()">登陆</i-button>

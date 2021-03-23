@@ -21,6 +21,13 @@ type Comment struct {
 	Replys       []Comment `gorm:"-" json:"replys"` // 回复列表
 }
 
+type QueryCommentField struct {
+	NickName  string `gorm:"column:nickname" form:"nickName"`
+	Mail      string `gorm:"column:mail" form:"mail"`
+	Content   string `gorm:"column:content" form:"content"`
+	PageTitle string `gorm:"column:page_title" form:"pageTitle"`
+}
+
 func init() {
 	dao.DB.AutoMigrate(&Comment{})
 }
@@ -31,10 +38,10 @@ func (q Comment) TableName() string {
 }
 
 // GetPage is get all comment
-func (q Comment) GetPage(nickName string, mail string, content string, pageTitle string, page util.Pagination) util.PageData {
+func (q Comment) GetPage(query QueryCommentField, page util.Pagination) util.PageData {
 	var data util.PageData
 	var comments []Comment
-	dao.DB.Where("content LIKE ? or nickname = ? or mail = ? or page_title LIKE ?", "%%"+content+"%%", nickName, mail, "%%"+pageTitle+"%%").Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
+	dao.DB.Where(query).Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
 	data.Records = comments
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()
