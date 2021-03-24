@@ -12,7 +12,6 @@ var resp = util.Response{}
 
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		println("enter auth middlerware")
 		authHeader := c.Request.Header.Get("Authorization")
 		if authHeader == "" {
 			resp.Error(c, util.ResponseAuthorized, "鉴权失败")

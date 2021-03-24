@@ -41,7 +41,20 @@ func (q Comment) TableName() string {
 func (q Comment) GetPage(query QueryCommentField, page util.Pagination) util.PageData {
 	var data util.PageData
 	var comments []Comment
-	dao.DB.Where(query).Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
+	db := dao.DB
+	if query.NickName != "" {
+		db = db.Where("nickname = ?", query.NickName)
+	}
+	if query.Mail != "" {
+		db = db.Where("mail = ?", query.Mail)
+	}
+	if query.Content != "" {
+		db = db.Where("content like ?", "%%"+query.Content+"%%")
+	}
+	if query.PageTitle != "" {
+		db = db.Where("page_title like ?", "%%"+query.PageTitle+"%%")
+	}
+	db.Order("created_at DESC").Offset(page.GetOffset()).Limit(page.GetPageSize()).Find(&comments).Offset(-1).Count(&data.Total)
 	data.Records = comments
 	data.Page = page.GetPage()
 	data.PageSize = page.GetPageSize()
