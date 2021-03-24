@@ -1,6 +1,8 @@
 
-![](./docs/logo.png)
-<h1>YozComment</h1>
+<center>
+<img src="./docs/logo.png" width="100px"/>
+<p style="font-size:24px;font-weight:bold;">YozComment</p>
+</center>
 
 ## 介绍
 开源的 golang 评论系统。因自己博客与他人共用服务器，暂时知名的几个系统都是需要在服务器安装一定的依赖或环境，不想增加服务器负担，顺带学习 golang 的态度，便自己造了这个轮子。
@@ -25,7 +27,7 @@
 
 ```bash
 	git clone https://github.com/kwokronny/YozComment.git
-	cd 项目目录
+	cd ${workspace}
 	npm install parcel-bundler -g
 	npm install
 	npm run build

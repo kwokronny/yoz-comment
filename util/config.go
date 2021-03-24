@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/rand"
+	"os/exec"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
 )
 
@@ -89,4 +91,12 @@ func SaveConfigFile(c *gin.Context) {
 		return
 	}
 	resp.Success(c, true)
+	exitInstall()
+}
+
+func exitInstall() {
+	cmd := exec.Command("sh", "serve.sh")
+	if err := cmd.Run(); err != nil {
+		log.Error(err)
+	}
 }

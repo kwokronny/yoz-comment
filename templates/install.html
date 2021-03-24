@@ -54,6 +54,7 @@
                 </form-item>
                 <form-item prop="sensitive_enabled" label="敏感字识别">
                   <i-switch v-model="model.sensitive_enabled"></i-switch>
+                  <Alert type="info">引用的是<a href="github.com/importcjj/sensitive">importcjj/sensitive</a>，敏感词字典存储在 config/sensitive.txt </Alert>
                 </form-item>
               </div>
             </Card>
@@ -61,12 +62,16 @@
               <div class="config-content">
                 <form-item prop="manage_router" label="路由">
                   <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
+                  <Alert type="info">可以通过自定义 扰乱字符 为后台管理入口 <br/>如设置路由为gkqoSDBxv43fgL9CP3pV9u <br/> 则后台管理路由为 https://{部署址址}/gkqoSDBxv43fgL9CP3pV9u </Alert>
                 </form-item>
                 <form-item prop="admin_root" label="用户名">
                   <i-input type="text" v-model="model.admin_root" placeholder="请输入用户名"></i-input>
                 </form-item>
                 <form-item prop="admin_pass" label="密码">
-                  <i-input type="text" v-model="model.admin_pass" placeholder="请输入密码"></i-input>
+                  <i-input type="password" v-model="model.admin_pass" placeholder="请输入密码"></i-input>
+                </form-item>
+                <form-item prop="confirm_pass" label="确认密码">
+                  <i-input type="password" v-model="model.confirm_pass" placeholder="请确认密码"></i-input>
                 </form-item>
               </div>
             </Card>
@@ -102,11 +107,12 @@
                     <i-input type="text" v-model="model.smtp_username" placeholder="请输入用户名"></i-input>
                   </form-item>
                   <form-item prop="smtp_password" label="密码">
-                    <i-input type="text" v-model="model.smtp_password" placeholder="请输入密码"></i-input>
+                    <i-input type="password" v-model="model.smtp_password" placeholder="请输入密码"></i-input>
                   </form-item>
                   <form-item prop="smtp_to" label="收件人">
                     <i-input type="text" v-model="model.smtp_to" placeholder="请输入收件邮箱"></i-input>
                   </form-item>
+                  <Alert type="info">下面两项配置主要用于接收到邮件通知时由跳转至网站查看</Alert>
                   <form-item prop="site_name" label="网站名称">
                     <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
                   </form-item>
@@ -129,45 +135,61 @@
     <script>
       new Vue({
         el: "#app",
-        data: {
-          loading: false,
-          model: {
-            site_name: "",
-            site_url: "",
-            server_port: "",
-            sensitive_enabled: false,
-            cros_enabled: false,
-            manage_router: "",
-            admin_root: "",
-            admin_pass: "",
-            mysql_host: "",
-            mysql_usr: "",
-            mysql_pwd: "",
-            mysql_db: "",
-            smtp_enabled: false,
-            smtp_host: "",
-            smtp_port: 465,
-            smtp_username: "",
-            smtp_password: "",
-            smtp_to: "",
-          },
-          rules: {
-            site_name: [{ required: true, message: "必填项", type: "string" }],
-            site_url: [{ required: true, message: "必填项", type: "string" }],
-            server_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
-            mysql_host: [{ required: true, message: "必填项", type: "string" }],
-            mysql_usr: [{ required: true, message: "必填项", type: "string" }],
-            mysql_pwd: [{ required: true, message: "必填项", type: "string" }],
-            mysql_db: [{ required: true, message: "必填项", type: "string" }],
-            manage_router: [{ required: true, message: "必填项", type: "string" }],
-            admin_root: [{ required: true, message: "必填项", type: "string" }],
-            admin_pass: [{ required: true, message: "必填项", type: "string" }],
-            smtp_host: [{ required: true, message: "必填项", type: "string" }],
-            smtp_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
-            smtp_username: [{ required: true, message: "必填项", type: "string" }],
-            smtp_password: [{ required: true, message: "必填项", type: "string" }],
-            smtp_to: [{ required: true, message: "必填项", type: "string" }],
-          },
+        data: function () {
+          var self = this;
+          return {
+            loading: false,
+            model: {
+              site_name: "",
+              site_url: "",
+              server_port: 9975,
+              sensitive_enabled: false,
+              cros_enabled: false,
+              manage_router: "",
+              admin_root: "",
+              admin_pass: "",
+              confirm_pass: "",
+              mysql_host: "",
+              mysql_usr: "",
+              mysql_pwd: "",
+              mysql_db: "",
+              smtp_enabled: false,
+              smtp_host: "",
+              smtp_port: 465,
+              smtp_username: "",
+              smtp_password: "",
+              smtp_to: "",
+            },
+            rules: {
+              site_name: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              site_url: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              server_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+              mysql_host: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              mysql_usr: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              mysql_pwd: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              mysql_db: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              manage_router: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              admin_root: [{ required: true, message: "必填项", type: "string", trigger: "change" }],//zz
+              admin_pass: [{ required: true, message: "必填项, 密码不少于6位，至少包含大写、小写、特殊符号、数字各1个", type: "string", trigger: "change",pattern:/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/ }],
+              confirm_pass: [
+                { required: true, message: "必填项", type: "string", trigger: "change" },
+                {
+                  validator: function (rule, value, cb) {
+                    if(self.model.admin_pass==value){
+                      cb()
+                    }
+                    cb("两次密码不一致")
+                  },
+                  trigger: "change",
+                },
+              ],
+              smtp_host: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              smtp_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+              smtp_username: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              smtp_password: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              smtp_to: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+            },
+          };
         },
         mounted: function () {},
         methods: {

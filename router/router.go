@@ -22,7 +22,7 @@ func SetupRouter() *gin.Engine {
 		engine.Use(func(c *gin.Context) {
 			c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 			c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-			c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT")
+			c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 			c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 
 			if c.Request.Method == "OPTIONS" {
@@ -45,7 +45,9 @@ func SetupRouter() *gin.Engine {
 	api.GET("/page", comment.GetComment)
 	api.POST("/comment", comment.Save)
 
-	manageApi := engine.Group(util.Config.ManageRouter)
+	manageApi := engine.Group(util.Config.ManageRouter, func(c *gin.Context) {
+		c.Redirect(http.StatusPermanentRedirect, "/index.html")
+	})
 	manageApi.GET("/login.html", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "login.html", gin.H{})
 	})
