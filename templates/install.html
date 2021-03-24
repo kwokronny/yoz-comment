@@ -29,8 +29,8 @@
         text-align: center;
         margin-bottom: 10px;
       }
-      .config-content{
-        max-width: 600px; 
+      .config-content {
+        max-width: 600px;
         width: 100%;
         margin: auto;
       }
@@ -107,6 +107,12 @@
                   <form-item prop="smtp_to" label="收件人">
                     <i-input type="text" v-model="model.smtp_to" placeholder="请输入收件邮箱"></i-input>
                   </form-item>
+                  <form-item prop="site_name" label="网站名称">
+                    <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
+                  </form-item>
+                  <form-item prop="site_url" label="网站网址">
+                    <i-input type="text" v-model="model.site_url" placeholder="请输入网站网址"></i-input>
+                  </form-item>
                 </div>
               </div>
             </Card>
@@ -126,6 +132,8 @@
         data: {
           loading: false,
           model: {
+            site_name: "",
+            site_url: "",
             server_port: "",
             sensitive_enabled: false,
             cros_enabled: false,
@@ -138,12 +146,14 @@
             mysql_db: "",
             smtp_enabled: false,
             smtp_host: "",
-            smtp_port: 0,
+            smtp_port: 465,
             smtp_username: "",
             smtp_password: "",
             smtp_to: "",
           },
           rules: {
+            site_name: [{ required: true, message: "必填项", type: "string" }],
+            site_url: [{ required: true, message: "必填项", type: "string" }],
             server_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
             mysql_host: [{ required: true, message: "必填项", type: "string" }],
             mysql_usr: [{ required: true, message: "必填项", type: "string" }],
@@ -165,7 +175,7 @@
             var self = this;
             this.loading = true;
             var params = Object.assign({}, this.model);
-            params.admin_pass = md5(params.admin_pass)
+            params.admin_pass = md5(params.admin_pass);
             this.$refs["configForm"].validate().then(function (valid) {
               if (valid == false) return;
               axios.post("setting", params).then(function (response) {

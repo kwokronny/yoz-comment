@@ -44,6 +44,9 @@ func Save(c *gin.Context) {
 			return
 		}
 	}
+	data.NickName = template.HTMLEscapeString(data.NickName)
+	data.Site = template.HTMLEscapeString(data.Site)
+	data.Mail = template.HTMLEscapeString(data.Mail)
 	data.Content = template.HTMLEscapeString(data.Content)
 	commentModel.Save(data)
 

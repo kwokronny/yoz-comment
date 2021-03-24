@@ -16,12 +16,10 @@ generate:
     - ssh-add ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   script:
-    - cd client
     - npm install cnpm --registry=https://registry.npm.taobao.org/ -g
     - cnpm install parcel-bundler -g
     - cnpm install
     - npm run build
-    - cd ../
     - export GOPROXY=https://goproxy.io
     - cp -r templates deploy
     - cp -r config deploy
