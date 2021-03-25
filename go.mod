@@ -4,8 +4,11 @@ go 1.14
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
+	github.com/goreleaser/goreleaser v0.161.1 // indirect
 	github.com/howeyc/fsnotify v0.9.0 // indirect
 	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
@@ -17,7 +20,7 @@ require (
 	golang.org/x/sys v0.0.0-20210316164454-77fc1eacc6aa // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.0.4
 	gorm.io/gorm v1.20.12
 )

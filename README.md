@@ -2,6 +2,7 @@
 <center>
 <img src="./docs/logo.png" width="100px"/>
 <p style="font-size:24px;font-weight:bold;">YozComment</p>
+<p>作者：<a href="https://kwokronny.top">KwokRonny</a></p>
 </center>
 
 ## 介绍
@@ -25,11 +26,26 @@
 
 ## 安装
 
-```bash
-	git clone https://github.com/kwokronny/YozComment.git
-	cd ${workspace}
-	npm install parcel-bundler -g
-	npm install
-	npm run build
-```
-![](./docs/install.jpg)
+- ### 部署至服务器
+	```bash
+	
+	```
+
+- ### 配置安装
+	运行脚本当检测到相对目录下 `config/config.yaml` 不存在，访问 http://localhost:9975 会进入安装配置页面
+	
+	![](./docs/install.jpg)
+
+	根据配置页面操作完成后会在相应位置生成 `config.yaml` 配置文件，并重新运行脚本启动服务
+
+- ### 在页面中放入引用代码完成评论系统部署
+
+	```html
+	<script 
+		id="YozComment" 
+		src="http://localhost:9975/client.js" 
+		token="页面唯一TOKEN" 
+		theme="{light|dark}" 
+		crossorigin="anonymous" 
+		async></script>
+	```
