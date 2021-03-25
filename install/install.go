@@ -12,7 +12,7 @@ func main() {
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.Default()
-	engine.LoadHTMLGlob("templates/install.html")
+	engine.LoadHTMLGlob("templates/manage/install.html")
 
 	engine.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "install.html", gin.H{})

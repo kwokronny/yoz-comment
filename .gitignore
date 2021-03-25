@@ -1,7 +1,6 @@
 /tmp
-/templates/static
-/templates/client.js
-/templates/client.js.map
+/templates/web
+/release
 /templates/index.html
 /logs
 /fresh

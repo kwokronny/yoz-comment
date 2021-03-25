@@ -15,7 +15,7 @@ func SetupRouter() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.Default()
-	engine.LoadHTMLFiles("templates/index.html", "templates/manage.html", "templates/login.html")
+	engine.LoadHTMLFiles("templates/web/index.html", "templates/manage/manage.html", "templates/manage/login.html")
 	engine.Use(middleware.LoggerMiddleware())
 
 	if util.Config.CROSEnabled == true {
@@ -34,8 +34,8 @@ func SetupRouter() *gin.Engine {
 		})
 	}
 
-	engine.Static("/static", "./templates/static")
-	engine.StaticFile("client.js", "./templates/client.js")
+	engine.Static("/static", "./templates/web/static")
+	engine.StaticFile("client.js", "./templates/web/client.js")
 
 	engine.GET("/index.html", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
