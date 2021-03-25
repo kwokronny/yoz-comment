@@ -27,6 +27,9 @@ type Model struct {
 
 func init() {
 	var err error
+	if util.Config.Installed == false {
+		return
+	}
 	config := util.Config
 	var uri string = fmt.Sprintf("%s:%s@tcp(%s)/%s?loc=Local&parseTime=True", config.MysqlUsr, config.MysqlPwd, config.MysqlHost, config.MysqlDB)
 	DB, err = gorm.Open(mysql.New(mysql.Config{

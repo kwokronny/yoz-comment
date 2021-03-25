@@ -15,6 +15,7 @@ import (
 var resp = Response{}
 
 type configStruct struct {
+	Installed  bool
 	SiteName   string `yaml:"site_name" json:"site_name"`
 	SiteUrl    string `yaml:"site_url" json:"site_url"`
 	ServerPort int    `yaml:"server_port" json:"server_port" `
@@ -55,10 +56,13 @@ func init() {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+		Config.Installed = true
+	} else {
+		Config.Installed = false
 	}
 }
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*")
 
 func randStringRunes(n int) string {
 	rand.Seed(time.Now().UnixNano())

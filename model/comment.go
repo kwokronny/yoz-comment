@@ -29,7 +29,9 @@ type QueryCommentField struct {
 }
 
 func init() {
-	dao.DB.AutoMigrate(&Comment{})
+	if util.Config.Installed != false {
+		dao.DB.AutoMigrate(&Comment{})
+	}
 }
 
 // TableName is Change GORM default TableName

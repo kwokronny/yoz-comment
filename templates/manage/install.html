@@ -77,18 +77,27 @@
             </Card>
             <Card title="数据库配置" style="margin-bottom: 20px">
               <div class="config-content">
-                <form-item prop="mysql_host" label="链接">
-                  <i-input type="text" v-model="model.mysql_host" placeholder="host:port"></i-input>
+                <form-item prop="db_app" label="数据库选择">
+                  <RadioGroup v-model="model.db_app" type="button">
+                    <Radio value="mysql" label="MySQL"></Radio>
+                    <Radio value="sqlite" label="SQLite"></Radio>
+                    <Radio value="postgresql" label="PostgreSQL"></Radio>
+                  </RadioGroup>
                 </form-item>
-                <form-item prop="mysql_usr" label="用户名">
-                  <i-input type="text" v-model="model.mysql_usr" placeholder="请输入用户名"></i-input>
-                </form-item>
-                <form-item prop="mysql_pwd" label="密码">
-                  <i-input type="text" v-model="model.mysql_pwd" placeholder="请输入密码"></i-input>
-                </form-item>
-                <form-item prop="mysql_db" label="数据库">
-                  <i-input type="text" v-model="model.mysql_db" placeholder="请输入数据库名"></i-input>
-                </form-item>
+                <template v-if="model.db_app=='mysql'">
+                  <form-item prop="mysql_host" label="链接">
+                    <i-input type="text" v-model="model.mysql_host" placeholder="host:port"></i-input>
+                  </form-item>
+                  <form-item prop="mysql_usr" label="用户名">
+                    <i-input type="text" v-model="model.mysql_usr" placeholder="请输入用户名"></i-input>
+                  </form-item>
+                  <form-item prop="mysql_pwd" label="密码">
+                    <i-input type="text" v-model="model.mysql_pwd" placeholder="请输入密码"></i-input>
+                  </form-item>
+                  <form-item prop="mysql_db" label="数据库">
+                    <i-input type="text" v-model="model.mysql_db" placeholder="请输入数据库名"></i-input>
+                  </form-item>
+                </template>
               </div>
             </Card>
             <Card title="SMTP邮件通知配置" style="margin-bottom: 20px">
@@ -149,6 +158,7 @@
               admin_root: "",
               admin_pass: "",
               confirm_pass: "",
+              db_app: "",
               mysql_host: "",
               mysql_usr: "",
               mysql_pwd: "",

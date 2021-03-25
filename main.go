@@ -8,5 +8,9 @@ import (
 
 func main() {
 	r := router.SetupRouter()
-	r.Run(":" + strconv.Itoa(util.Config.ServerPort))
+	port := "9975"
+	if util.Config.Installed == true {
+		port = strconv.Itoa(util.Config.ServerPort)
+	}
+	r.Run(":" + port)
 }
