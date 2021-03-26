@@ -78,26 +78,29 @@
             <Card title="数据库配置" style="margin-bottom: 20px">
               <div class="config-content">
                 <form-item prop="db_app" label="数据库选择">
-                  <RadioGroup v-model="model.db_app" type="button">
-                    <Radio value="mysql" label="MySQL"></Radio>
-                    <Radio value="sqlite" label="SQLite"></Radio>
-                    <Radio value="postgresql" label="PostgreSQL"></Radio>
-                  </RadioGroup>
+                  <radio-group v-model="model.db_app" type="button">
+                    <Radio label="sqlite">SQLite</Radio>
+                    <Radio label="mysql">MySQL</Radio>
+                    <Radio label="postgresql">PostgreSQL</Radio>
+                  </radio-group>
                 </form-item>
-                <template v-if="model.db_app=='mysql'">
-                  <form-item prop="mysql_host" label="链接">
-                    <i-input type="text" v-model="model.mysql_host" placeholder="host:port"></i-input>
+                <template v-if="model.db_app!='sqlite'">
+                  <form-item prop="db_host" label="数据库主机">
+                    <i-input type="text" v-model="model.db_host" placeholder="请输入数据库主机"></i-input>
                   </form-item>
-                  <form-item prop="mysql_usr" label="用户名">
-                    <i-input type="text" v-model="model.mysql_usr" placeholder="请输入用户名"></i-input>
+                  <form-item prop="db_port" label="端口">
+                    <i-input type="number" number v-model="model.db_port" placeholder="请输入端口"></i-input>
                   </form-item>
-                  <form-item prop="mysql_pwd" label="密码">
-                    <i-input type="text" v-model="model.mysql_pwd" placeholder="请输入密码"></i-input>
+                  <form-item prop="db_usr" label="用户名">
+                    <i-input type="text" v-model="model.db_usr" placeholder="请输入用户名"></i-input>
                   </form-item>
-                  <form-item prop="mysql_db" label="数据库">
-                    <i-input type="text" v-model="model.mysql_db" placeholder="请输入数据库名"></i-input>
+                  <form-item prop="db_pwd" label="密码">
+                    <i-input type="text" v-model="model.db_pwd" placeholder="请输入密码"></i-input>
                   </form-item>
                 </template>
+                <form-item prop="db_lib" label="数据库">
+                  <i-input type="text" v-model="model.db_lib" placeholder="请输入数据库名"></i-input>
+                </form-item>
               </div>
             </Card>
             <Card title="SMTP邮件通知配置" style="margin-bottom: 20px">
@@ -158,11 +161,12 @@
               admin_root: "",
               admin_pass: "",
               confirm_pass: "",
-              db_app: "",
-              mysql_host: "",
-              mysql_usr: "",
-              mysql_pwd: "",
-              mysql_db: "",
+              db_app: "sqlite",
+              db_host: "",
+              db_port: 3306,
+              db_usr: "",
+              db_pwd: "",
+              db_db: "",
               smtp_enabled: false,
               smtp_host: "",
               smtp_port: 465,
@@ -174,10 +178,12 @@
               site_name: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               site_url: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               server_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
-              mysql_host: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
-              mysql_usr: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
-              mysql_pwd: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
-              mysql_db: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              db_app: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              db_host: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              db_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+              db_usr: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              db_pwd: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              db_lib: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               manage_router: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               admin_root: [{ required: true, message: "必填项", type: "string", trigger: "change" }],//zz
               admin_pass: [{ required: true, message: "必填项, 密码不少于6位，至少包含大写、小写、特殊符号、数字各1个", type: "string", trigger: "change",pattern:/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/ }],

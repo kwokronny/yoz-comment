@@ -10,6 +10,8 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 )
 
 // DB is gorm instance Lib
@@ -31,10 +33,23 @@ func init() {
 		return
 	}
 	config := util.Config
-	var uri string = fmt.Sprintf("%s:%s@tcp(%s)/%s?loc=Local&parseTime=True", config.MysqlUsr, config.MysqlPwd, config.MysqlHost, config.MysqlDB)
-	DB, err = gorm.Open(mysql.New(mysql.Config{
-		DSN: uri,
-	}), &gorm.Config{})
+	var dbSource gorm.Dialector
+	if config.DBApp == "mysql" {
+		var dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?loc=Local&parseTime=True", config.DBUsr, config.DBPwd, config.DBHost, config.DBPort, config.DBLib)
+		dbSource = mysql.New(mysql.Config{
+			DSN: dsn,
+		})
+	} else if config.DBApp == "postgresql" {
+		var dsn = fmt.Sprintf("host=%s user=%s password=%s DB.name=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", config.DBHost, config.DBUsr, config.DBPwd, config.DBLib, config.DBPort)
+		postgres.New(postgres.Config{
+			DSN:                  dsn,
+			PreferSimpleProtocol: true,
+		})
+	} else if config.DBApp == "sqlite" {
+		var dbName = config.DBLib + ".db"
+		dbSource = sqlite.Open(dbName)
+	}
+	DB, err = gorm.Open(dbSource, &gorm.Config{})
 	if err != nil {
 		log.Panicln("GORM Error:", err.Error())
 	}

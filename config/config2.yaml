@@ -1,6 +1,7 @@
 site_name: KwokRonny
 site_url: https://kwokronny.top
 server_port: 7550
+db_app: mysql
 mysql_host: kwok-nas.asuscomm.com:3336
 mysql_usr: root
 mysql_pwd: gr68599$

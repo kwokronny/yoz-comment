@@ -20,10 +20,12 @@ type configStruct struct {
 	SiteUrl    string `yaml:"site_url" json:"site_url"`
 	ServerPort int    `yaml:"server_port" json:"server_port" `
 
-	MysqlHost string `yaml:"mysql_host" json:"mysql_host"`
-	MysqlUsr  string `yaml:"mysql_usr" json:"mysql_usr"`
-	MysqlPwd  string `yaml:"mysql_pwd" json:"mysql_pwd"`
-	MysqlDB   string `yaml:"mysql_db" json:"mysql_db"`
+	DBApp  string `yaml:"db_app" json:"db_app"`
+	DBHost string `yaml:"db_host" json:"db_host"`
+	DBPort int    `yaml:"db_port" json:"db_port"`
+	DBUsr  string `yaml:"db_usr" json:"db_usr"`
+	DBPwd  string `yaml:"db_pwd" json:"db_pwd"`
+	DBLib  string `yaml:"db_lib" json:"db_lib"`
 
 	CROSEnabled bool `yaml:"cros_enabled" json:"cros_enabled"`
 
@@ -46,7 +48,7 @@ type configStruct struct {
 // Config 配置内容
 var Config configStruct
 
-var configPath string = "./config/config.yaml"
+var configPath string = "./config.yaml"
 
 // Setup 装载配置
 func init() {

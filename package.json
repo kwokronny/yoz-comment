@@ -1,12 +1,12 @@
 {
-  "name": "yoz-comment",
+  "name": "YozComment",
   "version": "1.0.0",
   "description": "open source blog comment system",
   "repository": "",
   "main": "index.js",
   "scripts": {
-    "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates/web --port 5000 && go-bindata-assetfs -debug -pkg=static -o ./templates/static.go templates/web/... templates/manage/...",
-    "build": "parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --experimental-scope-hoisting --no-content-hash && go-bindata-assetfs -nomemcopy -pkg=static -o ./templates/static.go templates/web/... templates/manage/..."
+    "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates/web --port 5000",
+    "build": "parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --experimental-scope-hoisting --no-content-hash"
   },
   "author": "kwokronny",
   "license": "ISC",

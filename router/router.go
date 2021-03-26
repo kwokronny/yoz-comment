@@ -22,7 +22,6 @@ func SetupRouter() *gin.Engine {
 		})
 		engine.POST("/setting", util.SaveConfigFile)
 	} else {
-		engine.LoadHTMLFiles("templates/web/index.html", "templates/manage/manage.html", "templates/manage/login.html", "templates/install/login.html")
 		engine.Use(middleware.LoggerMiddleware())
 
 		if util.Config.CROSEnabled == true {
@@ -41,8 +40,9 @@ func SetupRouter() *gin.Engine {
 			})
 		}
 
+		engine.LoadHTMLFiles("templates/web/index.html", "templates/manage/manage.html", "templates/manage/login.html")
 		engine.Static("/static", "./templates/web/static")
-		engine.StaticFile("client.js", "./templates/web/client.js")
+		engine.StaticFile("/client.js", "./templates/web/client.js")
 
 		engine.GET("/index.html", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "index.html", gin.H{})
@@ -52,13 +52,11 @@ func SetupRouter() *gin.Engine {
 		api.GET("/page", comment.GetComment)
 		api.POST("/comment", comment.Save)
 
-		manageApi := engine.Group(util.Config.ManageRouter, func(c *gin.Context) {
-			c.Redirect(http.StatusPermanentRedirect, "/index.html")
-		})
+		manageApi := engine.Group(util.Config.ManageRouter)
 		manageApi.GET("/login.html", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "login.html", gin.H{})
 		})
-		manageApi.GET("/index.html", func(c *gin.Context) {
+		manageApi.GET("/manage.html", func(c *gin.Context) {
 			c.HTML(http.StatusOK, "manage.html", gin.H{})
 		})
 		manageApi.POST("/login", manage.Login)
