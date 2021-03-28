@@ -54,7 +54,7 @@
                 </form-item>
                 <form-item prop="sensitive_enabled" label="敏感字识别">
                   <i-switch v-model="model.sensitive_enabled"></i-switch>
-                  <Alert type="info">引用的是<a href="github.com/importcjj/sensitive">importcjj/sensitive</a>，敏感词字典存储在 config/sensitive.txt </Alert>
+                  <Alert type="info">引用的是<a href="github.com/importcjj/sensitive">importcjj/sensitive</a>，将会下载<a href="https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt">敏感词字典</a>存储在 项目所在同级目录的 sensitive.txt，如遇因墙下载失败，可自行下载字典或编写字典到该位置。</Alert>
                 </form-item>
               </div>
             </Card>
@@ -220,7 +220,7 @@
                 var ret = response.data;
                 self.loading = false;
                 if (ret.code == 200) {
-                  self.$Message.success("配置完成");
+                  self.$Modal.success({title:"配置完成",content:"请手动重启服务"});
                 }
               });
             });

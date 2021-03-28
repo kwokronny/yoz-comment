@@ -6,3 +6,6 @@
 /fresh
 /node_modules
 /.cache
+dist/
+sensitive.txt
+statics/statics.go

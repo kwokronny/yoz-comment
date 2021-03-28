@@ -85,7 +85,7 @@
               self.loading = false;
               if (ret.code == 200) {
                 window.localStorage.setItem("yoz-comment-auth", ret.data);
-                location.href = "./index.html";
+                location.href = "./manage.html";
               } else {
                 self.$Message.error("登陆失败");
               }

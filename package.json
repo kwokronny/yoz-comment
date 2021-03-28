@@ -1,12 +1,13 @@
 {
   "name": "YozComment",
   "version": "1.0.0",
-  "description": "open source blog comment system",
+  "description": "open source comment system",
   "repository": "",
   "main": "index.js",
   "scripts": {
     "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates/web --port 5000",
-    "build": "parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --experimental-scope-hoisting --no-content-hash"
+    "bindata": "go-bindata-assetfs -debug -o statics/statics.go -pkg=statics templates/...",
+    "build": "rm -rf templates/web && parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --experimental-scope-hoisting --no-content-hash"
   },
   "author": "kwokronny",
   "license": "ISC",

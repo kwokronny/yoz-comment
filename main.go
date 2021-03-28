@@ -1,3 +1,4 @@
+//go:generate go-bindata-assetfs -o statics/statics.go -pkg=statics templates/...
 package main
 
 import (

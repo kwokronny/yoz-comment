@@ -1,10 +1,11 @@
 package util
 
 import (
-	"fmt"
+	"io"
 	"io/ioutil"
 	"math/rand"
-	"os/exec"
+	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +16,7 @@ import (
 var resp = Response{}
 
 type configStruct struct {
-	Installed  bool
+	Installed  bool   `yaml:"installed" json:"installed"`
 	SiteName   string `yaml:"site_name" json:"site_name"`
 	SiteUrl    string `yaml:"site_url" json:"site_url"`
 	ServerPort int    `yaml:"server_port" json:"server_port" `
@@ -53,15 +54,17 @@ var configPath string = "./config.yaml"
 // Setup 装载配置
 func init() {
 	yamlFile, err := ioutil.ReadFile(configPath)
-	if err == nil {
-		err = yaml.Unmarshal(yamlFile, &Config)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		Config.Installed = true
-	} else {
+	if err != nil {
 		Config.Installed = false
+		return
 	}
+	err = yaml.Unmarshal(yamlFile, &Config)
+	if err != nil {
+		Config.Installed = false
+		log.Error(err.Error())
+		return
+	}
+	Config.Installed = true
 }
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*")
@@ -80,29 +83,52 @@ func SaveConfigFile(c *gin.Context) {
 	var conf configStruct
 	err := c.BindJSON(&conf)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Errorf("配置生成入参错误：%s", err.Error())
 		resp.Error(c, ResponseParamError, "入参错误")
 		return
 	}
-	conf.SensitivePath = "./config/sensitive.txt"
+	if conf.SensitiveEnabled == true {
+		conf.SensitivePath = "./sensitive.txt"
+		err = downloadFile(conf.SensitivePath, "https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt")
+		if err != nil {
+			log.Errorf("下载敏感字典错误：%s", err.Error())
+			resp.Error(c, ResponseServerError, "下载敏感字典错误")
+			return
+		}
+	}
 	conf.JWTEncrypt = randStringRunes(26)
+	conf.Installed = true
 	yamlFile, err := yaml.Marshal(conf)
 	if err != nil {
+		log.Errorf("配置生成错误：%s", err.Error())
 		resp.Error(c, ResponseServerError, "生成错误")
 		return
 	}
 	err = ioutil.WriteFile(configPath, yamlFile, 0666)
 	if err != nil {
+		log.Errorf("配置保存错误：%s", err.Error())
 		resp.Error(c, ResponseServerError, "保存错误")
 		return
 	}
 	resp.Success(c, true)
-	exitInstall()
 }
 
-func exitInstall() {
-	cmd := exec.Command("sh", "serve.sh")
-	if err := cmd.Run(); err != nil {
-		log.Error(err)
+//TODO: download https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt
+
+func downloadFile(filepath string, url string) error {
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
 	}
+	defer resp.Body.Close()
+
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, resp.Body)
+	return err
 }

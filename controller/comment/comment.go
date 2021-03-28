@@ -2,6 +2,7 @@ package comment
 
 import (
 	"YozComment/model"
+	"YozComment/statics"
 	"YozComment/util"
 	"bytes"
 	"html/template"
@@ -54,7 +55,9 @@ func Save(c *gin.Context) {
 
 	if util.Config.SMTPEnabled == true {
 		err := sendEmail(data)
-		log.Errorf("邮件通知 %s", err.Error())
+		if err != nil {
+			log.Errorf("邮件通知 %s", err.Error())
+		}
 	}
 }
 
@@ -66,9 +69,15 @@ func sensitiveValid(content string) (bool, string) {
 }
 
 func sendEmail(data model.Comment) (err error) {
-	tmpl := template.New("mail_notice.html")
-	tmpl, err = tmpl.ParseFiles("./templates/mail_notice.html")
+	tmpl := template.New("")
+	mailTmpl, err := statics.Asset("templates/manage/mail_notice.html")
 	if err != nil {
+		log.Errorf("加载邮件模板文件错误: %s", err.Error())
+		return
+	}
+	tmpl, err = tmpl.Parse(string(mailTmpl))
+	if err != nil {
+		log.Errorf("解析邮件模板文件错误: %s", err.Error())
 		return
 	}
 	var body bytes.Buffer

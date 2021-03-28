@@ -41,7 +41,7 @@ func init() {
 		})
 	} else if config.DBApp == "postgresql" {
 		var dsn = fmt.Sprintf("host=%s user=%s password=%s DB.name=%s port=%d sslmode=disable TimeZone=Asia/Shanghai", config.DBHost, config.DBUsr, config.DBPwd, config.DBLib, config.DBPort)
-		postgres.New(postgres.Config{
+		dbSource = postgres.New(postgres.Config{
 			DSN:                  dsn,
 			PreferSimpleProtocol: true,
 		})
