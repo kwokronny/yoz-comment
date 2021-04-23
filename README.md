@@ -1,9 +1,9 @@
 
-<center>
+<div style="text-align:center">
 <img src="./docs/logo.png" width="100px"/>
 <p style="font-size:24px;font-weight:bold;">YozComment</p>
 <p>作者：<a href="https://kwokronny.top">KwokRonny</a></p>
-</center>
+</div>
 
 ## 介绍
 开源的 golang 评论系统。因自己博客与他人共用服务器，暂时知名的几个系统都是需要在服务器安装一定的依赖或环境，不想增加服务器负担，顺带学习 golang，便自己造了这个轮子。
@@ -11,15 +11,14 @@
 ![](./docs/preview.jpg)
 
 - ### 特点
-	* 支持MySQL、SQLite、PostgreSQL
 	* 多级评论
 	* 部署简单，可视化配置
-	* 支持 明/暗 主题
+	* 支持MySQL、SQLite、PostgreSQL
 	* 支持响应式
-	* 接入Gravatar头像显示
+	* 支持 明/暗 主题
+	* 接入 Gravatar 头像显示
 	* 支持敏感词识别
-	* 支持邮件通知
-	* 支持 SendCloud平台 发信通知留言者回复通知
+	* 支持邮件通知自己 及 SendCloud平台 发信通知留言者有回复
 	
 
 ## 安装
@@ -57,23 +56,7 @@
 
 	__预览__
 
-	<p><span id="9999" style="display: none !important; font-size:0; line-height:0">你在 KwokRonny 博客上的留言有回复啦</span></p>
-
-	<div style="background-color:white;border-top:2px solid #12ADDB;box-shadow:0 1px 3px #AAAAAA; line-height:180%; padding:0 15px 12px;width:500px;margin:100px auto;color:#555555;font-family:Century Gothic,Trebuchet MS,Hiragino Sans GB,微软雅黑,Microsoft Yahei,Tahoma,Helvetica,Arial,SimSun,sans-serif;font-size:14px;">
-	<h2 style="border-bottom:1px solid #DDD;font-size:16px;font-weight:normal;padding:13px 0 10px 0;"><span style="color: #12ADDB;font-weight: bold;">&gt; </span>你在 <a href="https://kwokronny.top" style="text-decoration:none;color: #12ADDB;" target="_blank">KwokRonny</a> 博客上的留言有回复啦！</h2>
-
-	<div style="padding:0 12px 0 12px;margin-top:18px">
-	<p>%you% 同学，你在文章《<a href="%post_url%" style="text-decoration:none; color:#12addb" target="_blank">%post%</a>》上的评论:</p>
-
-	<p style="background-color: #f5f5f5;border: 0 solid #DDD;padding: 10px 15px;margin:18px 0">%you_comment%</p>
-
-	<p>%comment_author% 给你的回复如下:</p>
-
-	<p style="background-color: #f5f5f5;border: 0 solid #DDD;padding: 10px 15px;margin:18px 0">%comment%</p>
-
-	<p>你可以点击 <a href="%comment_url%" style="text-decoration:none; color:#12addb" target="_blank">查看回复的完整內容 </a>，欢迎再来玩呀~</p>
-	</div>
-	</div>
+	![](./docs/mail_preview.png)
 
 - ### 配置安装
 
@@ -81,6 +64,8 @@
 
 	访问 http://localhost:9975 会进入安装配置页面
 	
+	> SMTP邮件通知使用同域名的邮箱发送邮件通知避免邮件发送失败或进入垃圾桶
+
 	![](./docs/install.jpg)
 
 	根据配置页面操作完成后会在相应位置生成 `config.yaml` 配置文件后，手动重新启动应用
