@@ -1,9 +1,11 @@
 
-<div style="text-align:center">
+
 <img src="./docs/logo.png" width="100px"/>
-<p style="font-size:24px;font-weight:bold;">YozComment</p>
-<p>作者：<a href="https://kwokronny.top">KwokRonny</a></p>
-</div>
+
+# YozComment
+
+作者：[KwokRonny](https://kwokronny.top)
+
 
 ## 介绍
 开源的 golang 评论系统。因自己博客与他人共用服务器，暂时知名的几个系统都是需要在服务器安装一定的依赖或环境，不想增加服务器负担，顺带学习 golang，便自己造了这个轮子。
@@ -30,7 +32,7 @@
 
 - ### 【可选】SendCloud 发信通知
 
-	为增加站点的互动，很多用户留言后通常无法得知自己的留言得到回复，也就减少了网站的互动性，但由于常见的邮箱存在被拦截SMTP发信问题，且SMTP协议直接发送会暴露服务器站点位置，所以就需要借助发信平台增强互动性啦，选用SendCloud原因是我好朋友与我共享了此平台的账号使用，后期需要增加其它平台可以提交pull-request（对开源项目管理经验少，如有需要还请不吝赐教）
+	为增加站点的互动，很多用户留言后通常无法得知自己的留言得到回复，也就减少了网站的互动性，但由于常见的邮箱存在被拦截SMTP发信问题，且SMTP协议直接发送会暴露服务器站点位置，所以就需要借助发信平台增强互动性啦，选用SendCloud原因是我好朋友与我共享了此平台的账号使用，后期需要增加其它平台可以提交pull-request（对开源项目管理经验少，如有需要还请不吝赐教）
 
 	> 提供的邮件模板代码
 	
