@@ -44,6 +44,12 @@ type configStruct struct {
 
 	SensitiveEnabled bool   `yaml:"sensitive_enabled" json:"sensitive_enabled"`
 	SensitivePath    string `yaml:"sensitive_path"`
+
+	SendCloudEnabled      bool   `yaml:"send_cloud_enabled" json:"send_cloud_enabled"`
+	SendCloudAPIUser      string `yaml:"send_cloud_api_user" json:"send_cloud_api_user"`
+	SendCloudAPIKey       string `yaml:"send_cloud_api_key" json:"send_cloud_api_key"`
+	SendCloudFrom         string `yaml:"send_cloud_from" json:"send_cloud_from"`
+	SendCloudTemplateName string `yaml:"send_cloud_template_name" json:"send_cloud_template_name"`
 }
 
 // Config 配置内容
@@ -112,8 +118,6 @@ func SaveConfigFile(c *gin.Context) {
 	}
 	resp.Success(c, true)
 }
-
-//TODO: download https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt
 
 func downloadFile(filepath string, url string) error {
 

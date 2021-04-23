@@ -40,7 +40,7 @@
     <div id="app">
       <Layout>
         <i-header>
-          <div class="layout-logo">YozComment 初始化配置</div>
+          <div class="layout-logo">YozComment 配置</div>
         </i-header>
         <i-content class="layout-content">
           <i-form ref="configForm" label-width="120" :rules="rules" :model="model">
@@ -54,7 +54,17 @@
                 </form-item>
                 <form-item prop="sensitive_enabled" label="敏感字识别">
                   <i-switch v-model="model.sensitive_enabled"></i-switch>
-                  <Alert type="info">引用的是<a href="github.com/importcjj/sensitive">importcjj/sensitive</a>，将会下载<a href="https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt">敏感词字典</a>存储在 项目所在同级目录的 sensitive.txt，如遇因墙下载失败，可自行下载字典或编写字典到该位置。</Alert>
+                  <Alert type="info"
+                    >引用的是<a href="github.com/importcjj/sensitive">importcjj/sensitive</a>，将会下载<a href="https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt">敏感词字典</a>存储在 项目所在同级目录的
+                    sensitive.txt，如遇因墙下载失败，可自行下载字典或编写字典到该位置。</Alert
+                  >
+                </form-item>
+                <Alert type="info">下面两项配置主要用于接收到邮件通知时由跳转至网站查看</Alert>
+                <form-item prop="site_name" label="网站名称">
+                  <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
+                </form-item>
+                <form-item prop="site_url" label="网站网址">
+                  <i-input type="text" v-model="model.site_url" placeholder="请输入网站网址"></i-input>
                 </form-item>
               </div>
             </Card>
@@ -62,7 +72,10 @@
               <div class="config-content">
                 <form-item prop="manage_router" label="路由">
                   <i-input type="text" v-model="model.manage_router" placeholder="请输入路由"></i-input>
-                  <Alert type="info">可以通过自定义 扰乱字符 为后台管理入口 <br/>如设置路由为gkqoSDBxv43fgL9CP3pV9u <br/> 则后台管理路由为 https://{部署址址}/gkqoSDBxv43fgL9CP3pV9u </Alert>
+                  <Alert type="info"
+                    >可以通过自定义 扰乱字符 为后台管理入口 <br />如设置路由为gkqoSDBxv43fgL9CP3pV9u <br />
+                    则后台管理路由为 https://{部署址址}/gkqoSDBxv43fgL9CP3pV9u
+                  </Alert>
                 </form-item>
                 <form-item prop="admin_root" label="用户名">
                   <i-input type="text" v-model="model.admin_root" placeholder="请输入用户名"></i-input>
@@ -124,12 +137,26 @@
                   <form-item prop="smtp_to" label="收件人">
                     <i-input type="text" v-model="model.smtp_to" placeholder="请输入收件邮箱"></i-input>
                   </form-item>
-                  <Alert type="info">下面两项配置主要用于接收到邮件通知时由跳转至网站查看</Alert>
-                  <form-item prop="site_name" label="网站名称">
-                    <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
+                </div>
+              </div>
+            </Card>
+            <Card title="SendCloud 邮件通知留言者配置" style="margin-bottom: 20px">
+              <div class="config-content">
+                <form-item prop="send_cloud_enabled" label="开启通知">
+                  <i-switch v-model="model.send_cloud_enabled"></i-switch>
+                </form-item>
+                <div v-if="model.send_cloud_enabled">
+                  <form-item prop="send_cloud_api_user" label="API USER">
+                    <i-input type="text" v-model="model.send_cloud_api_user" placeholder="请输入API USER"></i-input>
                   </form-item>
-                  <form-item prop="site_url" label="网站网址">
-                    <i-input type="text" v-model="model.site_url" placeholder="请输入网站网址"></i-input>
+                  <form-item prop="send_cloud_api_key" label="API KEY">
+                    <i-input type="text" v-model="model.send_cloud_api_key" placeholder="请输入API KEY"></i-input>
+                  </form-item>
+                  <form-item prop="send_cloud_from" label="寄件邮箱">
+                    <i-input type="text" v-model="model.send_cloud_from" placeholder="请输入寄件邮箱"></i-input>
+                  </form-item>
+                  <form-item prop="send_cloud_template_name" label="邮件模板名称">
+                    <i-input type="text" v-model="model.send_cloud_template_name" placeholder="请输入邮件模板名称"></i-input>
                   </form-item>
                 </div>
               </div>
@@ -145,35 +172,40 @@
     <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/build/md5.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script>
+      let defaultConfig = {
+        site_name: "",
+        site_url: "",
+        server_port: 9975,
+        sensitive_enabled: false,
+        cros_enabled: false,
+        manage_router: "",
+        admin_root: "",
+        admin_pass: "",
+        confirm_pass: "",
+        db_app: "sqlite",
+        db_host: "",
+        db_port: 3306,
+        db_usr: "",
+        db_pwd: "",
+        db_db: "",
+        smtp_enabled: false,
+        smtp_host: "",
+        smtp_port: 465,
+        smtp_username: "",
+        smtp_password: "",
+        smtp_to: "",
+        send_cloud_enabled: false,
+        send_cloud_api_key: "",
+        send_cloud_from: "",
+        send_cloud_template_name: "",
+      };
       new Vue({
         el: "#app",
         data: function () {
           var self = this;
           return {
             loading: false,
-            model: {
-              site_name: "",
-              site_url: "",
-              server_port: 9975,
-              sensitive_enabled: false,
-              cros_enabled: false,
-              manage_router: "",
-              admin_root: "",
-              admin_pass: "",
-              confirm_pass: "",
-              db_app: "sqlite",
-              db_host: "",
-              db_port: 3306,
-              db_usr: "",
-              db_pwd: "",
-              db_db: "",
-              smtp_enabled: false,
-              smtp_host: "",
-              smtp_port: 465,
-              smtp_username: "",
-              smtp_password: "",
-              smtp_to: "",
-            },
+            model: defaultConfig,
             rules: {
               site_name: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               site_url: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
@@ -185,30 +217,45 @@
               db_pwd: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               db_lib: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               manage_router: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
-              admin_root: [{ required: true, message: "必填项", type: "string", trigger: "change" }],//zz
-              admin_pass: [{ required: true, message: "必填项, 密码不少于6位，至少包含大写、小写、特殊符号、数字各1个", type: "string", trigger: "change",pattern:/^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/ }],
+              admin_root: [{ required: true, message: "必填项", type: "string", trigger: "change" }], //zz
+              admin_pass: [{ required: true, message: "必填项, 密码不少于6位，至少包含大写、小写、特殊符号、数字各1个", type: "string", trigger: "change", pattern: /^\S*(?=\S{6,})(?=\S*\d)(?=\S*[A-Z])(?=\S*[a-z])(?=\S*[!@#$%^&*? ])\S*$/ }],
               confirm_pass: [
                 { required: true, message: "必填项", type: "string", trigger: "change" },
                 {
                   validator: function (rule, value, cb) {
-                    if(self.model.admin_pass==value){
-                      cb()
+                    if (self.model.admin_pass == value) {
+                      cb();
                     }
-                    cb("两次密码不一致")
+                    cb("两次密码不一致");
                   },
                   trigger: "change",
                 },
               ],
               smtp_host: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
-              smtp_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1 }],
+              smtp_port: [{ required: true, message: "必填项，端口范围须在1~65535之间", type: "number", max: 65535, min: 1, trigger: "change" }],
               smtp_username: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               smtp_password: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
               smtp_to: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              send_cloud_api_user: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              send_cloud_api_key: [{ required: true, message: "必填项", trigger: "change" }],
+              send_cloud_from: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
+              send_cloud_template_name: [{ required: true, message: "必填项", type: "string", trigger: "change" }],
             },
           };
         },
-        mounted: function () {},
+        mounted: function () {
+          this.getConfig();
+        },
         methods: {
+          getConfig() {
+            var self = this;
+            axios.post("getConfig").then(function (response) {
+              var ret = response.data;
+              if (ret.code == 200) {
+                self.model = ret.data.installed == true ? ret.data : defaultConfig;
+              }
+            });
+          },
           save: function (page) {
             var self = this;
             this.loading = true;
@@ -220,7 +267,7 @@
                 var ret = response.data;
                 self.loading = false;
                 if (ret.code == 200) {
-                  self.$Modal.success({title:"配置完成",content:"请手动重启服务"});
+                  self.$Modal.success({ title: "配置完成", content: "请手动重启服务" });
                 }
               });
             });

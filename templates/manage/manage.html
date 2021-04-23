@@ -12,7 +12,7 @@
         position: relative;
       }
       .layout-logo {
-        width: auto;
+        float: left;
         height: 30px;
         line-height: 30px;
         color: #fff;
@@ -21,6 +21,11 @@
         position: relative;
         top: 15px;
         left: 20px;
+      }
+      .layout-nav{
+        width: 120px;
+        margin: 0 auto;
+        margin-right: 20px;
       }
       .layout-content {
         padding: 40px 50px;
@@ -34,7 +39,15 @@
     <div id="app">
       <Layout>
         <i-header>
-          <div class="layout-logo">YozComment</div>
+          <i-menu mode="horizontal" theme="dark">
+            <div class="layout-logo">YozComment</div>
+            <div class="layout-nav">
+              <menu-item to="./config.html">
+                <Icon type="ios-cog" size="20"></Icon>
+                配置
+              </menu-item>
+            </div>
+          </i-menu>
         </i-header>
         <i-content class="layout-content">
           <Card title="评论管理">

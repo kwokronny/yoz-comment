@@ -82,6 +82,21 @@ func SetupRouter() *gin.Engine {
 			c.Writer.Write(tmpl)
 			c.Writer.Flush()
 		})
+
+		manageApi.GET("/config.html", func(c *gin.Context) {
+			c.Writer.WriteHeader(http.StatusOK)
+			tmpl, _ := statics.Asset("templates/manage/install.html")
+			c.Writer.Write(tmpl)
+			c.Writer.Flush()
+			// c.HTML(http.StatusOK, "install.html", gin.H{})
+		})
+
+		manageApi.POST("/getConfig", func(c *gin.Context) {
+			util.Response{}.Success(c, util.Config)
+		})
+
+		manageApi.POST("/setting", util.SaveConfigFile)
+
 		manageApi.GET("/manage.html", func(c *gin.Context) {
 			c.Writer.WriteHeader(http.StatusOK)
 			tmpl, _ := statics.Asset("templates/manage/manage.html")

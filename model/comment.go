@@ -17,7 +17,7 @@ type Comment struct {
 	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
 	PageUrl      string    `gorm:"column:page_url;type:varchar(255);not null;comment:来源页面" json:"pageUrl" binding:"required"`
 	PageTitle    string    `gorm:"column:page_title;type:varchar(100);not null;comment:页面标题" json:"pageTitle" binding:"required"`
-	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP"`
+	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP" json:"ip"`
 	Replys       []Comment `gorm:"-" json:"replys"` // 回复列表
 }
 

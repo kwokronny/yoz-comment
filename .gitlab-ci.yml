@@ -20,27 +20,9 @@ generate:
     - cnpm install parcel-bundler -g
     - cnpm install
     - npm run build
+    - go generate
     - export GOPROXY=https://goproxy.io
-    - rm -f deploy/config/config.yaml
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o deploy/comment-app main.go
-    - cd deploy
-    - tar -zcvf "$tar_name" ./*
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
+    - tar -zcvf "$tar_name" comment-app
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "mkdir ${deploy_path}; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && sh ./sever.sh"
-
-public:
-  image: golang:1.15-alpine
-  only:
-    - public
-  script:
-    - rm -rf .git
-    - rm -rf plugins
-    - rm -f config/config.yaml
-    - git init
-    - git config --global user.email "green68599@icloud.com"
-    - git config --global user.name "KwokRonny"
-    - git config --global credential.helper store
-    - git remote add origin "https://${GITHUB_TOKEN}:x-oauth-basic@github.com/kwokronny/yoz-comment.git"
-    - git add .
-    - git commit -m "同步仓库"
-    - git push -u origin master
