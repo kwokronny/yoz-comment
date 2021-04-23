@@ -20,8 +20,10 @@ generate:
     - cnpm install parcel-bundler -g
     - cnpm install
     - npm run build
-    - go generate
-    - export GOPROXY=https://goproxy.io
+    - mkdir statics
+    - go env -w GOPROXY=https://goproxy.io,direct
+    - npm run bindata-install
+    - npm run bindata
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
     - tar -zcvf "$tar_name" comment-app
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root

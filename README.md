@@ -107,7 +107,7 @@
 		运行以下命令会将相关静态文件编译至 templates/web 文件夹下，并热更新应用
 
 		```bash
-		npm start 
+		npm start
 		```
 	
 	- 后台管理
@@ -116,22 +116,22 @@
 
 - ### 后端
 
-	后端运用 gin+gorm 开发，开发架构主要是MVC架构，并将所有静态资源 通过 gin-bindata 打包进应用，方便部署。
+	后端运用 gin+gorm 开发，开发架构主要是MVC架构，并将所有静态资源 通过 [go-bindata-assetfs](https://github.com/elazarl/go-bindata-assetfs/) 打包进应用，方便部署。
 
-	安装 fresh 开启热更新
-
-	应用 go generate 
+	安装 [fresh](https://github.com/pilu/fresh) 开启热更新
 
 	```bash 
-	npm run bindata
+	npm run bindata-install // 全局安装 go-bindata-assetfs 工具
+	npm run bindata-debug
 	# 在开发中，方便调试，通过 gin-bindata 提供的 debug 方法 对静态资源通过链接的方法调用
-	fresh # 热更新启动
+	go get github.com/pilu/fresh # 热更新全局工具安装
+	fresh # 热更新调试开发
 	```
 
 - ### 构建 
 
 	```bash
 	npm run build
-	go generate 
+	npm run bindata
 	go build main.go
 	```
