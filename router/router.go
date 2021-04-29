@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SetupRouter is setup router setting
+// SetupRouter 装载路由
 func SetupRouter() *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 

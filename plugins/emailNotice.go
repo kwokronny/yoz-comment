@@ -11,6 +11,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+// SendEmail 发送评论通知给站长有新的评论
 func SendEmail(data model.Comment) (err error) {
 	tmpl := template.New("")
 	mailTmpl, err := statics.Asset("templates/manage/mail_notice.html")

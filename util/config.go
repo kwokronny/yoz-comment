@@ -84,7 +84,7 @@ func randStringRunes(n int) string {
 	return string(b)
 }
 
-// SaveConfigFile is save config
+// SaveConfigFile 保存配置文件
 func SaveConfigFile(c *gin.Context) {
 	var conf configStruct
 	err := c.BindJSON(&conf)
@@ -119,6 +119,7 @@ func SaveConfigFile(c *gin.Context) {
 	resp.Success(c, true)
 }
 
+// downloadFile 下载文件
 func downloadFile(filepath string, url string) error {
 
 	resp, err := http.Get(url)

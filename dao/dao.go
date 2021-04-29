@@ -17,10 +17,7 @@ import (
 // DB is gorm instance Lib
 var DB *gorm.DB
 
-// Model base model definition, including fields `ID`, `CreatedAt`, `UpdatedAt`, `DeletedAt`, which could be embedded in your models
-//    type User struct {
-//      dao.Model
-//    }
+// Model 通用数据表结构
 type Model struct {
 	ID        uint      `gorm:"AUTOINCREMENT;primary_key;unique;type:int;size:32;comment:ID" json:"id" form:"id"`
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime;type:timestamp;comment:发表日期" json:"createdAt" time_utc:"1"`

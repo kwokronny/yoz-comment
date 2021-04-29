@@ -39,7 +39,7 @@ func (q Comment) TableName() string {
 	return "yoz-comment"
 }
 
-// GetPage is get all comment
+// GetPage 获取所有评论并分页返回
 func (q Comment) GetPage(query QueryCommentField, page util.Pagination) util.PageData {
 	var data util.PageData
 	var comments []Comment
@@ -68,7 +68,7 @@ func (q Comment) GetComment(id uint) (comment Comment) {
 	return
 }
 
-// GetCommentByArticle is get comment by article
+// GetCommentByArticle 通过文章Token获取评论
 func (q Comment) GetCommentByArticle(ArticleToken string, page util.Pagination) util.PageData {
 	var data util.PageData
 	var comments []Comment
@@ -88,6 +88,7 @@ func (q Comment) GetCommentByArticle(ArticleToken string, page util.Pagination) 
 	return data
 }
 
+// genrateTree 数组生成树结构
 func genrateTree(comments []Comment) (trees []Comment) {
 	trees = []Comment{}
 	var roots, childs []Comment
@@ -106,6 +107,7 @@ func genrateTree(comments []Comment) (trees []Comment) {
 	return
 }
 
+// recursiveTree 生成树结构的递归函数
 func recursiveTree(tree *Comment, nodes []Comment) {
 	for _, comment := range nodes {
 		if comment.ParentID == 0 {
@@ -118,13 +120,13 @@ func recursiveTree(tree *Comment, nodes []Comment) {
 	}
 }
 
-// Save is insert or update record
+// Save 增加评论
 func (q Comment) Save(data Comment) Comment {
 	dao.DB.Create(&data)
 	return data
 }
 
-// Delete is get one record Comment
+// Delete 通过ID删除评论
 func (q Comment) Delete(id uint) Comment {
 	var model Comment
 	dao.DB.First(&model, id)

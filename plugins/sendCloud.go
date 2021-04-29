@@ -17,6 +17,7 @@ type xsmtpApi struct {
 	Sub map[string][]string `json:"sub"`
 }
 
+// SendCloud 当评论者收到回复时应用sendCloud平台发信通知评论者在此站的评论有回复，请查看
 func SendCloud(beComment model.Comment, reply model.Comment) (err error) {
 	xs := xsmtpApi{
 		To: []string{beComment.Mail},

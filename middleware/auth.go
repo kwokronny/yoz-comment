@@ -10,6 +10,7 @@ import (
 
 var resp = util.Response{}
 
+// AuthCheck 用户校验中间件
 func AuthCheck() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
@@ -23,7 +24,6 @@ func AuthCheck() gin.HandlerFunc {
 		})
 		if err == nil && token.Valid {
 			c.Next()
-			return
 		} else {
 			resp.Error(c, util.ResponseAuthorized, "鉴权失败")
 			c.Abort()
@@ -32,6 +32,7 @@ func AuthCheck() gin.HandlerFunc {
 	}
 }
 
+// GenerateToken 生成 JWT-TOKEN
 func GenerateToken() (string, error) {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 	token.Claims = jwt.MapClaims{

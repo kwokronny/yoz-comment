@@ -11,6 +11,7 @@ import (
 var commentModel = model.Comment{}
 var resp = util.Response{}
 
+// getPageRequestQuery 获取所有评论并分页的请求结构
 type getPageRequestQuery struct {
 	NickName  string `form:"nickName"`
 	Mail      string `form:"mail"`
@@ -18,7 +19,7 @@ type getPageRequestQuery struct {
 	PageTitle string `form:"pageTitle"`
 }
 
-// GetPage 获取所有问答并分页
+// GetPage 获取所有评论并分页
 func GetPage(c *gin.Context) {
 	data := model.QueryCommentField{}
 	c.BindQuery(&data)
@@ -43,13 +44,15 @@ func Delete(c *gin.Context) {
 	resp.Success(c, true)
 }
 
-type LoginParams struct {
+// LoginParams 登录传参数据结构
+type loginParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
+//Login 后台管理登录
 func Login(c *gin.Context) {
-	var admin LoginParams
+	var admin loginParams
 	err := c.ShouldBind(&admin)
 	if err != nil {
 		resp.Error(c, util.ResponseParamError, "入参错误")
