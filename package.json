@@ -1,7 +1,6 @@
 {
   "name": "yoz-comment",
   "description": "open source comment system",
-  "repository": "",
   "main": "index.js",
   "scripts": {
     "bindata-install": "go get github.com/go-bindata/go-bindata/... && go get github.com/elazarl/go-bindata-assetfs/...",
