@@ -4,13 +4,16 @@
 
 # YozComment 
 
+[![Release](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml/badge.svg?branch=v0.0.2)](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/hiyoz/yoz-comment)]()
+
 > 开源的 golang 评论系统
 > 
 > 作者：[KwokRonny](https://kwokronny.top)
 
 ![](./docs/preview.jpg)
 
-建立博客，原用着[utterance](https://github.com/utterance/utterances)评论系统，方便易用，但留言者都需要登录后方可留言过于繁琐且减少交互性，支持自搭建的评论系统大部分为python开发，需要在服务器安装一定的依赖等，因为与基友共用服务器，不想弄乱服务器环境，顺便练手玩下golang，便自己造了这个轮子。
+建立博客，原用着[utterance](https://github.com/utterance/utterances)评论系统，方便易用，但留言者都需要登录后方可留言过于繁琐且减少留言积极性，支持自搭建的评论系统大部分为python开发，需要在服务器安装一定的依赖等，因为与基友共用服务器，不想弄乱服务器环境，顺便练手玩下golang，便自己造了这个轮子。
 同时也欢迎大家提 Issues 指正或提交 Pull Request 优化
 
 - ### 特点
@@ -27,9 +30,21 @@
 ## 安装
 
 - ### 部署至服务器
-	```bash
-	nohup ./yoz-comment > /dev/null 2>&1 &
-	```
+
+	- #### Docker 
+
+		```bash
+		docker run \
+			 -v /deploy_dir:/app \ #部署位置
+			 -p 9975:9975 \ #端口
+			 --name yoz-comment \ #容器名称
+			 hiyoz/yoz-comment
+		```
+	
+	- #### 直接部署
+		```bash
+		nohup ./yoz-comment > /dev/null 2>&1 &
+		```
 
 - ### 【可选】SendCloud 发信通知
 
@@ -96,8 +111,6 @@
 	则后台管理路由为 https://{部署址址}/gkqoSDBxv43fgL9CP3pV9u/
 
 	![](./docs/manage.jpg)
-
-## 常见问题
 
 ## 开发
 
