@@ -1,3 +1,8 @@
 FROM scratch
-COPY yoz-comment /usr/bin/yoz-comment
-ENTRYPOINT ["/usr/bin/yoz-comment"]
+
+WORKDIR /app
+
+COPY yoz-comment /app/yoz-comment
+EXPOSE 9975
+VOLUME ["/app"]
+ENTRYPOINT ["/app/yoz-comment"]

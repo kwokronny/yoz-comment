@@ -59,13 +59,6 @@
                     sensitive.txt，如遇因墙下载失败，可自行下载字典或编写字典到该位置。</Alert
                   >
                 </form-item>
-                <Alert type="info">下面两项配置主要用于接收到邮件通知时由跳转至网站查看</Alert>
-                <form-item prop="site_name" label="网站名称">
-                  <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
-                </form-item>
-                <form-item prop="site_url" label="网站网址">
-                  <i-input type="text" v-model="model.site_url" placeholder="请输入网站网址"></i-input>
-                </form-item>
               </div>
             </Card>
             <Card title="管理配置" style="margin-bottom: 20px">
@@ -137,7 +130,14 @@
                   <form-item prop="smtp_to" label="收件人">
                     <i-input type="text" v-model="model.smtp_to" placeholder="请输入收件邮箱"></i-input>
                   </form-item>
-                </div>
+                  <Alert type="info">下面两项配置主要用于接收到邮件通知时由跳转至网站查看</Alert>
+                  <form-item prop="site_name" label="网站名称">
+                    <i-input type="text" v-model="model.site_name" placeholder="请输入网站名称"></i-input>
+                  </form-item>
+                  <form-item prop="site_url" label="网站网址">
+                    <i-input type="text" v-model="model.site_url" placeholder="请输入网站网址"></i-input>
+                  </form-item>
+                </div> 
               </div>
             </Card>
             <Card title="SendCloud 邮件通知留言者配置" style="margin-bottom: 20px">
@@ -244,7 +244,9 @@
           };
         },
         mounted: function () {
-          this.getConfig();
+          if(location.href.indexOf("config.html")>-1){
+            this.getConfig();
+          }
         },
         methods: {
           getConfig() {
@@ -268,6 +270,8 @@
                 self.loading = false;
                 if (ret.code == 200) {
                   self.$Modal.success({ title: "配置完成", content: "请手动重启服务" });
+                }else{
+                  self.$Modal.error({ title: "配置失败", content: ret.msg });
                 }
               });
             });

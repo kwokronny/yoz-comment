@@ -2,15 +2,16 @@
 
 <img src="./docs/logo.png" width="100px"/>
 
-# YozComment
+# YozComment 
 
-作者：[KwokRonny](https://kwokronny.top)
-
-
-## 介绍
-开源的 golang 评论系统。因自己博客与他人共用服务器，暂时知名的几个系统都是需要在服务器安装一定的依赖或环境，不想增加服务器负担，顺带学习 golang，便自己造了这个轮子。
+> 开源的 golang 评论系统
+> 
+> 作者：[KwokRonny](https://kwokronny.top)
 
 ![](./docs/preview.jpg)
+
+建立博客，原用着[utterance](https://github.com/utterance/utterances)评论系统，方便易用，但留言者都需要登录后方可留言过于繁琐且减少交互性，支持自搭建的评论系统大部分为python开发，需要在服务器安装一定的依赖等，因为与基友共用服务器，不想弄乱服务器环境，顺便练手玩下golang，便自己造了这个轮子。
+同时也欢迎大家提 Issues 指正或提交 Pull Request 优化
 
 - ### 特点
 	* 多级评论
@@ -27,7 +28,7 @@
 
 - ### 部署至服务器
 	```bash
-	nohup ./YozComment > /dev/null 2>&1 &
+	nohup ./yoz-comment > /dev/null 2>&1 &
 	```
 
 - ### 【可选】SendCloud 发信通知
@@ -96,6 +97,8 @@
 
 	![](./docs/manage.jpg)
 
+## 常见问题
+
 ## 开发
 
 - ### 前端
@@ -104,7 +107,7 @@
 
 		应用 Typescript 开发，开发架构及思路部分主要借鉴 [utterance](https://github.com/utterance/utterances) 。通过在网站内嵌 iframe 减少对代码间的冲突与安全问题。
 		
-		运行以下命令会将相关静态文件编译至 templates/web 文件夹下，并热更新应用
+		运行以下命令会将相关静态文件编译至 templates/web 文件夹下，并前端热更新
 
 		```bash
 		npm start
@@ -121,17 +124,21 @@
 	安装 [fresh](https://github.com/pilu/fresh) 开启热更新
 
 	```bash 
-	npm run bindata-install // 全局安装 go-bindata-assetfs 工具
-	npm run bindata-debug
-	# 在开发中，方便调试，通过 gin-bindata 提供的 debug 方法 对静态资源通过链接的方法调用
+	npm run bindata-install # 全局安装 go-bindata-assetfs 工具
+
+	npm run bindata-debug # 在开发中，方便调试，通过 gin-bindata 提供的 debug 方法 对静态资源通过链接的方法调用
+
 	go get github.com/pilu/fresh # 热更新全局工具安装
+
 	fresh # 热更新调试开发
 	```
 
-- ### 构建 
+- ### 构建打包
 
 	```bash
-	npm run build
-	npm run bindata
-	go build main.go
+	npm run build # 构建评论组件静态文件至templates/web
+
+	npm run bindata # 将templates/web下的静态文件打包进二进制文件，方便部署
+
+	go build main.go # 生成应用
 	```

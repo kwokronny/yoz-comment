@@ -27,4 +27,4 @@ generate:
     - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
     - tar -zcvf "$tar_name" comment-app
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
-    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "mkdir ${deploy_path}; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && nohup ./comment-app > /dev/null 2>&1 &"
+    - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 comment-app && mkdir ${deploy_path}; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && nohup ./comment-app > /dev/null 2>&1 &"

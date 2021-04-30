@@ -95,7 +95,7 @@ func SaveConfigFile(c *gin.Context) {
 	}
 	if conf.SensitiveEnabled == true {
 		conf.SensitivePath = "./sensitive.txt"
-		err = downloadFile(conf.SensitivePath, "https://raw.githubusercontent.com/importcjj/sensitive/master/dict/dict.txt")
+		err = downloadFile(conf.SensitivePath, "https://cdn.jsdelivr.net/gh/importcjj/sensitive@latest/dict/dict.txt")
 		if err != nil {
 			log.Errorf("下载敏感字典错误：%s", err.Error())
 			resp.Error(c, ResponseServerError, "下载敏感字典错误")
