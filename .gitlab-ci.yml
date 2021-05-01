@@ -3,7 +3,7 @@ generate:
   only:
     - master
   variables:
-    deploy_path: "/www/wwwroot/kwokronny.top/yoz-comment"
+    deploy_path: "/www/wwwroot/kwokronny.top/yoz-comment/"
     tar_name: "yoz-comment.release.tar.gz"
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
