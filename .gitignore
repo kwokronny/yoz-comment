@@ -10,5 +10,4 @@ dist/
 sensitive.txt
 package-lock.json
 statics/statics.go
-go.sum
 config.yaml
