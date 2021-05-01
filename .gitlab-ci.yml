@@ -1,5 +1,6 @@
 generate:
   image: golang:1.15-alpine
+  when: manual
   only:
     - master
   variables:
@@ -24,7 +25,7 @@ generate:
     - go env -w GOPROXY=https://goproxy.io,direct
     - npm run bindata-install
     - npm run bindata
-    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
+    - CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
     - tar -zcvf "$tar_name" comment-app
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 comment-app && mkdir ${deploy_path}; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && nohup ./comment-app > /dev/null 2>&1 &"
