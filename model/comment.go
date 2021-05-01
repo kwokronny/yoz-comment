@@ -15,12 +15,13 @@ type Comment struct {
 	Mail         string    `gorm:"column:mail;type:varchar(50);not null;comment:邮箱" json:"mail" form:"mail" binding:"required,email"`
 	Site         string    `gorm:"column:site;type:varchar(50);comment:网站" json:"site" form:"site"`
 	Content      string    `gorm:"column:content;type:varchar(255);not null;comment:内容" json:"content" form:"content" binding:"required"`
-	PageUrl      string    `gorm:"column:page_url;type:varchar(255);not null;comment:来源页面" json:"pageUrl" binding:"required"`
+	PageURL      string    `gorm:"column:page_url;type:varchar(255);not null;comment:来源页面" json:"pageUrl" binding:"required"`
 	PageTitle    string    `gorm:"column:page_title;type:varchar(100);not null;comment:页面标题" json:"pageTitle" binding:"required"`
 	IP           string    `gorm:"column:ip;type:varchar(50);not null;comment:IP" json:"ip"`
 	Replys       []Comment `gorm:"-" json:"replys"` // 回复列表
 }
 
+// QueryCommentField 后台管理评论检索请求传参结构
 type QueryCommentField struct {
 	NickName  string `gorm:"column:nickname" form:"nickName"`
 	Mail      string `gorm:"column:mail" form:"mail"`
@@ -63,6 +64,7 @@ func (q Comment) GetPage(query QueryCommentField, page util.Pagination) util.Pag
 	return data
 }
 
+// GetComment 通过ID获取单个评论
 func (q Comment) GetComment(id uint) (comment Comment) {
 	dao.DB.First(&comment, id)
 	return

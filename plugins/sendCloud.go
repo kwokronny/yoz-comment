@@ -12,31 +12,31 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-type xsmtpApi struct {
+type xsmtpAPI struct {
 	To  []string            `json:"to"`
 	Sub map[string][]string `json:"sub"`
 }
 
 // SendCloud 当评论者收到回复时应用sendCloud平台发信通知评论者在此站的评论有回复，请查看
 func SendCloud(beComment model.Comment, reply model.Comment) (err error) {
-	xs := xsmtpApi{
+	xs := xsmtpAPI{
 		To: []string{beComment.Mail},
 		Sub: map[string][]string{
 			"%post%":           {beComment.PageTitle},
-			"%post_url%":       {beComment.PageUrl},
+			"%post_url%":       {beComment.PageURL},
 			"%you%":            {beComment.NickName},
 			"%you_comment%":    {beComment.Content},
 			"%comment_author%": {reply.NickName},
 			"%comment%":        {reply.Content},
 		},
 	}
-	xsmtpApiValue, _ := json.Marshal(xs)
+	xsmtpAPIValue, _ := json.Marshal(xs)
 	RequestURI := "http://api.sendcloud.net/apiv2/mail/sendtemplate"
 	PostParams := url.Values{
 		"apiUser":            {util.Config.SendCloudAPIUser},
 		"apiKey":             {util.Config.SendCloudAPIKey},
 		"from":               {util.Config.SendCloudFrom},
-		"xsmtpapi":           {string(xsmtpApiValue)},
+		"xsmtpapi":           {string(xsmtpAPIValue)},
 		"templateInvokeName": {util.Config.SendCloudTemplateName},
 	}
 	PostBody := bytes.NewBufferString(PostParams.Encode())

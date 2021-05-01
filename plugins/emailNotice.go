@@ -27,16 +27,16 @@ func SendEmail(data model.Comment) (err error) {
 	var body bytes.Buffer
 	err = tmpl.Execute(&body, struct {
 		SiteName    string
-		SiteUrl     string
+		SiteURL     string
 		CommentUser string
-		PostUrl     string
+		PostURL     string
 		PostTitle   string
 		Content     string
 	}{
 		SiteName:    util.Config.SiteName,
-		SiteUrl:     util.Config.SiteUrl,
+		SiteURL:     util.Config.SiteURL,
 		CommentUser: data.NickName,
-		PostUrl:     data.PageUrl,
+		PostURL:     data.PageURL,
 		PostTitle:   data.PageTitle,
 		Content:     data.Content,
 	})

@@ -18,7 +18,7 @@ var resp = Response{}
 type configStruct struct {
 	Installed  bool   `yaml:"installed" json:"installed"`
 	SiteName   string `yaml:"site_name" json:"site_name"`
-	SiteUrl    string `yaml:"site_url" json:"site_url"`
+	SiteURL    string `yaml:"site_url" json:"site_url"`
 	ServerPort int    `yaml:"server_port" json:"server_port" `
 
 	DBApp  string `yaml:"db_app" json:"db_app"`

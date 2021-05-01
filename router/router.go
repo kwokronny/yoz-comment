@@ -72,18 +72,18 @@ func SetupRouter() *gin.Engine {
 		api.GET("/page", comment.GetComment)
 		api.POST("/comment", comment.Save)
 
-		manageApi := engine.Group(util.Config.ManageRouter)
-		manageApi.GET("/", func(c *gin.Context) {
+		manageAPI := engine.Group(util.Config.ManageRouter)
+		manageAPI.GET("/", func(c *gin.Context) {
 			c.Redirect(http.StatusTemporaryRedirect, "./manage.html")
 		})
-		manageApi.GET("/login.html", func(c *gin.Context) {
+		manageAPI.GET("/login.html", func(c *gin.Context) {
 			c.Writer.WriteHeader(http.StatusOK)
 			tmpl, _ := statics.Asset("templates/manage/login.html")
 			c.Writer.Write(tmpl)
 			c.Writer.Flush()
 		})
 
-		manageApi.GET("/config.html", func(c *gin.Context) {
+		manageAPI.GET("/config.html", func(c *gin.Context) {
 			c.Writer.WriteHeader(http.StatusOK)
 			tmpl, _ := statics.Asset("templates/manage/install.html")
 			c.Writer.Write(tmpl)
@@ -91,21 +91,21 @@ func SetupRouter() *gin.Engine {
 			// c.HTML(http.StatusOK, "install.html", gin.H{})
 		})
 
-		manageApi.POST("/getConfig", func(c *gin.Context) {
+		manageAPI.POST("/getConfig", func(c *gin.Context) {
 			util.Response{}.Success(c, util.Config)
 		})
 
-		manageApi.POST("/setting", util.SaveConfigFile)
+		manageAPI.POST("/setting", util.SaveConfigFile)
 
-		manageApi.GET("/manage.html", func(c *gin.Context) {
+		manageAPI.GET("/manage.html", func(c *gin.Context) {
 			c.Writer.WriteHeader(http.StatusOK)
 			tmpl, _ := statics.Asset("templates/manage/manage.html")
 			c.Writer.Write(tmpl)
 			c.Writer.Flush()
 		})
-		manageApi.POST("/login", manage.Login)
-		manageApi.GET("/page", middleware.AuthCheck(), manage.GetPage)
-		manageApi.POST("/delete", middleware.AuthCheck(), manage.Delete)
+		manageAPI.POST("/login", manage.Login)
+		manageAPI.GET("/page", middleware.AuthCheck(), manage.GetPage)
+		manageAPI.POST("/delete", middleware.AuthCheck(), manage.Delete)
 	}
 	return engine
 }
