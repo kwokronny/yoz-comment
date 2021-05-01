@@ -9,7 +9,7 @@ generate:
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     - apk update
-    - apk add openssh-client nodejs npm
+    - apk add openssh-client nodejs npm gcc g++
     - mkdir -p ~/.ssh
     - echo "$SERVER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
