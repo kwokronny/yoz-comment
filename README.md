@@ -2,10 +2,12 @@
 
 <img src="./docs/logo.png" width="100px"/>
 
-# YozComment 
+# 有知评论 YozComment
 
-[![Release](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml/badge.svg?branch=v0.0.2)](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml)
+[![Release](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml/badge.svg)](https://github.com/hiyoz/yoz-comment/actions/workflows/release.yml)
 [![Go Version](https://img.shields.io/github/go-mod/go-version/hiyoz/yoz-comment)]()
+[![License](https://img.shields.io/github/go-mod/go-version/hiyoz/yoz-comment)]()
+
 
 > 开源的 golang 评论系统
 > 
