@@ -27,9 +27,6 @@ jobs:
       with:
         go-version: 1.15
 
-    - name: Install CGO dependencies
-      run: sudo apt-get install build-essential
-
     - name: Bindata Frontend in app
       run: | 
         mkdir statics
