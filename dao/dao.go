@@ -11,7 +11,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
-	"gorm.io/driver/sqlite"
 )
 
 // DB is gorm instance Lib
@@ -42,9 +41,9 @@ func init() {
 			DSN:                  dsn,
 			PreferSimpleProtocol: true,
 		})
-	} else if config.DBApp == "sqlite" {
-		var dbName = config.DBLib + ".db"
-		dbSource = sqlite.Open(dbName)
+		// } else if config.DBApp == "sqlite" {
+		// 	var dbName = config.DBLib + ".db"
+		// 	dbSource = sqlite.Open(dbName)
 	}
 	DB, err = gorm.Open(dbSource, &gorm.Config{})
 	if err != nil {

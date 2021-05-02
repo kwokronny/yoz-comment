@@ -1,15 +1,14 @@
 generate:
   image: golang:1.15-alpine
-  when: manual
   only:
-    - master
+    - release-blog
   variables:
     deploy_path: "/www/wwwroot/kwokronny.top/yoz-comment/"
     tar_name: "yoz-comment.release.tar.gz"
   before_script:
     - sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
     - apk update
-    - apk add --update openssh-client nodejs npm gcc musl-dev
+    - apk add --update openssh-client nodejs npm
     - mkdir -p ~/.ssh
     - echo "$SERVER_KEY" | tr -d '\r' > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
@@ -25,7 +24,7 @@ generate:
     - go env -w GOPROXY=https://goproxy.io,direct
     - npm run bindata-install
     - npm run bindata
-    - CGO_ENABLED=1 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
+    - CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o comment-app main.go
     - tar -zcvf "$tar_name" comment-app
     - scp -P"$SERVER_PORT" -r "$tar_name" root@"$SERVER_HOST":/root
     - ssh -p"$SERVER_PORT" root@"$SERVER_HOST" "pkill -9 comment-app && mkdir ${deploy_path}; tar -zxvf $tar_name -C $deploy_path && cd $deploy_path && nohup ./comment-app > /dev/null 2>&1 &"

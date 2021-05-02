@@ -19,12 +19,14 @@
 - ### 特点
 	* 多级评论
 	* 部署简单，可视化配置
-	* 支持MySQL、SQLite、PostgreSQL
+	* 支持MySQL、PostgreSQL
 	* 支持响应式
 	* 支持 明/暗 主题
 	* 接入 Gravatar 头像显示
 	* 支持敏感词识别
 	* 支持邮件通知自己 及 SendCloud平台 发信通知留言者有回复
+
+> 由于 gorm.io/driver/sqlite 中依赖的 go-sqlite3 需要开启 CGO 支持，编译跨平台需要较为复杂的操作，才疏学浅，只好暂时放弃，有了解的朋友还请多多指教。
 	
 
 ## 安装

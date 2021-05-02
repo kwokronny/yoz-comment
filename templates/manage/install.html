@@ -85,7 +85,7 @@
               <div class="config-content">
                 <form-item prop="db_app" label="数据库选择">
                   <radio-group v-model="model.db_app" type="button">
-                    <Radio label="sqlite">SQLite</Radio>
+                    <!-- <Radio label="sqlite">SQLite</Radio> -->
                     <Radio label="mysql">MySQL</Radio>
                     <Radio label="postgresql">PostgreSQL</Radio>
                   </radio-group>
@@ -182,7 +182,7 @@
         admin_root: "",
         admin_pass: "",
         confirm_pass: "",
-        db_app: "sqlite",
+        db_app: "mysql",
         db_host: "",
         db_port: 3306,
         db_usr: "",
