@@ -6,7 +6,7 @@
     "bindata-install": "go get github.com/go-bindata/go-bindata/... && go get github.com/elazarl/go-bindata-assetfs/...",
     "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates/web --port 5000",
     "bindata-debug": "go-bindata-assetfs -debug -o statics/statics.go -pkg=statics templates/...",
-    "build": "rm -rf templates/web && parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --experimental-scope-hoisting --no-content-hash",
+    "build": "rm -rf templates/web && parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --public-url ./ --experimental-scope-hoisting --no-content-hash",
     "bindata": "go-bindata-assetfs -o statics/statics.go -pkg=statics templates/..."
   },
   "author": "kwokronny",
