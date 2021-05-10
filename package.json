@@ -17,6 +17,6 @@
     "typescript": "^4.2.3"
   },
   "dependencies": {
-    "@hiyoz/stylus-shortcut": "^1.1.0"
+    "stylus-shortcut": "^1.0.0"
   }
 }
