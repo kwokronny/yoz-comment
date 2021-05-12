@@ -127,7 +127,10 @@
 		运行以下命令会将相关静态文件编译至 templates/web 文件夹下，并前端热更新
 
 		```bash
-		npm start
+		npm install -g parcel-bundler # 安装轻便的js模块打包机
+		npm install # 安装相应的包依赖
+
+		npm start # 运行
 		```
 	
 	- 后台管理
