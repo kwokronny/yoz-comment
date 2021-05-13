@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YozComment 评论系统</title>
+    <link rel="stylesheet" href="//unpkg.com/view-design/dist/styles/iview.css" />
+    <style>
+      html,
+      body {
+        background: #f5f7f9;
+        position: relative;
+      }
+      .layout-logo {
+        float: left;
+        height: 30px;
+        line-height: 30px;
+        color: #fff;
+        font-size: 18px;
+        border-radius: 3px;
+        position: relative;
+        top: 15px;
+        left: 20px;
+      }
+      .layout-nav{
+        width: 120px;
+        margin: 0 auto;
+        margin-right: 20px;
+      }
+      .layout-content {
+        padding: 40px 50px;
+      }
+      .layout-footer-center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <Layout>
+        <i-header>
+          <i-menu mode="horizontal" theme="dark">
+            <div class="layout-logo">YozComment</div>
+            <div class="layout-nav">
+              <menu-item to="./config.html">
+                <Icon type="ios-cog" size="20"></Icon>
+                配置
+              </menu-item>
+            </div>
+          </i-menu>
+        </i-header>
+        <i-content class="layout-content">
+          <Card title="评论管理">
+            <div style="min-height: 200px">
+              <i-form :model="filter" inline>
+                <form-item prop="pageTitle">
+                  <i-input type="text" v-model="filter.pageTitle" placeholder="请输入页面名称"></i-input>
+                </form-item>
+                <form-item prop="nickName">
+                  <i-input type="text" v-model="filter.nickName" placeholder="请输入昵称"></i-input>
+                </form-item>
+                <form-item prop="mail">
+                  <i-input type="text" v-model="filter.mail" placeholder="请输入邮箱"></i-input>
+                </form-item>
+                <form-item prop="content">
+                  <i-input type="text" v-model="filter.content" placeholder="请输入内容"></i-input>
+                </form-item>
+                <form-item>
+                  <i-button type="primary" icon="ios-funnel" @click="getList(1)">筛选</i-button>
+                </form-item>
+              </i-form>
+              <i-table border :data="list.records" :loading="loading" :columns="columns">
+                <template slot-scope="{row}" slot="nickName">
+                  <a :href="row.site" target="_blank" v-text="row.nickName"></a>
+                </template>
+                <template slot-scope="{row}" slot="pageTitle">
+                  <a :href="row.pageUrl" target="_blank" v-text="row.pageTitle"></a>
+                </template>
+                <template slot-scope="{row}" slot="date">
+                  <i-time :time="row.createdAt"></i-time>
+                </template>
+                <template slot-scope="{row}" slot="option">
+                  <i-button size="small" type="primary" icon="ios-chatbubbles" @click="openReplyModal(row)">回复</i-button>
+                  <i-button size="small" type="error" icon="ios-trash" @click="remove(row)">删除</i-button>
+                </template>
+              </i-table>
+            </div>
+            <div style="margin-top: 20px; text-align: center">
+              <Page :total="list.total" :page="list.page" :page-size="list.pageSize" show-total @on-change="getList" />
+            </div>
+          </Card>
+          <Modal title="回复" v-model="replyModal" :footer-hide="true">
+            <i-form ref="replyForm" :model="model" :rules="rules">
+              <form-item prop="nickName" label="昵称">
+                <i-input type="text" v-model="model.nickName" placeholder="请输入昵称"></i-input>
+              </form-item>
+              <form-item prop="mail" label="邮箱">
+                <i-input type="email" v-model="model.mail" placeholder="请输入邮箱"></i-input>
+              </form-item>
+              <form-item prop="site" label="网站">
+                <i-input type="url" v-model="model.site" placeholder="请输入网站"></i-input>
+              </form-item>
+              <form-item prop="content" label="内容">
+                <i-input type="textarea" v-model="model.content" placeholder="请输入内容"></i-input>
+              </form-item>
+              <form-item>
+                <i-button type="primary" icon="ios-chatbubbles" long @click="reply()">回复</i-button>
+              </form-item>
+            </i-form>
+          </Modal>
+        </i-content>
+        <footer class="layout-footer-center">Power by <a href="https://kwokronny.top">kwokronny</a></footer>
+      </Layout>
+    </div>
+    <script src="//vuejs.org/js/vue.min.js"></script>
+    <script src="//unpkg.com/view-design/dist/iview.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <script>
+      let authToken = window.localStorage.getItem("yoz-comment-auth");
+      if (authToken == "") {
+        location.href = "./login.html";
+      }
+      let instance = axios.create({
+        headers: { Authorization: authToken },
+      });
+      instance.interceptors.response.use(
+        function (response) {
+          if (response.data.code == 401) {
+            location.href = "./login.html";
+          }
+          return response;
+        },
+        function (error) {
+          return Promise.reject(error);
+        }
+      );
+      // instance.in
+      new Vue({
+        el: "#app",
+        data: {
+          loading: false,
+          filter: {
+            nickName: "",
+            mail: "",
+            content: "",
+            pageTitle: "",
+          },
+          replyModal: false,
+          model: {
+            articleToken: "",
+            parentId: "",
+            rId: "",
+            nickName: "",
+            mail: "",
+            site: "",
+            content: "",
+            pageUrl: "",
+            pageTitle: "",
+          },
+          rules: {
+            nickName: [{ required: true, message: "请输入昵称", type: "string", trigger: "change" }],
+            mail: [{ required: true, message: "请输入正确的邮箱", type: "email", trigger: "change" }],
+            site: [{ message: "请输入正确的网址", type: "url", trigger: "change" }],
+            content: [{ required: true, message: "请输入内容", type: "string", trigger: "change" }],
+          },
+          list: {
+            records: [],
+          },
+          columns: [
+            {
+              key: "id",
+              title: "ID",
+              width: 80,
+            },
+            {
+              key: "rId",
+              title: "RID",
+              width: 80,
+            },
+            {
+              key: "pageTitle",
+              title: "页面",
+              slot: "pageTitle",
+            },
+            {
+              key: "nickName",
+              title: "昵称",
+              slot: "nickName",
+            },
+            {
+              key: "mail",
+              title: "邮箱",
+            },
+            {
+              key: "content",
+              title: "内容",
+              tooltip: true,
+              ellipsis: true,
+            },
+            {
+              key: "createdAt",
+              title: "日期",
+              slot: "date",
+            },
+            {
+              key: "option",
+              title: "操作",
+              slot: "option",
+            },
+          ],
+        },
+        mounted: function () {
+          this.getList();
+        },
+        methods: {
+          getList: function (page) {
+            var self = this;
+            this.loading = true;
+            var params = Object.assign({}, this.filter);
+            params.page = page || this.list.page + 1 || 1;
+            instance.get("page", { params }).then(function (response) {
+              var ret = response.data;
+              self.loading = false;
+              if (ret.code == 200) {
+                self.list = ret.data;
+              } else {
+                self.$Message.error("加载失败，请刷新重试");
+              }
+            });
+          },
+          openReplyModal(row) {
+            this.replyModal = true;
+            let userInfo = JSON.parse(window.localStorage.getItem("yoz-comment-user"));
+            // this.model = Object.assign({}, row);
+            if (userInfo) {
+              this.model.nickName = userInfo.nickName;
+              this.model.mail = userInfo.mail;
+              this.model.site = userInfo.site;
+            }
+            this.model.pageUrl = row.pageUrl;
+            this.model.pageTitle = row.pageTitle;
+            this.model.articleToken = row.articleToken;
+            this.model.rId = row.id;
+            this.model.parentId = row.parentId == 0 ? row.id : row.parentId;
+            this.model.content = "";
+          },
+          reply() {
+            var self = this;
+            this.$refs["replyForm"].validate().then(function (valid) {
+              if (valid == false) return;
+              var params = Object.assign({}, self.model);
+              self.$Modal.confirm({
+                title: "操作确认",
+                content: "确认回复吗？",
+                onOk: function () {
+                  axios.post("/api/comment", params).then(function (res) {
+                    var ret = res.data;
+                    if (ret.code == 200) {
+                      self.model = self.$options.data().model;
+                      self.$Message.success("回复成功");
+                      self.replyModal = false;
+                      self.getList(1);
+                    } else {
+                      self.$Message.success(ret.msg);
+                    }
+                  });
+                },
+              });
+            });
+          },
+          remove(row) {
+            var self = this;
+            this.$Modal.confirm({
+              title: "操作确认",
+              content: "确认删除" + row.nickName + "的评论吗？",
+              onOk: function () {
+                instance.post("delete", { id: row.id }).then(function (response) {
+                  var ret = response.data;
+                  if (ret.code == 200) {
+                    self.$Message.success("删除成功");
+                    self.getList(1);
+                  } else {
+                    self.$Message.error(ret.msg);
+                  }
+                });
+              },
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

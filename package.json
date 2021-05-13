@@ -1,0 +1,22 @@
+{
+  "name": "yoz-comment",
+  "description": "open source comment system",
+  "main": "index.js",
+  "scripts": {
+    "bindata-install": "go get github.com/go-bindata/go-bindata/... && go get github.com/elazarl/go-bindata-assetfs/...",
+    "start": "parcel serve client/client.ts client/static/comment.ts client/{demo,index}.html client/static/themes/{light,dark}.styl -d templates/web --port 5000",
+    "bindata-debug": "go-bindata-assetfs -debug -o statics/statics.go -pkg=statics templates/...",
+    "build": "rm -rf templates/web && parcel build client/client.ts client/static/comment.ts client/index.html client/static/themes/{light,dark}.styl -d templates/web --public-url ./ --experimental-scope-hoisting --no-content-hash",
+    "bindata": "go-bindata-assetfs -o statics/statics.go -pkg=statics templates/..."
+  },
+  "author": "kwokronny",
+  "license": "ISC",
+  "devDependencies": {
+    "cssnano": "^4.1.10",
+    "stylus": "^0.54.8",
+    "typescript": "^4.2.3"
+  },
+  "dependencies": {
+    "stylus-shortcut": "^1.0.0"
+  }
+}

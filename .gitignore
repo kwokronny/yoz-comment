@@ -1,0 +1,13 @@
+/tmp
+/templates/web
+/release
+/templates/index.html
+/logs
+/fresh
+/node_modules
+/.cache
+dist/
+sensitive.txt
+package-lock.json
+statics/statics.go
+config.yaml
